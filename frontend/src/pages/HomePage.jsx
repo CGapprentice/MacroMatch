@@ -9,7 +9,8 @@ function HomePage() {
             <h1>MacroMatch</h1>
             <h4>This page is on the works so don't mind the empty space</h4>
             <Link to="/loginpage">login</Link><br></br>
-            <Link to="/signinpage">sign in</Link>
+            <Link to="/signinpage">sign in</Link><br></br>
+            <Link to="/calculatorpage">calculator page</Link>
         </div>
         </>
     )
