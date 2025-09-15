@@ -1,0 +1,90 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+}
+
+.signIn-background{
+  background-image: linear-gradient(180deg, #1E1E2FFF 0%, #50507CFF 100%);
+  min-height: 100vh;
+  width: 100%;
+  object-fit: sticky;
+  top:0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.signContainer{
+  width: 500px; 
+  height: 600px;
+  background-color: white;
+
+  padding: 15px;
+  border: 2px solid black;
+  border-radius: 10px;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+
+
+}
+
+.flName{
+    margin: 20px 10px;
+}
+
+.flName button{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 50vw;
+}
+
+
+.flName input{
+    background-color: lightgray;
+    opacity: 0.3;
+    margin: 10px 0;
+    
+}
+
+
+.afterform{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+
+.google-signin{
+
+    background-color: white;
+    border: 1px solid gray;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+
+}
+
+
+
+.afterform p{
+    margin: 10px 0;
+    
+}
+
+.signUp{
+    margin: 10px 0;
+    background-image: linear-gradient(180deg, #1E1E2FFF 0%, #50507CFF 100%);
+}
+
+
