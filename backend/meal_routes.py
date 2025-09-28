@@ -3,12 +3,12 @@ from flask import Blueprint, request, jsonify, current_app
 from datetime import datetime
 from models import Meal
 from firebase_config import get_firebase_service
-from auth_routes import token_required
+from auth_utils import firebase_token_required
 
 meal_bp = Blueprint('meals', __name__, url_prefix='/api/v1/meals')
 
 @meal_bp.route('/', methods=['POST'])
-@token_required
+@firebase_token_required
 def create_meal():
     # create new meal
     try:
@@ -54,7 +54,7 @@ def create_meal():
         return jsonify({'error': 'server error'}), 500
 
 @meal_bp.route('/', methods=['GET'])
-@token_required
+@firebase_token_required
 def get_meals():
     # get user's meals
     try:
@@ -74,7 +74,7 @@ def get_meals():
         return jsonify({'error': 'server error'}), 500
 
 @meal_bp.route('/<meal_id>', methods=['DELETE'])
-@token_required
+@firebase_token_required
 def delete_meal(meal_id):
     # delete a meal
     try:

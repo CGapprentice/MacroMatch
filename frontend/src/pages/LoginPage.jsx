@@ -1,50 +1,161 @@
+import React, { useState } from "react";
+import { loginWithEmail, registerWithEmail, API_BASE_URL } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
-import '../login.css'
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+const LoginPage = () => {
+  const navigate = useNavigate();
+  
+  const [isLogin, setIsLogin] = useState(true); // Toggle between login/register
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    confirmPassword: ""
+  });
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
-function LoginPage() {
-    const[email, setEmail] = useState('');
-    const[password, setPassword] = useState('');
+  function validateForm(data) {
+    const errors = {};
+    if (!data.email) errors.email = "Email is required";
+    if (!data.password) errors.password = "Password is required";
+    
+    if (!isLogin) {
+      if (data.password !== data.confirmPassword) {
+        errors.confirmPassword = "Passwords don't match";
+      }
+      if (data.password.length < 6) {
+        errors.password = "Password must be at least 6 characters";
+      }
+    }
+    
+    return errors;
+  }
 
-    const submit=(e)=>{
-        e.preventDefault();
-        setEmail(email);
-        setPassword(password);
-        console.log("Email:", email);
-        console.log("Password:" ,password);
+  async function handleSubmit(e) {
+    e.preventDefault();
+    
+    const validationErrors = validateForm(formData);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
     }
 
-    return(
-        <div className="loginInfo">
-            {/*<img src="/MMlogin.png" className="loginImage" alt="MacroMatch background"/>*/}
-            <div className="gradient">
-            </div>
-            <div className="loginContext">
-                <h1>MacroMatch</h1>
-                <h2>Welcome Back!</h2>
-                <form className="loginText">
-                    <label for="email">Email: </label>
-                    <input type="email" id="email" required />
-                    <label for="password" className="password">Password:<a href="url">Forgot Password?</a> </label> 
-                    <input type="password" id="password" required />
-                    <br></br>
-                    <button type="submit" onClick={submit}>Login</button>
-                </form>
-                <div className="after_or">
-                    <p className="ORline">OR</p>
-                    <div className="button-Google">
-                        <button className="google"> <img src="/google-logo.png" className="googleLogo" alt="Google Logo"/>Google</button>
-                    </div>
-                </div>
-                    
-                   
-                    <p> Don't have an account? <Link to="/signinpage">Sign up</Link></p>
-        
-            </div>
-        </div>
+    setIsLoading(true);
+    setErrors({});
+    setMessage("");
 
-    )
-}
+    try {
+      let userCredential;
+      
+      if (isLogin) {
+        // Login with Firebase Auth
+        userCredential = await loginWithEmail(formData.email, formData.password);
+        setMessage("Login successful!");
+      } else {
+        // Register with Firebase Auth
+        userCredential = await registerWithEmail(formData.email, formData.password);
+        setMessage("Account created successfully!");
+      }
+
+      // Get the ID token
+      const idToken = await userCredential.user.getIdToken();
+      
+      // Store the Firebase ID token (not JWT!)
+      localStorage.setItem("firebaseToken", idToken);
+      
+      // Verify with your backend
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/verify`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${idToken}`
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Backend verification successful:", data);
+        navigate("/dashboard");
+      } else {
+        setMessage("Authentication successful, but backend verification failed");
+      }
+
+    } catch (error) {
+      console.error("Auth error:", error);
+      
+      // Handle Firebase Auth errors
+      switch (error.code) {
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+          setMessage("Invalid email or password");
+          break;
+        case 'auth/email-already-in-use':
+          setMessage("Email already in use");
+          break;
+        case 'auth/weak-password':
+          setMessage("Password is too weak");
+          break;
+        case 'auth/invalid-email':
+          setMessage("Invalid email format");
+          break;
+        default:
+          setMessage("Authentication failed. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return (
+    <div className="login-container">
+      <form onSubmit={handleSubmit} className="login-form">
+        <h2>{isLogin ? "Login to MacroMatch" : "Create MacroMatch Account"}</h2>
+        
+        <input 
+          type="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={(e) => setFormData({...formData, email: e.target.value})}
+        />
+        {errors.email && <div className="error">{errors.email}</div>}
+        
+        <input 
+          type="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={(e) => setFormData({...formData, password: e.target.value})}
+        />
+        {errors.password && <div className="error">{errors.password}</div>}
+        
+        {!isLogin && (
+          <>
+            <input 
+              type="password"
+              placeholder="Confirm Password"
+              value={formData.confirmPassword}
+              onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+            />
+            {errors.confirmPassword && <div className="error">{errors.confirmPassword}</div>}
+          </>
+        )}
+        
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? "Processing..." : (isLogin ? "Login" : "Create Account")}
+        </button>
+        
+        <button 
+          type="button" 
+          onClick={() => setIsLogin(!isLogin)}
+          className="toggle-auth"
+        >
+          {isLogin ? "Need an account? Register" : "Have an account? Login"}
+        </button>
+        
+        {message && <div className="message">{message}</div>}
+      </form>
+    </div>
+  );
+};
 
 export default LoginPage;
