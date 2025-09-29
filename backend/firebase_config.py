@@ -94,6 +94,16 @@ class FirebaseService:
             print(f"error getting user by firebase uid: {str(e)}")
             raise e
     
+    def update_user(self, user_id, update_data):
+        # update user data
+        try:
+            doc_ref = self.db.collection('users').document(user_id)
+            doc_ref.update(update_data)
+            return True
+        except Exception as e:
+            print(f"error updating user: {str(e)}")
+            return False
+    
     def add_meal(self, user_id, meal_data):
         # add meal to user's meals
         try:
