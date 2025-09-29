@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { loginWithEmail, registerWithEmail, API_BASE_URL } from "../firebase";
+import { loginWithEmail, registerWithEmail } from "../firebase";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   
-  const [isLogin, setIsLogin] = useState(true); // Toggle between login/register
+  const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -49,37 +49,19 @@ const LoginPage = () => {
       let userCredential;
       
       if (isLogin) {
-        // Login with Firebase Auth
         userCredential = await loginWithEmail(formData.email, formData.password);
-        setMessage("Login successful!");
       } else {
-        // Register with Firebase Auth
         userCredential = await registerWithEmail(formData.email, formData.password);
-        setMessage("Account created successfully!");
       }
 
-      // Get the ID token
+      // Get and store the Firebase ID token
       const idToken = await userCredential.user.getIdToken();
-      
-      // Store the Firebase ID token (not JWT!)
       localStorage.setItem("firebaseToken", idToken);
       
-      // Verify with your backend
-      const response = await fetch(`${API_BASE_URL}/api/v1/auth/verify`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${idToken}`
-        }
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Backend verification successful:", data);
+      // Navigate to dashboard - backend will verify token on protected API calls
+      setTimeout(() => {
         navigate("/dashboard");
-      } else {
-        setMessage("Authentication successful, but backend verification failed");
-      }
+      }, 500);
 
     } catch (error) {
       console.error("Auth error:", error);
