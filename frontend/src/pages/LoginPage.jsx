@@ -4,11 +4,16 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 function LoginPage() {
+
+    useState(()=> {
+        document.title = 'Login Page'
+    },[])
+
     const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
 
-    const submit=(e)=>{
-        e.preventDefault();
+    const submit=()=>{
+        preventDeafault();
         setEmail(email);
         setPassword(password);
         console.log("Email:", email);
@@ -25,9 +30,9 @@ function LoginPage() {
                 <h2>Welcome Back!</h2>
                 <form className="loginText">
                     <label for="email">Email: </label>
-                    <input type="email" id="email" required />
+                    <input type="email" id="email" name="email" required />
                     <label for="password" className="password">Password:<a href="url">Forgot Password?</a> </label> 
-                    <input type="password" id="password" required />
+                    <input type="password" id="password" name="password" required />
                     <br></br>
                     <button type="submit" onClick={submit}>Login</button>
                 </form>
@@ -47,4 +52,4 @@ function LoginPage() {
     )
 }
 
-export default LoginPage;
+export default LoginPage
