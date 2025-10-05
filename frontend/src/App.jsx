@@ -5,7 +5,7 @@ import { createBrowserRouter, Router, RouterProvider } from 'react-router-dom'
 import HomePage from './pages/HomePage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import SignInPage from './pages/SigninPage.jsx'
-import { Calculator, UserProvider } from './calculator'
+import { Calculator, UserProvider } from './components/index.js'
 import './main.css'
 
 

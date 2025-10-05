@@ -5,10 +5,10 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword,
   signOut,
-  onAuthStateChanged 
+  onAuthStateChanged,
+  GoogleAuthProvider
 } from 'firebase/auth';
 
-// Firebase config from environment variables (Create React App)
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -31,6 +31,7 @@ if (missingConfig.length > 0) {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+export const google = new GoogleAuthProvider();
 
 // Auth functions
 export const loginWithEmail = (email, password) => {

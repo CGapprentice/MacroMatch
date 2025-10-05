@@ -6,11 +6,11 @@ from datetime import datetime
 
 # import our stuff
 from config import config
-from auth_routes import auth_bp
+from firebase_mongo_auth_routes import firebase_mongo_auth_bp
 from meal_routes import meal_bp
-from user_routes import user_bp
 from error_handlers import error_bp
 from firebase_config import get_firebase_service
+from mongodb_config import get_mongodb
 
 def create_app(config_name=None):
     # create our flask app
@@ -35,7 +35,7 @@ def create_app(config_name=None):
     return app
 
 def initialize_firebase(app):
-    # setup firebase connection
+    # setup firebase and mongodb connections
     with app.app_context():
         try:
             firebase_service = get_firebase_service()
@@ -44,12 +44,19 @@ def initialize_firebase(app):
             print(f"firebase error: {str(e)}")
             if app.config.get('DEBUG', False):
                 print("continuing without firebase in dev mode")
+        
+        try:
+            mongodb = get_mongodb()
+            print("mongodb connected! :)")
+        except Exception as e:
+            print(f"mongodb error: {str(e)}")
+            if app.config.get('DEBUG', False):
+                print("continuing without mongodb in dev mode")
 
 def register_blueprints(app):
     # register our route blueprints
-    app.register_blueprint(auth_bp)
+    app.register_blueprint(firebase_mongo_auth_bp)  # Firebase + MongoDB auth routes
     app.register_blueprint(meal_bp)
-    app.register_blueprint(user_bp)
     app.register_blueprint(error_bp)
     print("routes registered! :)")
 

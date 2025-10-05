@@ -1,11 +1,16 @@
-/* Color Scheme: MacroMatch Theme 
-Light mode : #52B23B main green, #FFBB92 accent orange, #FFFFFF white, #000000 black
-Dark mode :  #1E1E2F main dark, #4B0082 accent purple, #FFFFFF white
-*/
-
-
 .App {
   text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
 }
 
 .App-header {
