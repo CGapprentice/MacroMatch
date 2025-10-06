@@ -8,6 +8,7 @@ from datetime import datetime
 from config import config
 from auth_routes import auth_bp
 from meal_routes import meal_bp
+from user_routes import user_bp
 from error_handlers import error_bp
 from firebase_config import get_firebase_service
 
@@ -48,6 +49,7 @@ def register_blueprints(app):
     # register our route blueprints
     app.register_blueprint(auth_bp)
     app.register_blueprint(meal_bp)
+    app.register_blueprint(user_bp)
     app.register_blueprint(error_bp)
     print("routes registered! :)")
 
@@ -70,7 +72,8 @@ def add_health_check(app):
             'endpoints': {
                 'health': '/health',
                 'auth': '/api/v1/auth',
-                'meals': '/api/v1/meals'
+                'meals': '/api/v1/meals',
+                'users': '/api/v1/users'
             },
             'timestamp': datetime.utcnow().isoformat()
         }), 200

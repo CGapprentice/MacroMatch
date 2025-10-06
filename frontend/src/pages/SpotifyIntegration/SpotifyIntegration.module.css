@@ -1,0 +1,176 @@
+.spotifyConnection{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.spotifyContainer{
+    border: 1px solid rgb(234, 230, 230);
+    padding: 10px;
+    border-radius: 5px;
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 144px;
+    margin-bottom: 30px;
+}
+
+.spotify{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.spotifyLogo{
+    height: 115px;
+    margin-right: 20px;
+}
+.spotifyText{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+.spotifyText p{
+    color: gray;
+    font-size: 14px;
+}
+
+.manageConnectionButton{
+    padding-right: 20px;
+}
+.manageConnectionButton button{
+    color: black;
+    background-color: #F3F4F6FF;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 10px 30px;
+}
+
+
+.generatePlaylist{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.playlistContainer{
+    border: 1px solid rgb(234, 230, 230);
+    padding: 10px;
+    width: 80%;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    padding: 20px 20px;
+}
+
+.playlistHeader{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+.playlistHeader p{
+    color:gray;
+}
+
+.workoutType{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.workoutType select{
+    height: 35px;
+    border-color: lightgray;
+    border-radius: 5px;
+    font-size: 16px;
+    padding-left: 10px;
+}
+
+.tempo{
+    display:flex;
+    flex-direction: column;
+}
+
+.tempo input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.tempo input[type="range"]:hover{
+    opacity: 1;
+}
+
+.tempo input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 1px solid lightgray;
+    background: white;
+    cursor: pointer;
+    border-radius: 50%;
+}
+.tempo input[type="range"]::-moz-range-thumb{
+    background: black;
+    cursor: pointer;
+
+}
+
+.rangeLabels{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 14px;
+    color: gray;
+    margin-bottom: 30px;
+}
+
+.preferredGenres{
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.genresLabels{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.genresLabels button{
+    background-color: F3F4F6FF;
+    border: 1px solid lightgray;
+    color: black;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.generateButton button{
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    width: 100%;
+    height: 50px;
+    border-radius: 5px;
+    font-size:20px;
+    cursor: pointer;
+}

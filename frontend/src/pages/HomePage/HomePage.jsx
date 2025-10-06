@@ -1,4 +1,4 @@
-import '../login.css'
+import styles from './HomePage.module.css'
 
 import { Link } from 'react-router-dom'
 import { useEffect } from 'react'
@@ -14,16 +14,16 @@ function HomePage() {
         <>
         <header>
             
-            <div className="homeHeader">
+            <div className={styles.homeHeader}>
                 <h1>MacroMatch</h1>
-                <div className="categoriesHeader">
+                <div className={styles.categoriesHeader}>
                     <p><a href="#home">Home</a></p>
                     <p><a href="#features">Features</a></p> 
                     <p><a href="#aboutUs">About Us</a></p>
                   
                     
                 </div>
-                <div className="login-signupHeader">
+                <div className={styles.loginsignupHeader}>
                     <Link to="/loginpage"><button>login</button></Link><br></br>
                     <Link to="/signinpage"><button>sign in</button></Link><br></br>   
                 </div>
@@ -34,39 +34,41 @@ function HomePage() {
         </header>
         <main>
             <section id="home" className="home">
-                <div className="whatIsMacro">
-                    <h1>What is MacroMatch?</h1>
-                    <br></br>
-                    <br></br>
-                    <p>MacroMatch is a helping tool for those who wish to reach their fitness goals.
-                    Either by losing weight, gaining weight, or maintaining weight. These goals
-                    shouldn't be that hard to reach but sometimes there is a need to get some help.
-                    Which is where MacroMatch comes into play. Keep on reading and will show how we help.
-                    </p>
-                </div>
-                <div className="macroimage">
-                    <img src="/macroMatchhomepage.jpg" className="imageHome" alt="person lifting weights" />
+                <div className={styles.homePageContainer}>
+                    <div className={styles.whatIsMacro}>
+                        <h1>What is MacroMatch?</h1>
+                        <br></br>
+                        <br></br>
+                        <p>MacroMatch is a helping tool for those who wish to reach their fitness goals.
+                        Either by losing weight, gaining weight, or maintaining weight. These goals
+                        shouldn't be that hard to reach but sometimes there is a need to get some help.
+                        Which is where MacroMatch comes into play. Keep on reading and will show how we help.
+                        </p>
+                    </div>
+                    <div className={styles.macroimage}>
+                        <img src="/macroMatchhomepage.jpg" className={styles.imageHome} alt="person lifting weights" />
+                    </div>
                 </div>
             </section>
 
 
 
-            <section id="features" className="features">
-                <div className="top-feature">
+            <section id="features" className={styles.features}>
+                <div className={styles.topfeature}>
                     <h1>Features</h1>
                     <p>The following are the features MacroMatch has</p>
                 </div>
 
 
-                <div className="featuresCategory">
+                <div className={styles.featuresCategory}>
                     <div>
                         
                         <img src="/homepageTracking.jpeg"/>
                     </div>
 
-                    <div className="calcSpot">
+                    <div className={styles.calcSpot}>
                         
-                        <div className="calcImage">
+                        <div className={styles.calcImage}>
                             <div>
                                 <img src="/homepageCalc.png" alt="calculator image"/>
                             </div>
@@ -77,7 +79,7 @@ function HomePage() {
                             
                         </div>
 
-                        <div className="musicImage">
+                        <div className={styles.musicImage}>
                             <div>
                                 <img src="/homepageMusic.png" alt="calculator image"/>
                             </div>
@@ -88,7 +90,7 @@ function HomePage() {
                         </div>
                         
 
-                        <div className="foodImage">
+                        <div className={styles.foodImage}>
                             <div>
                                 <img src="/homepageFood.png" alt="calculator image"/>
                             </div>
@@ -98,7 +100,7 @@ function HomePage() {
                             </div>
                         </div>
                         
-                        <div className="workoutImage">
+                        <div className={styles.workoutImage}>
                             <div>
                                 <img src="/homepageWorkout.png" alt="calculator image"/>
                             </div>
@@ -114,15 +116,15 @@ function HomePage() {
             </section>
 
 
-            <section id="aboutUs" className="aboutUs">
+            <section id="aboutUs" className={styles.aboutUs}>
                 <div>
-                    <div className="aboutUsHeader">
+                    <div className={styles.aboutUsHeader}>
                         <h1>About Us</h1>
                         <p>We are a group of four who really care about fitness. We believe that being fit can lead to a healthy life and wish the same for others. </p>
                     </div>
-                    <div className="aboutUsParagraph">
+                    <div className={styles.aboutUsParagraph}>
                         <h4>Why trust us?</h4>
-                        <p>This team is built up of computer science majors. We sit in a chair and stare into our computers most of the day. We ourselves need a healthy
+                        <p>This team is built up of computer science majors. We sit on a chair and stare into our computers most of the day. We ourselves need a healthy
                         life style because if we don't then you can imagine what will happen if we don't. (Knees will start cracking way earlier than they should). As well
                         who else would be the best to talk about being able to reach their fitness goals than people who literally be sitting all day. 
                         </p>

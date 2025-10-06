@@ -1,6 +1,6 @@
 # firebase setup for our app :)
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import credentials, firestore, auth
 from flask import current_app
 
 class FirebaseService:
@@ -78,6 +78,32 @@ class FirebaseService:
             print(f"error getting user by email: {str(e)}")
             raise e
     
+    def get_user_by_firebase_uid(self, firebase_uid):
+        # find user by firebase uid
+        try:
+            users_ref = self.db.collection('users')
+            query = users_ref.where('firebase_uid', '==', firebase_uid).limit(1)
+            docs = query.get()
+            if docs:
+                doc = docs[0]
+                user_data = doc.to_dict()
+                user_data['id'] = doc.id
+                return user_data
+            return None
+        except Exception as e:
+            print(f"error getting user by firebase uid: {str(e)}")
+            raise e
+    
+    def update_user(self, user_id, update_data):
+        # update user data
+        try:
+            doc_ref = self.db.collection('users').document(user_id)
+            doc_ref.update(update_data)
+            return True
+        except Exception as e:
+            print(f"error updating user: {str(e)}")
+            return False
+    
     def add_meal(self, user_id, meal_data):
         # add meal to user's meals
         try:
@@ -100,6 +126,31 @@ class FirebaseService:
             return meal_list
         except Exception as e:
             print(f"error getting meals: {str(e)}")
+            raise e
+    
+    def verify_firebase_token(self, id_token):
+        # verify firebase id token
+        try:
+            decoded_token = auth.verify_id_token(id_token)
+            return decoded_token
+        except Exception as e:
+            print(f"token verification failed: {str(e)}")
+            return None
+    
+    def get_user_by_firebase_uid(self, firebase_uid):
+        # find user by firebase uid
+        try:
+            users_ref = self.db.collection('users')
+            query = users_ref.where('firebase_uid', '==', firebase_uid).limit(1)
+            docs = query.get()
+            if docs:
+                doc = docs[0]
+                user_data = doc.to_dict()
+                user_data['id'] = doc.id
+                return user_data
+            return None
+        except Exception as e:
+            print(f"error getting user by firebase uid: {str(e)}")
             raise e
 
 # global firebase service
