@@ -1,0 +1,12 @@
+# basic flask stuff
+Flask==3.1.2
+Flask-CORS==4.0.0
+
+# firebase
+firebase-admin==6.4.0
+
+# mongodb
+pymongo==4.6.1
+
+# auth and config
+python-dotenv==1.0.0
