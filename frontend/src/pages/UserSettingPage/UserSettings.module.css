@@ -303,10 +303,18 @@
     padding-right: 50px;
 }
 
+.deleteButton{
+    background-image: inherit !important;   
+}
+
 .deleteAccount button{
     cursor: pointer;
     background-color:red;
     color: white;
     border-radius: 5px;
     width: 100%;
+}
+
+.downloadButton{
+    background-image: inherit !important;
 }

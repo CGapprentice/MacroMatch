@@ -262,7 +262,7 @@ function UserSettingsPage(){
                         <div className={styles.exportData}>
                             <h4>Data Export</h4>
                             <p>Download a copy of your activity logs, caloric records, and workout plans.</p>
-                            <button>Download My Data</button>
+                            <button className={styles.downloadButton}>Download My Data</button>
                         </div>
                         <div className={styles.deleteAccount}>
                             <h4> Permanently Delete Account</h4>
