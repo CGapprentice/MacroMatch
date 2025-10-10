@@ -88,7 +88,15 @@
     position: relative;
     margin: 8px;
 }
+.toggle:hover{
+    background-image: inherit !important;
 
+}
+/*
+.toggled:hover{
+    background-color: inherit !important;
+    color: inherit !important;
+}*/
 
 .toggle .inner{
     height: 25px;
@@ -108,9 +116,7 @@
     background-color: black;
 }
 
-.toggle:hover{
-    border-color: #6f6f6f;
-}
+
 
 .toggle.toggled .inner{
    left: calc(30px + 6px);
