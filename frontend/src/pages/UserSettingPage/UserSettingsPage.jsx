@@ -12,20 +12,49 @@ import ToggleSwitch from './toggleSwitch/toggleSwitch.jsx';
 function UserSettingsPage(){
     useEffect(()=>{
         document.title = "User Settings"
+        //loadUserData();
     }, [])
 
     // Temporary variables until authentication is properly implemented
+    const[loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
     const [userForm, setUserForm] = useState({
         firstName: '',
         lastName: '',
         email: ''
     });
+    /*
+    const loadUserData = async (e) => {
+        e.preventDefault();
 
-    const handleDefault = (e) => {
-        const {name, value} = e.target;
-        setUserForm(prev => ({...prev, [name]: value}))
-    };
+        const userCredential = getAuth().currentUser;
+        const token = await userCredential.getIdToken();
+        try{
+            const response = await fetch('http://localhost:5000/api/v1/auth/profile',{
+                method: 'GET',
+                headers: {
+                    'Authorization' : `Bearer ${token}`,
+                    'Content-Type' : 'application/json'
+                }
+            });
+            if(!response.ok){
+                throw new Error("Failed to get Users information", response.status);
+            }
+            const data = await response.json();
+            setUserForm({
+                firstName: data.user.name?.split(' ')[0]|| '',
+                lastName: data.user.name?.split(' ')[1]|| '',
+                email: data.user.email || ''
+            });
+        }catch(error){
+            console.error("Error fetching user data: ", error);
+        }
+    }*/
+    const handleInput = (e) =>{
+        const{name, value} = e.target;
+        setUserForm(prev => ({...prev, [name]: value}));
+    }
+
 
     /*
         const auth = getAuth();
@@ -107,7 +136,7 @@ function UserSettingsPage(){
                                         id="firstName"
                                         name="firstName"
                                         value={userForm.firstName}
-                                        onChange={handleDefault}
+                                        onChange={handleInput}
                                     />
                                 </div>
                                 
@@ -119,7 +148,7 @@ function UserSettingsPage(){
                                         id="lastName"
                                         name="lastName"
                                         value={userForm.lastName}
-                                        onChange={handleDefault}
+                                        onChange={handleInput}
                                         />
                                 </div>
                                
@@ -130,7 +159,7 @@ function UserSettingsPage(){
                                         id="email"
                                         name="email"
                                         value={userForm.email}
-                                        onChange={handleDefault}
+                                        onChange={handleInput}
                                     />
 
                                 </div>
