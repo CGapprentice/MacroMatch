@@ -1,7 +1,7 @@
 import React from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Router, RouterProvider } from 'react-router-dom'
 
-import HomePage from './pages/HomePage.jsx'
+import HomePage from './pages/HomePage/HomePage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import SignInPage from './pages/SigninPage.jsx'
 import { Calculator, UserProvider } from './components/index.js'
