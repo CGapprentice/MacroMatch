@@ -1,6 +1,18 @@
 import styles from './header.module.css'
 import { Link } from 'react-router-dom'
+import { getAuth, signOut } from 'firebase/auth'
+
+
 function HomePageHeader() {
+    const auth = getAuth();
+    const handleLogout = () =>{
+        signOut(auth).then(()=>{
+            console.log("User signed out")
+        }).catch((error)=>{
+            console.error("Error signing out user: ", error)
+        });
+    }
+
     return(
         <header>
                 <div className={styles.header}>
@@ -12,6 +24,9 @@ function HomePageHeader() {
                         <Link to='/spotifyintegration'><p>Spotify Integration </p></Link>
                         <Link to='/usersettingspage'><p>User Settings</p></Link>
 
+                    </div>
+                    <div className={styles.logoutButton}>
+                        <button onClick={handleLogout}> Logout </button>
                     </div>
                     <div className={styles.line}></div>
                 </div>

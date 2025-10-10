@@ -27,3 +27,18 @@
     text-decoration:none;
     color: black;
 }
+
+.logoutButton{
+    display: flex;
+    justify-content: flex-end;
+    width: 30%;
+    padding-right: 20px;
+}
+
+.logoutButton button{
+    background-color: black;
+    color: white;
+    padding: 8px 25px;
+    cursor: pointer;
+    border-radius: 8px;
+}
