@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage.jsx'
 import SignInPage from './pages/SigninPage.jsx'
 import { Calculator, UserProvider } from './components/index.js'
 import UserSettingsPage from './pages/UserSettingPage/UserSettingsPage.jsx'
+import RoutinePage from './pages/RoutinePage/RoutinePage.jsx'
 import './main.css'
 
 
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
   ,{
     path: '/usersettingspage',
     element: <UserSettingsPage />
+  },
+  {
+    path: '/routinepage',
+    element: <RoutinePage />
   }
 ])
 
