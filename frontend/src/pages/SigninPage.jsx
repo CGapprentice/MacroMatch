@@ -165,10 +165,12 @@ function SignInPage() {
                             <p>Already have an account? <Link to="/loginpage">log in</Link></p>
                             
                             <p className='Or'>OR</p>
+                            <div className="googleButton">
+                                <button className="google-signin" type="button">
+                                    <img src="/google_logo.png" className="googleLogo" alt="Google Logo" />
+                                </button>
+                            </div>
                             
-                            <button className="google-signin" type="button">
-                                <img src="/google_logo.png" className="googleLogo" alt="Google Logo" />
-                            </button>
                         </div>
                     </form>
                 </div>
