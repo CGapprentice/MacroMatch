@@ -18,7 +18,7 @@
 
 .signContainer{
   width: 500px; 
-  height: 600px;
+  height: auto;
   background-color: white;
 
   padding: 15px;

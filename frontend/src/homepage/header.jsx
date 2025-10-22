@@ -22,8 +22,9 @@ function HomePageHeader() {
                         <Link to='/calculatorpage'>Caloric Intake</Link>
 
                         <Link to='/spotifyintegration'><p>Spotify Integration </p></Link>
-                        <Link to='/usersettingspage'><p>User Settings</p></Link>
                         <Link to='/routinepage'><p>Your Routine</p></Link>
+                        <Link to='/usersettingspage'><p>User Settings</p></Link>
+                        
 
                     </div>
                     <div className={styles.logoutButton}>
