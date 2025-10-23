@@ -42,7 +42,6 @@
 }
 
 
-
 .set.chooseDay{
     background-color: black;
     color: white;
@@ -50,10 +49,26 @@
 }
 
 .routineSection{
+    width: 100%;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.popUp{
     border: 1px solid lightgray;
     border-radius: 10px;
     width: 70%;
     margin-top: 20px;
     padding: 20px 20px;
-    
+}
+
+.addbutton{
+    margin: 20px 0px;
+
+}
+
+.addbutton button{
+    background-color: black;
+    background-image: inherit !important;
 }

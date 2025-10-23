@@ -44,8 +44,6 @@ function InputPopup(){
         }
     }
 
-    
-
  
 
     const handleChange = (event)=>{
@@ -184,7 +182,7 @@ function InputPopup(){
                             </div>
                             <ul>
                                 {exercise.map((ex,idx) => (
-                                    <li key={idx}> {ex.name} (sets: {ex.sets} reps: {ex.reps})</li>
+                                    <li key={idx}> {ex.name} (reps: {ex.reps} sets: {ex.sets})</li>
                                 ))}
                             </ul>
                             

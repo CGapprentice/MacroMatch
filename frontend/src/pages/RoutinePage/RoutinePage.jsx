@@ -21,6 +21,7 @@ function RoutinePage(){
 
     const[showPopup, setShowPopup] = useState(false);
     const[activeDay, setActiveDay] = useState('');
+    const[dayCount,setDayCount] = useState(0);
 
 
     const handleDayClick = (selectedDay) =>{
@@ -74,8 +75,18 @@ function RoutinePage(){
                 </div>
             </section>
             <section className={styles.routineSection}>
-                <DayPopup showPopup={showPopup} activeDay={activeDay} selectedDay={chooseDay}/>
+                {Object.entries(chooseDay)
+                .filter(([day,isOpen]) => isOpen)
+                .map(([day]) => (
+                    <div className={styles.popUp} key={day}>
+                        <DayPopup key={day} showPopup={true} activeDay={day} selectedDay={day} dayCount={dayCount+1}/>
+                    </div>
+                ))}
                 
+                <div className={styles.addbutton}>
+                    <button>add routine</button> 
+                </div>
+                       
             </section>
 
 
