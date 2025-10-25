@@ -1,6 +1,8 @@
 import styles from './RoutinePage.module.css'
 import { useEffect, useState } from 'react'
 import HomePageHeader from '../../homepage/header.jsx'
+import SummaryPage from "./components/SummaryPage.jsx"
+
 
 import DayPopup from './components/DayPopup.jsx'
 
@@ -9,6 +11,8 @@ function RoutinePage(){
         document.title = 'Routine Page';
     },[])
 
+    const [routineSummary, setRoutineSummary] = useState(false);
+    const[data, setData] = useState({});
     const[chooseDay, setChooseDay] = useState({
         sunday: false,
         monday: false,
@@ -23,41 +27,49 @@ function RoutinePage(){
     const[activeDay, setActiveDay] = useState('');
     const[dayCount,setDayCount] = useState(0);
 
+    const check = Object.values(chooseDay).every(value => value === false);
 
     const handleDayClick = (selectedDay) =>{
         setChooseDay(prevState => {
            const newState = { ...prevState,
             [selectedDay]: !prevState[selectedDay]};
+            
             if(newState[selectedDay]){
                 setActiveDay(selectedDay);
                 setShowPopup(true);
-                console.log(selectedDay);
-                console.log(showPopup);
-                console.log(chooseDay);
-
+                setDayCount(prev => ({
+                    ...prev,
+                    [selectedDay]: (prev[selectedDay] || 0) + 1
+                }));
+                //setDayCount(dayCount + 1);
             }else{
                 setShowPopup(false);
-                console.log(selectedDay);
-                console.log(showPopup);
-                console.log(chooseDay);
+                setDayCount(prev => ({
+                    ...prev,
+                    [selectedDay] : (prev[selectedDay] || 0) - 1
+                }));
+                //setDayCount(dayCount - 1);
+    
             }
             return newState;
-        });
-    
-        /*
-        setActiveDay(selectedDay);
-        setShowPopup(true);
-        console.log(selectedDay);
-        console.log(chooseDay);*/
-
+        });  
     };
+
+
+    const addRoutine= ()=>{
+        setRoutineSummary(true);
+        console.log(data);
+    }
+
 
     return(
         <>
         <header>
             <HomePageHeader />
         </header>
-        <main className={styles.mainRoutine}>
+        {routineSummary ? (
+            <SummaryPage data={data} setRoutineSummary={setRoutineSummary} />
+        ): <main className={styles.mainRoutine}>
             <section className={styles.chooseContainer}>
                 <div className={styles.days}>
                     <div className={styles.routineHeader}>
@@ -79,19 +91,25 @@ function RoutinePage(){
                 .filter(([day,isOpen]) => isOpen)
                 .map(([day]) => (
                     <div className={styles.popUp} key={day}>
-                        <DayPopup key={day} showPopup={true} activeDay={day} selectedDay={day} dayCount={dayCount+1}/>
+                        <DayPopup key={day} showPopup={true} 
+                        activeDay={day} 
+                        selectedDay={day} 
+                        dayCount={dayCount[day] || 0}
+                        eachDayChange={(day, data) => 
+                            setData(prev => ({...prev, [day]: data})) 
+                        }
+                        />
                     </div>
                 ))}
-                
-                <div className={styles.addbutton}>
-                    <button>add routine</button> 
-                </div>
+                {check || routineSummary ? null : <div className={styles.addbutton}>
+                    <button onClick={addRoutine}>add routine</button> 
+                </div> }
                        
             </section>
 
 
             
-        </main>
+        </main>}
         </>
     )
 }

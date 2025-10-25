@@ -1,23 +1,9 @@
 import styles from "./InputPopup.module.css"
 import { useState } from 'react'
+import DayPopup from "./DayPopup.jsx"
 
-function InputPopup(){
-    const[selected, setSelected] = useState('Running');
-    const[duration, setDuration] = useState('');
-    const[speed, setSpeed] = useState('');
-    const[distance, setDistance] = useState('');
-    const[highIntensity, setHighIntensity] = useState('');
-    const[lowIntensity, setLowIntensity] = useState('');
-    const[restTime, setRestTime] = useState('');
-    
-    const[exercise, setExercise] = useState([]);
-    const[addingExercise, setAddingExercise] = useState('');
-    
-    const[notes, setNotes] = useState('');
-    const[excercisePerRound, setExercisePerRound] = useState('');
 
-    const[reps,setReps] = useState(0);
-    const[sets,setSets] = useState(0);
+function InputPopup({selected, setSelected, duration, setDuration, speed, setSpeed, distance, setDistance, highIntensity,setHighIntensity, lowIntensity, setLowIntensity, restTime, setRestTime, exercise, setExercise, addingExercise, setAddingExercise, notes, setNotes, excercisePerRound, setExercisePerRound, reps, setReps, sets, setSets }){
 
     function onClickRep(){
         setReps(reps+1);

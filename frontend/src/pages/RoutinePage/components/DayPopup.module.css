@@ -24,3 +24,11 @@
     padding: 0 10px;
 }
 
+.types button{
+    background-image: inherit !important;
+}
+
+.saveButton button{
+    background-color: black;
+    background-image: inherit !important;
+}
