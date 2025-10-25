@@ -25,7 +25,6 @@ function RoutinePage(){
 
     const[showPopup, setShowPopup] = useState(false);
     const[activeDay, setActiveDay] = useState('');
-    const[dayCount,setDayCount] = useState(0);
 
     const check = Object.values(chooseDay).every(value => value === false);
 
@@ -37,18 +36,8 @@ function RoutinePage(){
             if(newState[selectedDay]){
                 setActiveDay(selectedDay);
                 setShowPopup(true);
-                setDayCount(prev => ({
-                    ...prev,
-                    [selectedDay]: (prev[selectedDay] || 0) + 1
-                }));
-                //setDayCount(dayCount + 1);
             }else{
                 setShowPopup(false);
-                setDayCount(prev => ({
-                    ...prev,
-                    [selectedDay] : (prev[selectedDay] || 0) - 1
-                }));
-                //setDayCount(dayCount - 1);
     
             }
             return newState;
@@ -91,10 +80,10 @@ function RoutinePage(){
                 .filter(([day,isOpen]) => isOpen)
                 .map(([day]) => (
                     <div className={styles.popUp} key={day}>
-                        <DayPopup key={day} showPopup={true} 
+                        <DayPopup key={day} showPopup={showPopup} 
                         activeDay={day} 
                         selectedDay={day} 
-                        dayCount={dayCount[day] || 0}
+                        setShowPopup={setShowPopup}
                         eachDayChange={(day, data) => 
                             setData(prev => ({...prev, [day]: data})) 
                         }

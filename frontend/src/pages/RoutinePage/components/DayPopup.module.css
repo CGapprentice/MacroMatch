@@ -9,10 +9,13 @@
     color: black;
     background-color: white;
     background-image: inherit !important;
-    width: 5px;
-    height:10px;
+    padding: 1px 3px;
 }
 .workoutOptions{
+    padding: 10px 0px;
+}
+
+.types{
     padding: 10px 0px;
 }
 

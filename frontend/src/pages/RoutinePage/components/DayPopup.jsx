@@ -2,7 +2,7 @@ import styles from './DayPopup.module.css'
 import InputPopup from './InputPopup.jsx'
 import { useState } from 'react'
 
-function DayPopup({showPopup, activeDay, dayCount, setDay, eachDayChange}){
+function DayPopup({showPopup, activeDay, setDay, eachDayChange, setShowPopup}){
     const [routine, setRoutine] = useState('');
     const capitalizedDay = activeDay.charAt(0).toUpperCase() + activeDay.slice(1);
     
@@ -48,18 +48,34 @@ function DayPopup({showPopup, activeDay, dayCount, setDay, eachDayChange}){
         eachDayChange(activeDay, data);
 
     }
+    /* Function helps closing Popup and clearing. Only thing is that need to change the button colors
+    function handleDeleting(){
+        setShowPopup(false);
+        setRoutine('');
+        setSelected('Running');
+        setDuration('');
+        setSpeed('');
+        setDistance('');
+        setHighIntensity('');
+        setLowIntensity('');
+        setRestTime('');
+        setExercise([]);
+        setNotes('');
+        setExercisePerRound('');
+        setReps(0);
+        setSets(0);
+    }
+    */
    
     
     return(
         <div className={styles.DayPopupContainter}>
             <div className={styles.DayPopup}>
                 <div className={styles.topBox}>
-                    <h1>{capitalizedDay}</h1> <button>X</button>
+                    <h1>{capitalizedDay}</h1> {/* <button onClick={handleDeleting}>X</button>*/}
                 </div>
                 
-                <div className={styles.workoutOptions}>
-                    <h4>Workout {dayCount}</h4>
-                </div>
+                
                 <div className={styles.types}>
                     <InputPopup
                         selected={selected} 

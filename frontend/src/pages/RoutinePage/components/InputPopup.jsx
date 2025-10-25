@@ -70,7 +70,6 @@ function InputPopup({selected, setSelected, duration, setDuration, speed, setSpe
                                     <label htmlFor="timeduration">Total Duration:</label>
                                     <input
                                         type="text"
-                                        placeholder="(hh:mm:ss)"
                                         value= {duration}
                                         onChange={e=> setDuration(e.target.value)}
                                     />

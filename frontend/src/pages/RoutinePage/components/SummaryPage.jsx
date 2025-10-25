@@ -40,7 +40,7 @@ function SummaryPage({data,setRoutineSummary}){
 
                     {routine.selected==="Strength" ? (
                         <div className={styles.strengthSection}>
-                            <p>Type of Workout: {routine.selected}</p>
+                            <p><b>Type of Workout:</b> {routine.selected}</p>
                             {routine.exercise && routine.exercise.map((exercise, each) =>(
                             <div key={each}>
                                 <p><b>Exercise:</b> {exercise.name}</p>
