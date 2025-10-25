@@ -38,7 +38,12 @@ function RoutinePage(){
                 setShowPopup(true);
             }else{
                 setShowPopup(false);
-    
+                setData(prev=>{
+                    const update = {...prev};
+                    delete update[selectedDay];
+                    return update;
+                });
+
             }
             return newState;
         });  
@@ -80,10 +85,9 @@ function RoutinePage(){
                 .filter(([day,isOpen]) => isOpen)
                 .map(([day]) => (
                     <div className={styles.popUp} key={day}>
-                        <DayPopup key={day} showPopup={showPopup} 
+                        <DayPopup key={day} showPopup={true} 
                         activeDay={day} 
                         selectedDay={day} 
-                        setShowPopup={setShowPopup}
                         eachDayChange={(day, data) => 
                             setData(prev => ({...prev, [day]: data})) 
                         }

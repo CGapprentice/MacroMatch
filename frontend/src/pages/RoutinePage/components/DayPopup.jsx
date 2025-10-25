@@ -2,7 +2,7 @@ import styles from './DayPopup.module.css'
 import InputPopup from './InputPopup.jsx'
 import { useState } from 'react'
 
-function DayPopup({showPopup, activeDay, setDay, eachDayChange, setShowPopup}){
+function DayPopup({showPopup, activeDay, setDay, eachDayChange}){
     const [routine, setRoutine] = useState('');
     const capitalizedDay = activeDay.charAt(0).toUpperCase() + activeDay.slice(1);
     
