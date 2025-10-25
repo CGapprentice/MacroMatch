@@ -1,0 +1,55 @@
+.summaryPage{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 100px;
+    gap: 20px;
+}
+
+.editButton{
+    display:flex;
+    width:85%;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+.editButton button{
+    background-color: black;
+    background-image: inherit !important;
+    border-radius: 5px;
+}
+
+
+.boxes{
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    width: 70%;
+    padding: 20px 20px;
+    display:flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cardioSection{
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.intervalSection{
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.strengthSection{
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.yogaSection{
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+}

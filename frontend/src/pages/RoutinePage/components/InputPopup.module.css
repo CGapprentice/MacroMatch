@@ -1,0 +1,145 @@
+.cardioformat{
+    width: 100%;
+}
+
+
+.typeofWorkout{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+.cardioSelect{
+    display:flex; 
+    flex-direction: column;
+    gap: 10px;
+    padding-right: 100px;
+    margin-left: 30px;
+}
+
+
+.cardioSelect input{
+    width: 100%;
+}
+
+.spacebetweentypes{
+    display:flex;
+    padding-bottom: 10px;
+}
+
+.strengthExercise{
+    display: flex;
+    flex-direction: column;
+    padding-right: 100px;
+    gap: 10px;
+    width: 100%;
+    margin-left: 30px;
+}
+
+.strengthExercise select{
+    width:100%;
+}
+
+.strengthExercise input{
+    width: 100%;
+}
+
+.repSection{
+    display:flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.setReps{
+    display: flex;
+    flex-direction: row;
+}
+
+.repBox{
+    display: flex;
+    align-items: center;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+}
+.repBox button{
+    padding: 8px 15px;
+    background-image: inherit !important;
+}
+
+
+
+.setBox{
+    display: flex;
+    align-items: center;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+}
+.minus{
+    color: black;
+    margin-right: 10px;
+}
+
+.plus{
+    background-color: black;
+    margin-left: 10px;
+}
+
+.setBox button{
+    padding: 8px 15px;
+    background-image: inherit !important;
+}
+
+.addExerciseButton{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.addExerciseButton button{
+    background-color: black;
+    color: white;
+    background-image: inherit !important;
+}
+
+.HITIntervalworkout{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 20px;
+    width: 100%;
+}
+
+.HITIntervalworkout textarea{
+    display:flex;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid lightgray;
+    padding: 10px 10px;
+    color: black;
+    width: 100%;
+    height: 75px;
+    resize: vertical;
+
+}
+
+
+.rightExercisePerRound input{
+
+    margin-bottom: 10px;
+}
+
+
+.yogasection{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 30px;
+    width: 100%;
+}
+
+.yogasection textarea{
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    resize: vertical;
+    height: 100px;
+    padding: 10px 10px;
+    width: 100%;
+}

@@ -1,0 +1,44 @@
+.header{
+    padding: 10px 0;
+    width: 100%;
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgb(196, 193, 193);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    
+}
+.header h1{
+    font-style: italic;
+}
+
+.links{
+    gap: 20px;
+    font-size: .8em;
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    
+    
+}
+
+.links a{
+    text-decoration:none;
+    color: black;
+}
+
+.logoutButton{
+    display: flex;
+    justify-content: flex-end;
+    width: 30%;
+    padding-right: 20px;
+}
+
+.logoutButton button{
+    background-color: black;
+    color: white;
+    padding: 8px 25px;
+    cursor: pointer;
+    border-radius: 8px;
+}

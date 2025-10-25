@@ -17,8 +17,10 @@ class Config:
     FIREBASE_AUTH_URI = os.environ.get('FIREBASE_AUTH_URI')
     FIREBASE_TOKEN_URI = os.environ.get('FIREBASE_TOKEN_URI')
     
-    # jwt config
-    JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') or SECRET_KEY
+    # mongodb config
+    MONGODB_URI = os.environ.get('MONGODB_URI', 'mongodb://localhost:27017/')
+    MONGODB_DB_NAME = os.environ.get('MONGODB_DB_NAME', 'macromatch')
+    
     
     # cors config
     CORS_ORIGINS = os.environ.get('CORS_ORIGINS', 'http://localhost:3000').split(',')
