@@ -332,99 +332,97 @@ const Calculator = () => {
   };
 
   const handleGeneratePlaylist = async () => {
-    if (!spotifyConnected) {
-      alert('Please connect your Spotify account first!');
-      return;
-    }
-    
-    try {
-      const duration = parseInt(formData.timeAvailable.split('-')[0]);
-      const playlist = await generatePlaylist(formData.workoutType, duration, formData.fitnessLevel);
-      alert(`Created playlist: "${playlist.name}" 🎵\nOpen Spotify to listen!`);
-    } catch (error) {
+  if (!spotifyConnected) {
+    alert('Please connect your Spotify account first or configure Spotify credentials!');
+    return;
+  }
+  
+  try {
+    const duration = parseInt(formData.timeAvailable.split('-')[0]);
+    const playlist = await generatePlaylist(formData.workoutType, duration, formData.fitnessLevel);
+    alert(`Created playlist: "${playlist.name}" 🎵\nOpen Spotify to listen!`);
+  } catch (error) {
+    if (error.message.includes('Spotify integration is not configured')) {
+      alert('Spotify integration is not set up yet. Please configure Spotify credentials.');
+    } else {
       alert('Failed to generate playlist. Please try again.');
     }
-  };
+  }
+};
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="content-wrapper">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-20">
-        <div className="max-w-6xl mx-auto flex items-center justify-between p-5">
-          <div className="text-xl font-bold text-gray-800">MacroMatch</div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">Welcome, {user?.name || user?.email}</span>
-            <button 
-              onClick={handleLogout}
-              className="text-sm text-red-600 hover:text-red-800"
-            >
-              Logout
-            </button>
+      <header className="calculator-header">
+        <div className="header-content">
+          <div className="header-title">MacroMatch</div>
+          <div className="header-user">
+            <span className="user-welcome">Welcome, {user?.name || user?.email}</span>
+            <button onClick={handleLogout} className="logout-button">Logout</button>
           </div>
         </div>
       </header>
-
-      <main className="max-w-6xl mx-auto p-5">
+      
+      <main className="calculator-main">
         {/* Title */}
-        <div className="mb-7">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Enhanced Caloric Intake Calculator</h1>
-          <p className="text-gray-600">Get personalized caloric recommendations, dynamic workout plans, and calculated macronutrient breakdowns.</p>
+        <h1>Macro Calculator</h1>
+        <div className="title-section">
+          <h1 className="main-title">Enhanced Caloric Intake Calculator</h1>
+          <p className="subtitle">Get personalized caloric recommendations, dynamic workout plans, and calculated macronutrient breakdowns.</p>
           {lastSaved && (
-            <div className="mt-2 text-sm text-green-600">
-              ✓ Last saved: {lastSaved.toLocaleTimeString()}
-            </div>
+            <div className="save-status">✓ Last saved: {lastSaved.toLocaleTimeString()}</div>
           )}
         </div>
 
         {/* Form Card */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 mb-5">
-          <h2 className="text-lg font-semibold mb-2">Basic Information</h2>
-          <p className="text-gray-600 text-sm mb-4">Enter your current metrics and goals.</p>
+        <div className="card">
+          <h2 className="section-title">Basic Information</h2>
+          <p className="section-subtitle">Enter your current metrics and goals.</p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="form-grid">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Current Weight</label>
+              <label className="form-label">Current Weight</label>
               <input
                 type="number"
                 name="weight"
                 value={formData.weight}
                 onChange={handleInputChange}
                 placeholder={getPlaceholder('weight')}
-                className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="form-input"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Height</label>
+              <label className="form-label">Height</label>
               <input
                 type="number"
                 name="height"
                 value={formData.height}
                 onChange={handleInputChange}
                 placeholder={getPlaceholder('height')}
-                className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="form-input"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Age</label>
+              <label className="form-label">Age</label>
               <input
                 type="number"
                 name="age"
                 value={formData.age}
                 onChange={handleInputChange}
                 placeholder="30"
-                className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="form-input"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Gender</label>
+              <label className="form-label">Gender</label>
               <select
                 name="gender"
                 value={formData.gender}
                 onChange={handleInputChange}
-                className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="form-input"
               >
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -432,12 +430,12 @@ const Calculator = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Activity Level</label>
+              <label className="form-label">Activity Level</label>
               <select
                 name="activity"
                 value={formData.activity}
                 onChange={handleInputChange}
-                className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="form-input"
               >
                 <option value="1.2">Sedentary</option>
                 <option value="1.375">Light Activity</option>
@@ -448,19 +446,19 @@ const Calculator = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Target Weight</label>
+              <label className="form-label">Target Weight</label>
               <input
                 type="number"
                 name="targetWeight"
                 value={formData.targetWeight}
                 onChange={handleInputChange}
                 placeholder={getPlaceholder('targetWeight')}
-                className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="form-input"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Body Fat % (optional)</label>
+              <label className="form-label">Body Fat % (optional)</label>
               <input
                 type="number"
                 name="bodyFat"
@@ -470,17 +468,17 @@ const Calculator = () => {
                 min="5"
                 max="50"
                 step="0.1"
-                className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="form-input"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Units</label>
+              <label className="form-label">Units</label>
               <select
                 name="units"
                 value={formData.units}
                 onChange={handleInputChange}
-                className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="form-input"
               >
                 <option value="imperial">Imperial (lbs / inches)</option>
                 <option value="metric">Metric (kg / cm)</option>
@@ -489,17 +487,17 @@ const Calculator = () => {
           </div>
 
           {/* Fitness Preferences Section */}
-          <div className="border-t-2 border-gray-200 pt-5 mt-5">
-            <h4 className="text-gray-800 font-semibold mb-4">Fitness Preferences</h4>
+          <div className="preferences-section">
+            <h4 className="preferences-title">Fitness Preferences</h4>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="form-grid">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Fitness Level</label>
+                <label className="form-label">Fitness Level</label>
                 <select
                   name="fitnessLevel"
                   value={formData.fitnessLevel}
                   onChange={handleInputChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="form-input"
                 >
                   <option value="beginner">Beginner</option>
                   <option value="intermediate">Intermediate</option>
@@ -508,12 +506,12 @@ const Calculator = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Available Equipment</label>
+                <label className="form-label">Available Equipment</label>
                 <select
                   name="equipment"
                   value={formData.equipment}
                   onChange={handleInputChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="form-input"
                 >
                   <option value="none">No Equipment</option>
                   <option value="basic">Basic (Dumbbells/Resistance Bands)</option>
@@ -523,12 +521,12 @@ const Calculator = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Workout Time Available</label>
+                <label className="form-label">Workout Time Available</label>
                 <select
                   name="timeAvailable"
                   value={formData.timeAvailable}
                   onChange={handleInputChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="form-input"
                 >
                   <option value="15-30">15-30 minutes</option>
                   <option value="30-45">30-45 minutes</option>
@@ -538,12 +536,12 @@ const Calculator = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Primary Goal</label>
+                <label className="form-label">Primary Goal</label>
                 <select
                   name="primaryGoal"
                   value={formData.primaryGoal}
                   onChange={handleInputChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="form-input"
                 >
                   <option value="weight_loss">Weight Loss</option>
                   <option value="muscle_gain">Muscle Gain</option>
@@ -553,12 +551,12 @@ const Calculator = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Preferred Workout Type</label>
+                <label className="form-label">Preferred Workout Type</label>
                 <select
                   name="workoutType"
                   value={formData.workoutType}
                   onChange={handleInputChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="form-input"
                 >
                   <option value="cardio">Cardio Focus</option>
                   <option value="strength">Strength Focus</option>
@@ -568,12 +566,12 @@ const Calculator = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Dietary Preference</label>
+                <label className="form-label">Dietary Preference</label>
                 <select
                   name="dietType"
                   value={formData.dietType}
                   onChange={handleInputChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="form-input"
                 >
                   <option value="balanced">Balanced</option>
                   <option value="low_carb">Low Carb</option>
@@ -584,15 +582,15 @@ const Calculator = () => {
             </div>
           </div>
 
-          <div className="flex justify-start">
+          <div className="button-container">
             <button
               onClick={calculateCalories}
               disabled={loading}
-              className="bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold text-sm hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="calculate-button"
             >
               {loading ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  <span className="spinner"></span>
                   Saving...
                 </>
               ) : (
@@ -603,177 +601,130 @@ const Calculator = () => {
         </div>
 
         {/* Results Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
+        <div className="results-grid">
           {/* Caloric Snapshot */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
-            <h3 className="text-lg font-semibold mb-2">Your Caloric Snapshot</h3>
-            <p className="text-gray-600 text-sm mb-4">Personalized recommendations for your goals.</p>
+          <div className="card result-card">
+            <h3 className="card-title">Your Caloric Snapshot</h3>
+            <p className="card-subtitle">Personalized recommendations for your goals.</p>
 
-            <div className="space-y-3">
-              <div className="flex justify-between items-center py-2 border-t border-dashed border-gray-200 first:border-t-0 first:pt-0">
-                <span className="text-gray-600 text-sm">Basal Metabolic Rate (BMR)</span>
-                <span className="text-lg font-bold text-gray-800">{formatKcal(results.bmr)}</span>
+            <div className="result-items">
+              <div className="result-item">
+                <span className="result-label">Basal Metabolic Rate (BMR)</span>
+                <span className="result-value">{formatKcal(results.bmr)}</span>
               </div>
-              <div className="flex justify-between items-center py-2 border-t border-dashed border-gray-200">
-                <span className="text-gray-600 text-sm">Total Daily Energy Expenditure</span>
-                <span className="text-lg font-bold text-gray-800">{formatKcal(results.tdee)}</span>
+              <div className="result-item">
+                <span className="result-label">Total Daily Energy Expenditure</span>
+                <span className="result-value">{formatKcal(results.tdee)}</span>
               </div>
-              <div className="flex justify-between items-center py-2 border-t border-dashed border-gray-200">
-                <span className="text-gray-600 text-sm">Recommended Daily Intake</span>
-                <span className="text-lg font-bold text-gray-800">{formatKcal(results.recommendedIntake)}</span>
+              <div className="result-item">
+                <span className="result-label">Recommended Daily Intake</span>
+                <span className="result-value">{formatKcal(results.recommendedIntake)}</span>
               </div>
-              <div className="flex justify-between items-center py-2 border-t border-dashed border-gray-200">
-                <span className="text-gray-600 text-sm font-semibold">Daily Caloric Goal</span>
-                <span className={`text-xl font-bold ${
-                  results.dailyGoal < results.recommendedIntake ? 'text-red-500' :
-                  results.dailyGoal > results.recommendedIntake ? 'text-green-500' : 'text-gray-800'
+              <div className="result-item">
+                <span className="result-label">Daily Caloric Goal</span>
+                <span className={`result-goal ${
+                  results.dailyGoal < results.recommendedIntake ? 'goal-loss' :
+                  results.dailyGoal > results.recommendedIntake ? 'goal-gain' : ''
                 }`}>
                   {formatKcal(results.dailyGoal)}
                 </span>
               </div>
             </div>
 
-            <p className="text-xs text-gray-500 mt-4">
-              Calculations based on your personal metrics and goals. Consult a professional for personalized advice.
-            </p>
+            <p className="disclaimer">Calculations based on your personal metrics and goals. Consult a professional for personalized advice.</p>
           </div>
 
           {/* Workout Plan */}
-          <div className="lg:col-span-2 bg-white rounded-lg shadow-sm border border-gray-100 p-6">
-            <h3 className="text-lg font-semibold mb-2">Personalized Workout Plan</h3>
-            <p className="text-gray-600 text-sm mb-4">Customized exercises based on your preferences and goals.</p>
+          <div className="card workout-plan-card">
+            <h3 className="card-title">Personalized Workout Plan</h3>
+            <p className="card-subtitle">Customized exercises based on your preferences and goals.</p>
 
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-sm">
+            <div className="table-container">
+              <table className="data-table">
                 <thead>
-                  <tr className="bg-gray-50">
-                    <th className="text-left p-3 border-b border-gray-200 font-semibold">Exercise</th>
-                    <th className="text-left p-3 border-b border-gray-200 font-semibold">Duration</th>
-                    <th className="text-left p-3 border-b border-gray-200 font-semibold">Estimated Burn</th>
+                  <tr className="table-header">
+                    <th className="table-cell">Exercise</th>
+                    <th className="table-cell">Duration</th>
+                    <th className="table-cell">Estimated Burn</th>
                   </tr>
                 </thead>
                 <tbody>
                   {results.workouts.length > 0 ? (
                     results.workouts.map((workout, index) => (
-                      <tr key={index} className="border-b border-gray-100">
-                        <td className="p-3 text-gray-700">{workout.name}</td>
-                        <td className="p-3 text-gray-700">{workout.duration}</td>
-                        <td className="p-3 text-gray-700">{workout.estimatedBurn} kcal</td>
+                      <tr key={index} className="table-row">
+                        <td className="table-cell">{workout.name}</td>
+                        <td className="table-cell">{workout.duration}</td>
+                        <td className="table-cell">{workout.estimatedBurn} kcal</td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="3" className="p-3 text-gray-500 text-center">
-                        Complete the form to see your personalized workout plan
-                      </td>
+                      <td colSpan="3" className="table-empty">Complete the form to see your personalized workout plan</td>
                     </tr>
                   )}
                 </tbody>
               </table>
             </div>
 
-            <div className="mt-4">
+            <div className="playlist-button">
               <button
                 onClick={handleGeneratePlaylist}
-                className="bg-white text-gray-800 border border-gray-300 px-4 py-2 rounded-lg font-semibold text-sm hover:bg-gray-50 flex items-center gap-2"
+                className="playlist-button-style"
               >
                 {spotifyConnected ? (
-                  <>
-                    🎵 Generate Workout Playlist
-                  </>
+                  <>🎵 Generate Workout Playlist</>
                 ) : (
-                  <>
-                    🎧 Connect Spotify to Generate Playlist
-                  </>
+                  <>🎧 Connect Spotify to Generate Playlist</>
                 )}
               </button>
               {spotifyConnected && (
-                <div className="mt-2 text-xs text-green-600">
-                  ✓ Spotify connected
-                </div>
+                <div className="playlist-status">✓ Spotify connected</div>
               )}
             </div>
           </div>
         </div>
 
         {/* Macronutrient Breakdown */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
-          <h3 className="text-lg font-semibold mb-2">Dynamic Macronutrient Breakdown</h3>
-          <p className="text-gray-600 text-sm mb-4">Calculated distribution based on your goals and dietary preferences.</p>
+        <div className="card macro-breakdown-card">
+          <h3 className="card-title">Dynamic Macronutrient Breakdown</h3>
+          <p className="card-subtitle">Calculated distribution based on your goals and dietary preferences.</p>
 
-          <div className="flex flex-col lg:flex-row items-start gap-6">
-            {/* Donut Chart */}
-            <div className="flex-shrink-0 relative">
-              <svg viewBox="0 0 36 36" className="w-40 h-40 transform -rotate-90">
-                <circle
-                  className="fill-none stroke-purple-600"
-                  strokeWidth="6"
-                  strokeLinecap="butt"
-                  r="15.91549430918954"
-                  cx="18"
-                  cy="18"
-                  strokeDasharray={`${results.macros.carbs} ${100 - results.macros.carbs}`}
-                  strokeDashoffset="25"
-                />
-                <circle
-                  className="fill-none stroke-purple-800"
-                  strokeWidth="6"
-                  strokeLinecap="butt"
-                  r="15.91549430918954"
-                  cx="18"
-                  cy="18"
-                  strokeDasharray={`${results.macros.protein} ${100 - results.macros.protein}`}
-                  strokeDashoffset={`${25 - results.macros.carbs}`}
-                />
-                <circle
-                  className="fill-none stroke-cyan-600"
-                  strokeWidth="6"
-                  strokeLinecap="butt"
-                  r="15.91549430918954"
-                  cx="18"
-                  cy="18"
-                  strokeDasharray={`${results.macros.fats} ${100 - results.macros.fats}`}
-                  strokeDashoffset={`${25 - results.macros.carbs - results.macros.protein}`}
-                />
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="font-bold text-gray-800">
-                    {results.macros.carbs}% / {results.macros.protein}% / {results.macros.fats}%
-                  </div>
-                </div>
+          <div className="macro-container">
+            {/* Placeholder for chart - replace with plain CSS styling if needed */}
+            <div className="macro-chart">
+              <div className="chart-center">
+                <div className="macro-percent">{results.macros.carbs}% / {results.macros.protein}% / {results.macros.fats}%</div>
               </div>
             </div>
 
-            {/* Legend and Details */}
-            <div className="flex-1">
-              <div className="flex flex-wrap gap-4 mb-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-purple-800 rounded"></div>
-                  <span className="text-sm text-gray-700">Proteins — <strong>{results.macros.protein}%</strong></span>
+            <div className="macro-details">
+              <div className="macro-legend">
+                <div className="legend-item">
+                  <div className="legend-color purple-800"></div>
+                  <span>Proteins — <strong>{results.macros.protein}%</strong></span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-purple-600 rounded"></div>
-                  <span className="text-sm text-gray-700">Carbohydrates — <strong>{results.macros.carbs}%</strong></span>
+                <div className="legend-item">
+                  <div className="legend-color purple-600"></div>
+                  <span>Carbohydrates — <strong>{results.macros.carbs}%</strong></span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-cyan-600 rounded"></div>
-                  <span className="text-sm text-gray-700">Fats — <strong>{results.macros.fats}%</strong></span>
+                <div className="legend-item">
+                  <div className="legend-color cyan-600"></div>
+                  <span>Fats — <strong>{results.macros.fats}%</strong></span>
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
-                <div className="bg-gray-50 p-3 rounded-lg text-center">
-                  <div className="text-lg font-bold text-gray-800">{results.macroGrams.protein}g</div>
-                  <div className="text-xs text-gray-500 uppercase">Protein Daily</div>
+              <div className="macro-values">
+                <div className="macro-value">
+                  <div className="value-number">{results.macroGrams.protein}g</div>
+                  <div className="value-label">Protein Daily</div>
                 </div>
-                <div className="bg-gray-50 p-3 rounded-lg text-center">
-                  <div className="text-lg font-bold text-gray-800">{results.macroGrams.carbs}g</div>
-                  <div className="text-xs text-gray-500 uppercase">Carbs Daily</div>
+                <div className="macro-value">
+                  <div className="value-number">{results.macroGrams.carbs}g</div>
+                  <div className="value-label">Carbs Daily</div>
                 </div>
-                <div className="bg-gray-50 p-3 rounded-lg text-center">
-                  <div className="text-lg font-bold text-gray-800">{results.macroGrams.fats}g</div>
-                  <div className="text-xs text-gray-500 uppercase">Fats Daily</div>
+                <div className="macro-value">
+                  <div className="value-number">{results.macroGrams.fats}g</div>
+                  <div className="value-label">Fats Daily</div>
                 </div>
               </div>
             </div>
@@ -781,19 +732,18 @@ const Calculator = () => {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="mt-8 py-6 bg-transparent">
-        <div className="max-w-6xl mx-auto px-5 flex justify-between items-center text-gray-500">
-          <div className="flex gap-4">
-            <a href="#" className="text-sm">Product</a>
+      <footer className="calculator-footer">
+        <div className="footer-content">
+          <div className="footer-links">
+            <a href="#" className="footer-link">Product</a>
             <span>|</span>
-            <a href="#" className="text-sm">Legal</a>
+            <a href="#" className="footer-link">Legal</a>
           </div>
-          <div className="flex gap-2">
-            <a href="#" className="text-sm">f</a>
-            <a href="#" className="text-sm">t</a>
-            <a href="#" className="text-sm">ig</a>
-            <a href="#" className="text-sm">in</a>
+          <div className="footer-social">
+            <a href="#" className="social-link">f</a>
+            <a href="#" className="social-link">t</a>
+            <a href="#" className="social-link">ig</a>
+            <a href="#" className="social-link">in</a>
           </div>
         </div>
       </footer>

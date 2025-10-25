@@ -11,16 +11,25 @@
 }
 
 /*Home Page Home section */
-.homeHeader h1{
+.homeHeader h1 {
+  /* Fix: Use a responsive font size, not one based on an unstable viewport width */
+  font-size: 24px; /* Set a standard size */
   font-style: italic;
-  font-size: 2.5vw;
 }
 
-.homeHeader{
+@media (min-width: 900px) {
+  /* Only apply the larger size on big screens */
+  .homeHeader h1 {
+    font-size: 2.5vw; /* Optional: Keep the scaling on large screens */
+  }
+}
+
+.homeHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 10px;
+  /* Fix: Add responsive padding to ensure no overflow */
+  padding: 10px 20px; 
 }
 
 .categoriesHeader{
@@ -54,12 +63,13 @@
 .home{
   background-image: linear-gradient(180deg, #1E1E2FFF 0%, #50507CFF 100%);
   background-size: cover;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   color: white;
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
+  overflow-x: hidden;
 }
 
 .whatIsMacro{
@@ -86,7 +96,7 @@
 
 /* Home Page Feature Section */
 .features{
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   display: block;
   padding: 10vh 10vw;
@@ -114,7 +124,8 @@
 }
 .featuresCategory img{
   height: 60vh;
-  width: 40vw;
+  width: 100%; /* Changed to 100% width relative to its container */
+  max-width: 400px; /* Cap its max size */
   padding-right: 2vw;
 }
 
@@ -165,10 +176,12 @@
 /*About Us Section of Home Page*/
 
 .aboutUs{
-  width: 100vw;
+  width: 100%;
   height: 100vh;
-  padding: 5vh 10vw;
+  padding: 5vh 5%;
+  overflow-x: hidden;
 }
+
 .aboutUs h1{
   padding-bottom: 10px;
 }
@@ -215,10 +228,13 @@
 .gradient{
   /*background-image: linear-gradient( to bottom right, rgb(27, 155, 27), rgb(221, 221, 55));*/
   background-image: linear-gradient(180deg, #1E1E2FFF 0%, #50507CFF 100%);
-  min-height: 100vh;
-  width: 60%;
-  object-fit: sticky;
-  top:0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  width: 100vw;
 }
 
 .loginImage{
@@ -245,13 +261,16 @@
 
 }
 
-.loginText{
+/* Fix: The login text box often uses a fixed width, make it fully responsive */
+.loginText {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 30vw;
-
+  /* CRITICAL FIX: Replace hard-coded viewport width with responsive max-width */
+  width: 100%; 
+  max-width: 400px; /* Optional: Cap the max width on a large screen */
 }
+
 .loginText button{
   background-image: linear-gradient(180deg, #1E1E2FFF 0%, #50507CFF 100%);
 }

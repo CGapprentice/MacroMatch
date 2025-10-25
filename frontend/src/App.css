@@ -28,11 +28,682 @@
   color: #61dafb;
 }
 
+.app-navigation {
+  width: 100%; 
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #eee;
+  box-sizing: border-box;
+}
+
+.nav-container {
+  max-width: 1100px; 
+  margin: 0 auto; 
+  display: flex;
+  justify-content: space-around;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.content-wrapper {
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.card {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eee;
+  margin-bottom: 25px;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two columns, equally spaced */
+  gap: 20px;
+  margin-top: 25px;
+}
+
+.workout-plan-card {
+  background-color: #f7f9fc;
+}
+
+.workout-plan-card .table-container {
+  overflow-x: auto; /* Makes table scrollable on small screens */
+  margin-top: 15px;
+}
+
+.workout-plan-card .data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+
+.workout-plan-card .table-header {
+  background-color: #3f51b5; /* Primary color header */
+  color: white;
+}
+
+.workout-plan-card .table-cell {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.workout-plan-card .table-row:hover {
+  background-color: #f0f4ff; /* Light hover effect */
+}
+
+.macro-breakdown-card {
+    grid-column: 1 / -1; 
+    text-align: center;
+    border-left: 5px solid #ff9800; /* A distinct left border color */
+}
+
+.calculator-content {
+  max-width: 800px; 
+  margin: 0 auto; 
+  padding: 20px;
+}
+
+.calculator-form {
+  background-color: white; 
+  padding: 30px; 
+  border-radius: 12px; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Input and Button Styling --- */
+input[type="number"], input[type="text"], select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box; /* Includes padding in the element's total width */
+    font-size: 16px;
+}
+
+button {
+    background-color: #3f51b5; /* Primary color */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #304f9f;
+}
+
+/* --- Calculator Macro Display --- */
+.macro-values {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.value-number {
+    font-size: 32px;
+    font-weight: bold;
+    color: #3f51b5; /* Highlight macro numbers */
+}
+
+.value-label {
+    font-size: 14px;
+    color: #666;
+}
+
+.social-feed-container {
+    max-width: 1000px;
+    margin: 30px auto; 
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.posts-section {
+    flex: 1;
+    min-width: 0;
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #eee;
+}
+
+.trending-section {
+  /* width: 250px; */
+  background-color: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eee; 
+}
+
+.post-card {
+  margin-bottom: 20px;
+  background-color: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eee;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.challenges-section {
+  width: 150px;
+}
+
+.playlist-container {
+  max-width: 700px; 
+  margin: 20px auto; 
+  padding: 20px; 
+  text-align: center;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* --- Color Variables --- */
+:root {
+  --color-primary: #3f51b5; /* Blue for highlights/numbers */
+  --color-text: #333;
+  --color-secondary-text: #666;
+  --color-background: #f7f7f7;
+  --color-card-bg: #ffffff;
+  --color-border: #eee;
+  --color-success: #4caf50; /* Green for gain */
+  --color-danger: #f44336; /* Red for loss */
+  --color-purple-800: #673ab7; /* Protein */
+  --color-purple-600: #9c27b0; /* Carbs */
+  --color-cyan-600: #00bcd4; /* Fats */
+}
+
+/* ---------------------------------
+ * 1. Global & Layout
+ * --------------------------------- */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.card {
+  background-color: var(--color-card-bg);
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.card-title {
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.card-subtitle {
+  color: var(--color-secondary-text);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 15px;
+}
+
+/* ---------------------------------
+ * 2. Caloric Snapshot (First Card)
+ * --------------------------------- */
+.result-items {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex-grow: 1; /* Pushes the disclaimer to the bottom */
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px dashed #f0f0f0;
+}
+
+.result-item:last-of-type {
+  border-bottom: none;
+}
+
+.result-label {
+  font-size: 1rem;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.result-value, .result-goal {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+.result-goal {
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.goal-loss {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: var(--color-danger);
+}
+
+.goal-gain {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: var(--color-success);
+}
+
+.disclaimer {
+  font-size: 0.75rem;
+  color: #999;
+  margin-top: 25px;
+  padding-top: 15px;
+  border-top: 1px solid var(--color-border);
+}
+
+
+/* ---------------------------------
+ * 3. Workout Plan (Second Card)
+ * --------------------------------- */
+
+.table-container {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table-header {
+  background-color: #f5f5f5;
+  color: var(--color-text);
+  font-size: 0.9rem;
+}
+
+.table-cell {
+  padding: 12px 15px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.table-row:last-child .table-cell {
+  border-bottom: none;
+}
+
+.table-empty {
+  text-align: center;
+  font-style: italic;
+  color: var(--color-secondary-text);
+}
+
+.playlist-button {
+  margin-top: auto; /* Aligns button to the bottom */
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.playlist-button-style {
+  background-color: #1DB954; /* Spotify Green */
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.playlist-button-style:hover {
+  background-color: #1ed760;
+}
+
+.playlist-status {
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: var(--color-success);
+  font-weight: 500;
+}
+
+
+/* ---------------------------------
+ * 4. Macronutrient Breakdown (Third Card - Full Width)
+ * --------------------------------- */
+.macro-breakdown-card {
+  grid-column: 1 / -1; /* Make this card span the full width of the grid */
+}
+
+.macro-container {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Placeholder for Donut Chart */
+.macro-chart {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: conic-gradient(
+      var(--color-purple-800) 0% var(--macro-protein),
+      var(--color-purple-600) var(--macro-protein) var(--macro-carbs),
+      var(--color-cyan-600) var(--macro-carbs) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 10px #f0f0f0 inset; /* Adds a visual ring */
+}
+
+/* The actual center hole of the donut */
+.chart-center {
+  width: 120px;
+  height: 120px;
+  background-color: var(--color-card-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.macro-percent {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  line-height: 1.4;
+}
+
+.macro-details {
+  flex: 1;
+  min-width: 250px;
+}
+
+/* Macro Legend */
+.macro-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+
+.purple-800 { background-color: var(--color-purple-800); }
+.purple-600 { background-color: var(--color-purple-600); }
+.cyan-600 { background-color: var(--color-cyan-600); }
+
+/* Macro Gram Values (Using aggregated style fragments) */
+.macro-values {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border);
+}
+
+.value-number {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--color-primary); /* Highlight macro numbers */
+}
+
+.value-label {
+  font-size: 14px;
+  color: var(--color-secondary-text);
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+  .results-grid {
+    grid-template-columns: 1fr; /* Stack cards on smaller screens */
+  }
+
+  .macro-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .macro-details {
+    margin-top: 20px;
+  }
+}
+
+/* ---------------------------------
+ * 5. Social Feed Styles
+ * --------------------------------- */
+.social-feed-container {
+    max-width: 1100px;
+    margin: 30px auto; 
+    display: flex;
+    gap: 30px;
+    align-items: flex-start; /* Aligns content to the top */
+    padding: 0 20px;
+}
+
+.posts-section {
+    flex: 2; /* Takes up more space */
+    min-width: 450px;
+}
+
+.sidebar-section {
+    flex: 1; /* Takes up less space */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: sticky; /* Keep it visible while scrolling */
+    top: 20px;
+}
+
+/* Post Card Styling */
+.post-card {
+    margin-bottom: 20px; /* Separates individual posts */
+}
+
+.new-post-card {
+    margin-bottom: 30px;
+}
+
+.new-post-form textarea {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1rem;
+    resize: vertical;
+    min-height: 80px;
+    margin-bottom: 10px;
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.post-button {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.post-button:disabled {
+    background-color: #b0b0b0;
+    cursor: not-allowed;
+}
+
+.char-count {
+    font-size: 0.8rem;
+    color: var(--color-secondary-text);
+}
+
+
+/* Individual Post Header */
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.user-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    border: 2px solid var(--color-primary);
+}
+
+.post-user-name {
+    font-weight: 600;
+    color: var(--color-text);
+    display: block;
+}
+
+.post-time {
+    font-size: 0.8rem;
+    color: var(--color-secondary-text);
+}
+
+.post-body {
+    margin-bottom: 15px;
+}
+
+.post-body p {
+    margin: 0;
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+/* Post Footer (Likes/Comments) */
+.post-footer {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--color-border);
+}
+
+.post-like, .post-comment, .share-icon {
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--color-secondary-text);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.post-like:hover {
+    color: var(--color-danger);
+}
+
+.post-like.liked {
+    color: var(--color-danger);
+    font-weight: 600;
+}
+
+/* Sidebar List Styles */
+.trending-list, .challenges-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.trending-item, .challenges-item {
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--color-border);
+    font-size: 0.95rem;
+    color: var(--color-text);
+}
+
+.trending-item:last-child, .challenges-item:last-child {
+    border-bottom: none;
+}
+
+.trending-stats, .challenges-stats {
+    font-size: 0.8rem;
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* --- Responsive Adjustments for Social Feed --- */
+@media (max-width: 768px) {
+  .social-feed-container {
+    /* Stack columns vertically on smaller screens */
+    flex-direction: column;
+    gap: 20px;
+    /* Use full width of the app-container (minus padding) */
+    padding: 0 20px; 
+  }
+
+  .posts-section {
+    /* When stacked, the post section should be 100% wide */
+    width: 100%;
+    /* Re-set min-width to its initial state to enforce 100% width on stacked columns */
+    min-width: unset; 
+  }
+
+  .trending-section {
+    /* Allow the sidebar to take up the full width when stacked */
+    width: 100%;
   }
 }

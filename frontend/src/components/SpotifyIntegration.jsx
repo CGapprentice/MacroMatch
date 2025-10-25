@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 
 const SPOTIFY_CONFIG = {
-  CLIENT_ID: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
-  REDIRECT_URI: process.env.REACT_APP_SPOTIFY_REDIRECT_URI,
+  CLIENT_ID: import.meta.env.VITE_SPOTIFY_CLIENT_ID, 
+  REDIRECT_URI: import.meta.env.VITE_SPOTIFY_REDIRECT_URI,
   SCOPES: [
     'user-read-private',
     'user-read-email',

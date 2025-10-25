@@ -1,6 +1,6 @@
 // src/components/UserContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { getCurrentUserToken } from '../firebase';
+import ApiService from '../services/api';
 
 const UserContext = createContext();
 
@@ -18,20 +18,20 @@ export const UserProvider = ({ children }) => {
 
   // Load user from localStorage on mount
   useEffect(() => {
-    const token = localStorage.getItem('firebase_token');
-    const savedUser = localStorage.getItem('user');
-    
-    if (token && savedUser) {
+    const savedUser = localStorage.getItem('auth_token') || localStorage.getItem('macromatch_user');
+    if (savedUser) {
       try {
+        // Try to parse as JSON first (in case it's a user object)
         const userData = JSON.parse(savedUser);
+        setUser(userData);
+      } catch {
+        // If it's just a token string, create a basic user object
         setUser({
-          ...userData,
-          token
+          id: 'user_' + Date.now(),
+          token: savedUser,
+          name: 'User', // You can update this after fetching user profile
+          calculatorData: null
         });
-      } catch (error) {
-        console.error('Error loading user:', error);
-        localStorage.removeItem('firebase_token');
-        localStorage.removeItem('user');
       }
     }
   }, []);
@@ -39,28 +39,17 @@ export const UserProvider = ({ children }) => {
   const saveUserData = async (calculatorData) => {
     setLoading(true);
     try {
-      // Get fresh Firebase token
-      const idToken = await getCurrentUserToken();
-      
-      if (!idToken) {
+      if (!user?.token) {
         throw new Error('No authentication token found');
       }
 
-      // Save to backend (MongoDB)
-      const response = await fetch('http://localhost:5000/api/auth/calculator-data', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${idToken}`
-        },
-        body: JSON.stringify(calculatorData)
-      });
+      // Use the API service to save data
+      const response = await ApiService.saveUserCalculatorData(
+        user.id, 
+        calculatorData, 
+        user.token
+      );
 
-      if (!response.ok) {
-        throw new Error('Failed to save data to server');
-      }
-
-      // Also save locally as backup
       const updatedUser = {
         ...user,
         calculatorData,
@@ -68,14 +57,13 @@ export const UserProvider = ({ children }) => {
       };
 
       setUser(updatedUser);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
+      localStorage.setItem('macromatch_user', JSON.stringify(updatedUser));
       
-      console.log('Data saved successfully');
       return { success: true };
     } catch (error) {
       console.error('Error saving data:', error);
       
-      // Fallback to localStorage
+      // Fallback to localStorage if API fails
       try {
         const updatedUser = {
           ...user,
@@ -83,7 +71,7 @@ export const UserProvider = ({ children }) => {
           lastUpdated: new Date().toISOString()
         };
         setUser(updatedUser);
-        localStorage.setItem('user', JSON.stringify(updatedUser));
+        localStorage.setItem('macromatch_user', JSON.stringify(updatedUser));
         console.log('Data saved locally as fallback');
         return { success: true };
       } catch (localError) {
@@ -99,32 +87,18 @@ export const UserProvider = ({ children }) => {
     
     setLoading(true);
     try {
-      // Get fresh Firebase token
-      const idToken = await getCurrentUserToken();
-      
-      if (idToken) {
-        // Try to load from backend first
-        const response = await fetch('http://localhost:5000/api/auth/calculator-data', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${idToken}`
-          }
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data.data) {
-            return data.data;
-          }
-        }
+      if (user.token) {
+        // Try to load from API first
+        const data = await ApiService.getUserCalculatorData(user.id, user.token);
+        return data;
       }
     } catch (error) {
-      console.error('Error loading data from server:', error);
+      console.error('Error loading data from API:', error);
     }
     
     // Fallback to localStorage
     try {
-      const savedUser = localStorage.getItem('user');
+      const savedUser = localStorage.getItem('macromatch_user');
       if (savedUser) {
         const userData = JSON.parse(savedUser);
         if (userData.calculatorData) {
@@ -143,30 +117,10 @@ export const UserProvider = ({ children }) => {
   const updateUserProfile = async (profileData) => {
     setLoading(true);
     try {
-      // Get fresh Firebase token
-      const idToken = await getCurrentUserToken();
-      
-      if (idToken) {
-        // Update on backend
-        const response = await fetch('http://localhost:5000/api/auth/profile', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${idToken}`
-          },
-          body: JSON.stringify(profileData)
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          const updatedUser = data.user;
-          setUser(updatedUser);
-          localStorage.setItem('user', JSON.stringify(updatedUser));
-          return { success: true };
-        }
+      if (user?.token) {
+        await ApiService.updateUserProfile(user.id, profileData, user.token);
       }
       
-      // Fallback to local update
       const updatedUser = {
         ...user,
         ...profileData,
@@ -174,7 +128,7 @@ export const UserProvider = ({ children }) => {
       };
       
       setUser(updatedUser);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
+      localStorage.setItem('macromatch_user', JSON.stringify(updatedUser));
       
       return { success: true };
     } catch (error) {
@@ -187,8 +141,9 @@ export const UserProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('user');
-    localStorage.removeItem('firebase_token');
+    localStorage.removeItem('macromatch_user');
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('spotify_access_token'); // Clear Spotify token too
   };
 
   return (
