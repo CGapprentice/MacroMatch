@@ -2,7 +2,7 @@ import styles from './DayPopup.module.css'
 import InputPopup from './InputPopup.jsx'
 import { useState, useEffect } from 'react'
 
-function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay }){
+function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, routineId }){
 
     const capitalizedDay = activeDay.charAt(0).toUpperCase() + activeDay.slice(1);
     
@@ -65,7 +65,7 @@ function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay }){
         }
         if(data){
             try{
-                const response = await fetch("http://localhost:5000/api/v1/routine/",
+                const response = await fetch(`http://localhost:5000/api/v1/routine/${routineId}`,
                     {
                         method: 'PUT',
                         headers: {
@@ -78,6 +78,8 @@ function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay }){
                 const result = await response.json();
                 if(!response.ok){
                     setErrorMessage(result.error);
+                }else{
+                    eachDayChange(activeDay, routineData);
                 }
             }catch(error){
                 console.log("failed to update: ", error);

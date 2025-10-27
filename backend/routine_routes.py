@@ -77,13 +77,13 @@ def get_routine():
         if not routine_user:
             return jsonify({'error': 'No routine found'}), 404
         
-        routines_with_id = []
+        addIdRoutine= []
         for r in routine_user:
             r['id'] = str(r['_id'])
             r.pop('_id', None)
-            routines_with_id.append(r)
+            addIdRoutine.append(r)
         
-        return jsonify({'routine': routines_with_id}), 200
+        return jsonify({'routine': addIdRoutine}), 200
     except Exception as error:
         print(f"routine error: {str(error)}")
         return jsonify({'error' : 'server error'}), 500
@@ -91,32 +91,40 @@ def get_routine():
 
 
 #there might be a better way to go about this
-@routine_bp.route('/', methods=['PUT'])
+@routine_bp.route('/<routine_id>', methods=['PUT'])
 @require_auth
-def update_routine():
+def update_routine(routine_id):
     try:
         data = request.get_json()
+
         if not data:
             return jsonify({'error' : 'no data is given'}), 400
         
         allowed_field = ['activeDay','showPopup','selected','duration','speed','distance','highIntensity','lowIntensity','restTime','exercise','notes','exercisePerRound']
-        updated = {key: value for key, value in data.items() if key in allowed_field}
+        updated_data = {}
+        #updated = {key: value for key, value in data.items() if key in allowed_field}
 
-        if not updated:
-            return jsonify({'error':'nothing was updated'}),400
-        routines_with_id = []
-        
-        for r in data:
-            r['id'] = str(r['_id'])
-            r.pop('_id', None)  # Optional: remove raw _id
-            routines_with_id.append(r)
-        
-        return jsonify({'routine': routines_with_id}), 200
+        for field in allowed_field:
+            if field in data:
+                updated_data[field] = data[field]
+        if not updated_data:
+            return jsonify({'error' : 'no fields were updated'}),400
 
+        routine_collection = get_routine_collection();
+        result = routine_collection.update_one(
+            {'_id' : ObjectId(routine_id), 'firebase_uid' : request.firebase_uid},
+            {'$set' : updated_data}
+        )
+
+        if not result:
+            return jsonify({'error' : 'failed to updated routine'}), 500
+        
         return jsonify({
-            'message' : 'routine is updated',
-            'updates' : list(updated.keys())
-        }), 200
+            'message' : 'routine updated',
+            'updates' : list(updated_data.keys()),
+        }),200
+   
+    
     except Exception as error:
         print(f"updating routine error: {str(error)}")
         return jsonify({'error': 'server error'}), 500

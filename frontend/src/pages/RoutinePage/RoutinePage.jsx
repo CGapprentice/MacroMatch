@@ -171,6 +171,7 @@ function RoutinePage(){
                         }
                         data={data[activeDay]}
                         setActiveDay={setActiveDay}
+                        routineId = {data[activeDay]?.id}
                         />
                     </div>
                 ))}
