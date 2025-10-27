@@ -3,12 +3,27 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 import { UserProvider } from './components/UserContext';
 import { useUser } from './components/UserContext';
+import SigninPage from "./pages/SigninPage";
+import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import Calculator from './components/Calculator';
 import SocialFeed from './components/SocialFeed';
 import PlaylistGenerator from './components/PlaylistGenerator';
 import './login.css';
 import './App.css';
+
+const ProtectedRoute = ({ element: Element }) => {
+    // Check user login status using the hook
+    const { userData } = useUser(); 
+
+    // If userData is NOT present (not logged in), redirect to /login
+    if (!userData) {
+        return <Navigate to="/login" replace />;
+    }
+
+    // If userData IS present, render the requested component
+    return Element;
+};
 
 const MockLogin = () => {
   return (
@@ -94,11 +109,18 @@ function App() {
         <div>
           <Navigation />
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<MockLogin />} />
-            <Route path="/calculator" element={<Calculator />} />
-            <Route path="/social" element={<SocialFeed />} />
-            <Route path="/playlist" element={<PlaylistGenerator />} />
+            {/* 1. Root path stays as your group's landing page */}
+            <Route path="/" element={<HomePage />} /> 
+
+            {/* 2. Login and Signup are public access */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signinpage" element={<SigninPage />} />
+            <Route path="/signin" element={<SigninPage />} /> 
+
+            {/* 3. PROTECTED ROUTES: Only accessible if logged in */}
+            <Route path="/calculator" element={<ProtectedRoute element={<Calculator />} />} />
+            <Route path="/social" element={<ProtectedRoute element={<SocialFeed />} />} />
+            <Route path="/playlist" element={<ProtectedRoute element={<PlaylistGenerator />} />} />
           </Routes>
         </div>
       </Router>

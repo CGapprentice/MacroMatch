@@ -17,19 +17,44 @@ export const useSpotify = () => {
   const [user, setSpotifyUser] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
 
+  const exchangeCodeForToken = async (code) => {
+    try {
+        const backendBaseUri = "http://localhost:8080"; // <-- Check your server's startup URL
+        const loginPath = "/api/spotify/login";       // <-- Use the endpoint your group created
+        
+        const response = await fetch(backendBaseUri + loginPath, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            setAccessToken(data.accessToken);
+            localStorage.setItem('spotify_access_token', data.accessToken);
+            getSpotifyUser(data.accessToken); 
+            setIsConnected(true);
+        } else {
+            console.error('Token exchange failed on server.');
+        }
+    } catch (error) {
+        console.error('Error contacting backend server:', error);
+    }
+  };
+
   useEffect(() => {
-    // Check for token in URL hash (after redirect)
-    const hash = window.location.hash.substring(1);
-    const params = new URLSearchParams(hash);
-    const token = params.get('access_token');
+    // A. Check for 'code' in the query string (Authorization Code Flow success)
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
     
-    if (token) {
-      setAccessToken(token);
-      window.location.hash = ''; // Clear hash
-      getSpotifyUser(token);
+    if (code) {
+      // Clear the code from the URL bar
+      window.history.pushState({}, null, window.location.pathname); 
+      // Call the new helper function
+      exchangeCodeForToken(code); 
     }
 
-    // Check for stored token
+    // B. Check for stored token (for session resumption)
     const storedToken = localStorage.getItem('spotify_access_token');
     if (storedToken) {
       setAccessToken(storedToken);
@@ -62,7 +87,7 @@ export const useSpotify = () => {
   const connectSpotify = () => {
     const authUrl = `https://accounts.spotify.com/authorize?` +
       `client_id=${SPOTIFY_CONFIG.CLIENT_ID}&` +
-      `response_type=token&` +
+      `response_type=code&` +
       `redirect_uri=${encodeURIComponent(SPOTIFY_CONFIG.REDIRECT_URI)}&` +
       `scope=${encodeURIComponent(SPOTIFY_CONFIG.SCOPES)}`;
     
