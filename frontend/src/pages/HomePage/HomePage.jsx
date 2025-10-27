@@ -24,8 +24,8 @@ function HomePage() {
                     
                 </div>
                 <div className={styles.loginsignupHeader}>
-                    <Link to="/loginpage"><button>login</button></Link><br></br>
-                    <Link to="/signinpage"><button>sign in</button></Link><br></br>   
+                    <Link to="/login"><button>login</button></Link><br></br>
+                    <Link to="/signinpage"><button>sign in</button></Link><br></br>
                 </div>
                             
             </div>

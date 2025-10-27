@@ -45,7 +45,7 @@ function RoutinePage(){
                 });
                 if(result.status === 401){
                     localStorage.removeItem("firebase_token");
-                    navigate('/loginpage')
+                    navigate('/login')
                     return
                 }
                 if(result.ok){
@@ -56,7 +56,20 @@ function RoutinePage(){
                         routinesEachDay[routine.activeDay] = routine;
                     });
                     setData(routinesEachDay);
+
+                    // Update chooseDay to reflect which days have routines
+                    const updatedChooseDay = {...chooseDay};
+                    response.routine.forEach(routine => {
+                        if(routine.activeDay && updatedChooseDay.hasOwnProperty(routine.activeDay)){
+                            updatedChooseDay[routine.activeDay] = true;
+                        }
+                    });
+                    setChooseDay(updatedChooseDay);
                     setRoutineSummary(true);
+                } else if(result.status === 404){
+                    // No routines found - this is normal for new users
+                    console.log('No routines found yet');
+                    setRoutineSummary(false);
                 }
             }catch(error){
                 console.error('Get User routine error: ', error);
@@ -101,7 +114,7 @@ function RoutinePage(){
                     });
                     if(response.status === 401){
                         localStorage.removeItem("firebase_token")
-                        navigate('/loginpage')
+                        navigate('/login')
                         return
                     }
                     if(response.ok){
@@ -129,8 +142,14 @@ function RoutinePage(){
     
 
     const addRoutine= ()=>{
-        setRoutineSummary(true);
-        console.log(data);
+        // Check if there's any data to display
+        if(Object.keys(data).length > 0){
+            setRoutineSummary(true);
+            console.log(data);
+        } else {
+            setErrorMessage("Please save at least one day's routine before viewing summary");
+            setTimeout(() => setErrorMessage(''), 3000);
+        }
     }
 
 
@@ -147,6 +166,18 @@ function RoutinePage(){
                     <div className={styles.routineHeader}>
                         <h1>Workout Routine</h1>
                     </div>
+                    {errorMessage && (
+                        <div style={{
+                            color: 'red',
+                            backgroundColor: '#ffebee',
+                            padding: '10px',
+                            borderRadius: '5px',
+                            margin: '10px 0',
+                            textAlign: 'center'
+                        }}>
+                            {errorMessage}
+                        </div>
+                    )}
                     <div className={styles.dayButtons}>
                         <button className={`${styles.set} ${chooseDay.sunday ? styles.chooseDay : ''}`} onClick={() => handleDayClick('sunday')}>Sun</button>
                         <button className={`${styles.set} ${chooseDay.monday ? styles.chooseDay : ''}`} onClick={() => handleDayClick('monday')}>Mon</button>

@@ -6,7 +6,7 @@ import { useUser } from './components/UserContext';
 import SigninPage from "./pages/SigninPage";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
-import Calculator from './components/Calculator';
+import Calculator from './components/calculator';
 import SocialFeed from './components/SocialFeed';
 import PlaylistGenerator from './components/PlaylistGenerator';
 import UserSettingsPage from './pages/UserSettingPage/UserSettingsPage.jsx'
@@ -17,14 +17,14 @@ import './App.css';
 
 const ProtectedRoute = ({ element: Element }) => {
     // Check user login status using the hook
-    const { userData } = useUser(); 
+    const { user } = useUser();
 
-    // If userData is NOT present (not logged in), redirect to /login
-    if (!userData) {
+    // If user is NOT present (not logged in), redirect to /login
+    if (!user) {
         return <Navigate to="/login" replace />;
     }
 
-    // If userData IS present, render the requested component
+    // If user IS present, render the requested component
     return Element;
 };
 
@@ -62,11 +62,11 @@ const MockLogin = () => {
 const Navigation = () => {
   const location = useLocation();
 
-  const { userData, logout } = useUser(); // Assuming useUser gives a logout function
-  const isLoggedIn = userData && userData.id; // Check if user data exists
-  
-  // Don't show nav on login page
-  if (location.pathname === '/login') {
+  const { user, logout } = useUser(); // Get user and logout from UserContext
+  const isLoggedIn = !!user; // Check if user exists
+
+  // Don't show nav on login/signin pages
+  if (location.pathname === '/login' || location.pathname === '/signinpage' || location.pathname === '/signin') {
     return null;
   }
 

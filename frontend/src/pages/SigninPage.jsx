@@ -1,7 +1,7 @@
 import '../sign.css'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { registerWithEmail } from '../firebase'
+import { loginWithEmail } from '../firebase'
 import {auth,google} from '../firebase.js'
 import {signInWithPopup} from 'firebase/auth'
 
@@ -42,15 +42,8 @@ function SignInPage() {
 
         try {
             const name = `${formData.firstName} ${formData.lastName}`.trim();
-            
-            // Register with Firebase
-            const userCredential = await registerWithEmail(formData.email, formData.password);
-            const user = userCredential.user;
-            
-            // Get Firebase ID token
-            const idToken = await user.getIdToken();
-            
-            // Send to backend to create user in MongoDB
+
+            // Send to backend to create user in Firebase + MongoDB
             const response = await fetch('http://localhost:5000/api/auth/register', {
                 method: 'POST',
                 headers: {
@@ -66,10 +59,18 @@ function SignInPage() {
             const data = await response.json();
 
             if (response.ok) {
-                // Save Firebase token and user data
+                // Now sign in with Firebase to get ID token
+                const userCredential = await loginWithEmail(formData.email, formData.password);
+                const idToken = await userCredential.user.getIdToken();
+
+                // Save Firebase token and user data (with token included)
+                const userData = {
+                    ...data.user,
+                    token: idToken
+                };
                 localStorage.setItem('firebase_token', idToken);
-                localStorage.setItem('user', JSON.stringify(data.user));
-                
+                localStorage.setItem('macromatch_user', JSON.stringify(userData));
+
                 // Redirect to calculator page
                 navigate('/calculatorpage');
             } else {
@@ -77,17 +78,7 @@ function SignInPage() {
             }
         } catch (err) {
             console.error('Registration error:', err);
-            
-            // Handle Firebase errors
-            if (err.code === 'auth/email-already-in-use') {
-                setError('Email already in use');
-            } else if (err.code === 'auth/invalid-email') {
-                setError('Invalid email address');
-            } else if (err.code === 'auth/weak-password') {
-                setError('Password is too weak');
-            } else {
-                setError('Registration failed. Please try again.');
-            }
+            setError(err.message || 'Registration failed. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -108,16 +99,26 @@ function SignInPage() {
                 body: JSON.stringify({idToken})
             });
             const data = await response.json();
-            if(data.user.created_at === data.user.updated_at){
+
+            if (response.ok) {
+                // Save user data and token
+                const userData = {
+                    ...data.user,
+                    token: idToken
+                };
                 localStorage.setItem('firebase_token', idToken);
-                localStorage.setItem('user', JSON.stringify(data.user));
-                navigate('/routinepage')
-            }else{
-                navigate('/loginpage')
+                localStorage.setItem('macromatch_user', JSON.stringify(userData));
+
+                // Navigate to calculator page on successful login
+                navigate('/calculatorpage');
+            } else {
+                setError(data.error || 'Google sign-in failed');
             }
         }catch(error){
             console.error("Error with signing up with google: ", error);
             setError("Google sign-in failed. Please try again");
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -192,7 +193,7 @@ function SignInPage() {
                                 {loading ? 'Signing up...' : 'Sign Up'}
                             </button>
                             
-                            <p>Already have an account? <Link to="/loginpage">log in</Link></p>
+                            <p>Already have an account? <Link to="/login">log in</Link></p>
                             
                             <p className='Or'>OR</p>
                             <div className="googleButton">

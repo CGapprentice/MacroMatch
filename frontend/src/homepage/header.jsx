@@ -9,7 +9,8 @@ function HomePageHeader() {
     const handleLogout = () =>{
         signOut(auth).then(()=>{
             localStorage.removeItem('firebase_token');
-            localStorage.removeItem('user');
+            localStorage.removeItem('macromatch_user');
+            localStorage.removeItem('spotify_access_token');
             console.log("User signed out")
             navigate('/')
         }).catch((error)=>{

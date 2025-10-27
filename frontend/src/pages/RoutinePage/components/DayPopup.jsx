@@ -5,8 +5,9 @@ import { useState, useEffect } from 'react'
 function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, routineId }){
 
     const capitalizedDay = activeDay.charAt(0).toUpperCase() + activeDay.slice(1);
-    
+
     const[errorMessage, setErrorMessage]= useState("");
+    const[successMessage, setSuccessMessage]= useState("");
     const token = localStorage.getItem('firebase_token')
 
     
@@ -79,7 +80,15 @@ function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, rout
                 if(!response.ok){
                     setErrorMessage(result.error);
                 }else{
-                    eachDayChange(activeDay, routineData);
+                    // Keep the ID when updating
+                    const updatedRoutineData = {
+                        ...routineData,
+                        id: routineId
+                    };
+                    eachDayChange(activeDay, updatedRoutineData);
+                    setSuccessMessage('Routine updated successfully!');
+                    setTimeout(() => setSuccessMessage(''), 3000);
+                    console.log('Routine updated successfully');
                 }
             }catch(error){
                 console.log("failed to update: ", error);
@@ -87,7 +96,6 @@ function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, rout
             }
         }else{
             console.log(routineData);
-            eachDayChange(activeDay, routineData);
             try{
                 const response = await fetch('http://localhost:5000/api/v1/routine/',{
                 method: 'POST',
@@ -101,6 +109,16 @@ function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, rout
             if(!response.ok){
                 console.log(result.error);
                 setErrorMessage(result.error);
+            } else {
+                // Add the ID from the response to the routine data
+                const savedRoutineData = {
+                    ...routineData,
+                    id: result.routine.id
+                };
+                eachDayChange(activeDay, savedRoutineData);
+                setSuccessMessage('Routine saved successfully!');
+                setTimeout(() => setSuccessMessage(''), 3000);
+                console.log('Routine saved successfully with ID:', result.routine.id);
             }
             }catch(error){
                 console.error('Adding Routine error: ', error);
@@ -188,8 +206,33 @@ function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, rout
                 <div className={styles.topBox}>
                     <h1>{capitalizedDay}</h1> {/* <button onClick={handleDeleting}>X</button>*/}
                 </div>
-                
-                
+                {errorMessage && (
+                    <div style={{
+                        color: 'red',
+                        backgroundColor: '#ffebee',
+                        padding: '8px',
+                        borderRadius: '5px',
+                        margin: '10px',
+                        textAlign: 'center',
+                        fontSize: '14px'
+                    }}>
+                        {errorMessage}
+                    </div>
+                )}
+                {successMessage && (
+                    <div style={{
+                        color: 'green',
+                        backgroundColor: '#e8f5e9',
+                        padding: '8px',
+                        borderRadius: '5px',
+                        margin: '10px',
+                        textAlign: 'center',
+                        fontSize: '14px'
+                    }}>
+                        {successMessage}
+                    </div>
+                )}
+
                 <div className={styles.types}>
                     <InputPopup
                         selected={selected} 

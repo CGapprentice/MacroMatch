@@ -43,10 +43,14 @@ function LoginPage() {
             const data = await response.json();
 
             if (response.ok) {
-                // Save Firebase ID token and user data
+                // Save Firebase ID token and user data (with token included)
+                const userData = {
+                    ...data.user,
+                    token: idToken
+                };
                 localStorage.setItem('firebase_token', idToken);
-                localStorage.setItem('user', JSON.stringify(data.user));
-                
+                localStorage.setItem('macromatch_user', JSON.stringify(userData));
+
                 // Redirect to calculator page
                 navigate('/calculatorpage');
             } else {
@@ -86,15 +90,26 @@ function LoginPage() {
                 body: JSON.stringify({idToken})
             });
             const data = await response.json();
-            if(data.user.created_at === data.user.updated_at){
+
+            if (response.ok) {
+                // Save user data and token
+                const userData = {
+                    ...data.user,
+                    token: idToken
+                };
                 localStorage.setItem('firebase_token', idToken);
-                localStorage.setItem('user', JSON.stringify(data.user));
-                navigate('/routinepage')    
-            }else{
-                navigate('/signinpage')
+                localStorage.setItem('macromatch_user', JSON.stringify(userData));
+
+                // Navigate to calculator page on successful login
+                navigate('/calculatorpage');
+            } else {
+                setError(data.error || 'Google sign-in failed');
             }
         }catch(error){
+            console.error('Google sign-in error:', error);
             setError("Google Sign-in failed. Please try again.");
+        } finally {
+            setLoading(false);
         }
 
     }

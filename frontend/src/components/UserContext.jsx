@@ -18,7 +18,7 @@ export const UserProvider = ({ children }) => {
 
   // Load user from localStorage on mount
   useEffect(() => {
-    const savedUser = localStorage.getItem('auth_token') || localStorage.getItem('macromatch_user');
+    const savedUser = localStorage.getItem('firebase_token') || localStorage.getItem('macromatch_user');
     if (savedUser) {
       try {
         // Try to parse as JSON first (in case it's a user object)
@@ -142,7 +142,7 @@ export const UserProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('macromatch_user');
-    localStorage.removeItem('auth_token');
+    localStorage.removeItem('firebase_token');
     localStorage.removeItem('spotify_access_token'); // Clear Spotify token too
   };
 

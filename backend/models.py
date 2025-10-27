@@ -92,9 +92,42 @@ class Meal:
         }
 
 
+class SocialPost:
+    # social feed post model
+    def __init__(self, content, user_name="", image_url=None, likes=None, comments=None):
+        self.content = content
+        self.user_name = user_name
+        self.image_url = image_url  # optional image URL
+        self.likes = likes if likes is not None else []  # array of user IDs who liked
+        self.comments = comments if comments is not None else []  # array of comment objects
+        self.created_at = datetime.utcnow()
+        self.updated_at = datetime.utcnow()
+
+    def validate(self):
+        # basic validation for social posts
+        errors = []
+        if not self.content or len(self.content.strip()) < 1:
+            errors.append("post needs content")
+        if len(self.content) > 5000:
+            errors.append("post content too long (max 5000 chars)")
+        return errors
+
+    def to_dict(self):
+        # convert to dict for mongodb
+        return {
+            'content': self.content,
+            'user_name': self.user_name,
+            'image_url': self.image_url,
+            'likes': self.likes,
+            'comments': self.comments,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at
+        }
+
+
 class Routine:
     def __init__ (self, activeDay, selected, showPopup=False, duration="", speed="", distance="", highIntensity="", lowIntensity="", restTime="", exercise=[], notes="", exercisePerRound=""):
-        self.showPopup = showPopup #check if this is really needed 
+        self.showPopup = showPopup #check if this is really needed
         self.activeDay = activeDay
         self.selected = selected
         self.duration = duration

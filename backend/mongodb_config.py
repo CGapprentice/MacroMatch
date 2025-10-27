@@ -73,3 +73,7 @@ def get_meals_collection():
 def get_routine_collection():
     """Get routine collection"""
     return get_mongodb().get_collection('routine')
+
+def get_social_posts_collection():
+    """Get social posts collection"""
+    return get_mongodb().get_collection('social_posts')

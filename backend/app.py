@@ -10,6 +10,7 @@ from firebase_mongo_auth_routes import firebase_mongo_auth_bp
 from meal_routes import meal_bp
 from error_handlers import error_bp
 from routine_routes import routine_bp
+from social_feed_routes import social_feed_bp
 from firebase_config import get_firebase_service
 from mongodb_config import get_mongodb
 
@@ -22,7 +23,11 @@ def create_app(config_name=None):
     app.config.from_object(config[config_name])
     
     # setup cors for frontend
-    CORS(app, origins=app.config['CORS_ORIGINS'], supports_credentials=True)
+    CORS(app,
+         resources={r"/api/*": {"origins": app.config['CORS_ORIGINS']}},
+         supports_credentials=True,
+         allow_headers=["Content-Type", "Authorization"],
+         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
     
     # setup firebase
     initialize_firebase(app)
@@ -60,6 +65,7 @@ def register_blueprints(app):
     app.register_blueprint(meal_bp)
     app.register_blueprint(error_bp)
     app.register_blueprint(routine_bp)
+    app.register_blueprint(social_feed_bp)
     print("routes registered! :)")
 
 def add_health_check(app):
@@ -83,7 +89,8 @@ def add_health_check(app):
                 'auth': '/api/v1/auth',
                 'meals': '/api/v1/meals',
                 'users': '/api/v1/users',
-                'routine': '/api/v1/routine'
+                'routine': '/api/v1/routine',
+                'social': '/api/v1/social'
             },
             'timestamp': datetime.utcnow().isoformat()
         }), 200

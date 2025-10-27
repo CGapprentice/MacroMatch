@@ -129,9 +129,11 @@ def login():
             'height': mongo_user.get('height'),
             'activity_level': mongo_user.get('activity_level'),
             'dietary_goals': mongo_user.get('dietary_goals'),
-            'gender': mongo_user.get('gender')
+            'gender': mongo_user.get('gender'),
+            'created_at': mongo_user.get('created_at').isoformat() if mongo_user.get('created_at') else None,
+            'updated_at': mongo_user.get('updated_at').isoformat() if mongo_user.get('updated_at') else None
         }
-        
+
         return jsonify({
             'message': 'Login successful',
             'user': user_response
