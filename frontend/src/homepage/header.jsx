@@ -1,13 +1,17 @@
 import styles from './header.module.css'
 import { Link } from 'react-router-dom'
 import { getAuth, signOut } from 'firebase/auth'
-
+import{useNavigate} from 'react-router-dom'
 
 function HomePageHeader() {
     const auth = getAuth();
+    const navigate = useNavigate();
     const handleLogout = () =>{
         signOut(auth).then(()=>{
+            localStorage.removeItem('firebase_token');
+            localStorage.removeItem('user');
             console.log("User signed out")
+            navigate('/')
         }).catch((error)=>{
             console.error("Error signing out user: ", error)
         });

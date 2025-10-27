@@ -9,6 +9,7 @@ from config import config
 from firebase_mongo_auth_routes import firebase_mongo_auth_bp
 from meal_routes import meal_bp
 from error_handlers import error_bp
+from routine_routes import routine_bp
 from firebase_config import get_firebase_service
 from mongodb_config import get_mongodb
 
@@ -21,7 +22,7 @@ def create_app(config_name=None):
     app.config.from_object(config[config_name])
     
     # setup cors for frontend
-    CORS(app, origins=app.config['CORS_ORIGINS'])
+    CORS(app, origins=app.config['CORS_ORIGINS'], supports_credentials=True)
     
     # setup firebase
     initialize_firebase(app)
@@ -58,6 +59,7 @@ def register_blueprints(app):
     app.register_blueprint(firebase_mongo_auth_bp)  # Firebase + MongoDB auth routes
     app.register_blueprint(meal_bp)
     app.register_blueprint(error_bp)
+    app.register_blueprint(routine_bp)
     print("routes registered! :)")
 
 def add_health_check(app):
@@ -80,7 +82,8 @@ def add_health_check(app):
                 'health': '/health',
                 'auth': '/api/v1/auth',
                 'meals': '/api/v1/meals',
-                'users': '/api/v1/users'
+                'users': '/api/v1/users',
+                'routine': '/api/v1/routine'
             },
             'timestamp': datetime.utcnow().isoformat()
         }), 200

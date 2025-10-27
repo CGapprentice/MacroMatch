@@ -69,3 +69,7 @@ def get_calculator_data_collection():
 def get_meals_collection():
     """Get meals collection"""
     return get_mongodb().get_collection('meals')
+
+def get_routine_collection():
+    """Get routine collection"""
+    return get_mongodb().get_collection('routine')

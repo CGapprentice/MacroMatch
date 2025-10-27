@@ -3,7 +3,7 @@ import { useState } from 'react'
 import DayPopup from "./DayPopup.jsx"
 
 
-function InputPopup({selected, setSelected, duration, setDuration, speed, setSpeed, distance, setDistance, highIntensity,setHighIntensity, lowIntensity, setLowIntensity, restTime, setRestTime, exercise, setExercise, addingExercise, setAddingExercise, notes, setNotes, excercisePerRound, setExercisePerRound, reps, setReps, sets, setSets }){
+function InputPopup({selected, setSelected, duration, setDuration, speed, setSpeed, distance, setDistance, highIntensity,setHighIntensity, lowIntensity, setLowIntensity, restTime, setRestTime, exercise, setExercise, addingExercise, setAddingExercise, notes, setNotes, exercisePerRound, setExercisePerRound, reps, setReps, sets, setSets }){
 
     function onClickRep(){
         setReps(reps+1);
@@ -97,7 +97,7 @@ function InputPopup({selected, setSelected, duration, setDuration, speed, setSpe
                                 <label><b>Exercise per round</b></label>
                                 <textarea
                                     name="exercise notes"
-                                    value={excercisePerRound}
+                                    value={exercisePerRound}
                                 onChange={(e)=>setExercisePerRound(e.target.value)}
                                 placeholder="Enter exercise per round"
                             />

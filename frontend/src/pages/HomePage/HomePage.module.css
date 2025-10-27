@@ -45,7 +45,11 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+}
+
+.homePageContainer img{
+  width: 40vw;
+  padding-left: 40px;
 }
 
 
@@ -54,8 +58,8 @@
 }
 
 .whatIsMacro h1{
-  font-size: 30px;
-  font-size: 5vw;
+  font-size: 20px;
+  font-size: 4vw;
 }
 
 .whatIsMacro p{

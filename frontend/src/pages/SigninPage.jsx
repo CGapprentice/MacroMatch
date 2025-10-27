@@ -92,7 +92,7 @@ function SignInPage() {
             setLoading(false);
         }
     };
-    /*
+    
     const handleGoogleClick = async () =>{
         setError('');
         setLoading(true);
@@ -109,16 +109,17 @@ function SignInPage() {
             });
             const data = await response.json();
             if(data.user.created_at === data.user.updated_at){
-                navigate('/usersettingspage')
+                localStorage.setItem('firebase_token', idToken);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                navigate('/routinepage')
             }else{
-                setError("Google Account Already Exists")
-                return
+                navigate('/loginpage')
             }
         }catch(error){
             console.error("Error with signing up with google: ", error);
             setError("Google sign-in failed. Please try again");
         }
-    }*/
+    }
 
     return (
         <div className="signIn-background">
@@ -195,7 +196,7 @@ function SignInPage() {
                             
                             <p className='Or'>OR</p>
                             <div className="googleButton">
-                                <button className="google-signin" type="button">
+                                <button className="google-signin" type="button" onClick={handleGoogleClick}>
                                     <img src="/google_logo.png" className="googleLogo" alt="Google Logo" />
                                 </button>
                             </div>
