@@ -2,6 +2,8 @@ import '../sign.css'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { registerWithEmail } from '../firebase'
+import {auth,google} from '../firebase.js'
+import {signInWithPopup} from 'firebase/auth'
 
 function SignInPage() {
     const navigate = useNavigate();
@@ -90,6 +92,34 @@ function SignInPage() {
             setLoading(false);
         }
     };
+    
+    const handleGoogleClick = async () =>{
+        setError('');
+        setLoading(true);
+        try{
+            const result = await signInWithPopup(auth, google);
+            const idToken = await result.user.getIdToken();
+            
+            const response = await fetch('http://localhost:5000/api/auth/login',{
+                method:'POST',
+                headers:{
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify({idToken})
+            });
+            const data = await response.json();
+            if(data.user.created_at === data.user.updated_at){
+                localStorage.setItem('firebase_token', idToken);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                navigate('/routinepage')
+            }else{
+                navigate('/loginpage')
+            }
+        }catch(error){
+            console.error("Error with signing up with google: ", error);
+            setError("Google sign-in failed. Please try again");
+        }
+    }
 
     return (
         <div className="signIn-background">
@@ -165,10 +195,12 @@ function SignInPage() {
                             <p>Already have an account? <Link to="/loginpage">log in</Link></p>
                             
                             <p className='Or'>OR</p>
+                            <div className="googleButton">
+                                <button className="google-signin" type="button" onClick={handleGoogleClick}>
+                                    <img src="/google_logo.png" className="googleLogo" alt="Google Logo" />
+                                </button>
+                            </div>
                             
-                            <button className="google-signin" type="button">
-                                <img src="/google_logo.png" className="googleLogo" alt="Google Logo" />
-                            </button>
                         </div>
                     </form>
                 </div>

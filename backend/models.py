@@ -90,3 +90,63 @@ class Meal:
             'notes': self.notes,
             'timestamp': self.timestamp
         }
+
+
+class Routine:
+    def __init__ (self, activeDay, selected, showPopup=False, duration="", speed="", distance="", highIntensity="", lowIntensity="", restTime="", exercise=[], notes="", exercisePerRound=""):
+        self.showPopup = showPopup #check if this is really needed 
+        self.activeDay = activeDay
+        self.selected = selected
+        self.duration = duration
+        self.speed = speed
+        self.distance = distance
+        self.highIntensity= highIntensity
+        self.lowIntensity = lowIntensity
+        self.restTime = restTime
+        self.exercise = exercise
+        self.notes = notes
+        self.exercisePerRound = exercisePerRound
+    """"
+    def validate(self):
+        errors = []
+        if not self.duration or len(self.duration.strip()) < 1:
+            errors.append("Need to add time")
+        if not self.speed or len(self.speed.strip()) < 1:
+            errors.append("Need to add speed")
+        if not self.distance or len(self.distance.strip()) < 1:
+            errors.append("Need to add distance")
+        if not self.highIntensity or len(self.highIntensity.strip()) < 1:
+            errors.append("Need to add High Intensity time")
+        if not self.lowIntensity or len(self.lowIntensity.strip()) < 1:
+            errors.append("Need to add Low Intensity time")
+        if not self.restTime or len(self.restTime.strip()) < 1:
+            errors.append("Need to add rest time")
+        if not self.exercise:
+            errors.append("There's no exercise added. Please add exercise")
+        if not self.notes or len(self.notes.strip()) < 1:
+            errors.append("Need to add a note of what you plan to do.")
+        if not self.exercisePerRound or len(self.exercisePerRound.strip()) < 1:
+            errors.append("Need to add exercises you will do.")
+        
+        #see if can add sets and reps can't be 0
+        return errors
+    """
+    def to_dict(self):
+        routine_dict = {
+            'activeDay': self.activeDay,
+            'showPopup': self.showPopup,
+            'selected': self.selected,
+            'duration': self.duration,
+            'speed': self.speed,
+            'distance': self.distance,
+            'highIntensity': self.highIntensity,
+            'lowIntensity': self.lowIntensity,
+            'restTime': self.restTime,
+            'exercise' : [ex.to_dict() if hasattr(ex,"to_dict") else ex for ex in self.exercise],
+            'notes': self.notes,
+            'exercisePerRound': self.exercisePerRound
+        }
+        # Add id if present (for MongoDB documents)
+        if hasattr(self, '_id') and self._id:
+            routine_dict['id'] = str(self._id)
+        return routine_dict

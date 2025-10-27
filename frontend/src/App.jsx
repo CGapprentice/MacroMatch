@@ -9,6 +9,9 @@ import HomePage from "./pages/HomePage";
 import Calculator from './components/Calculator';
 import SocialFeed from './components/SocialFeed';
 import PlaylistGenerator from './components/PlaylistGenerator';
+import UserSettingsPage from './pages/UserSettingPage/UserSettingsPage.jsx'
+import RoutinePage from './pages/RoutinePage/RoutinePage.jsx'
+import './main.css'
 import './login.css';
 import './App.css';
 
@@ -67,6 +70,7 @@ const Navigation = () => {
     return null;
   }
 
+
   const isActive = (path) => location.pathname === path ? 'nav-link-active' : '';
 
   return (
@@ -83,6 +87,12 @@ const Navigation = () => {
         </Link>
         <Link to="/playlist" className={`nav-link ${isActive('/playlist')}`}>
           🎵 Playlists
+        </Link>
+        <Link to="/routinepage" className={`nav-link ${isActive('/routinepage')}`}>
+          🏋️  Routine
+        </Link>
+        <Link to="/usersettingspage" className={`nav-link ${isActive('/usersettingspage')}`}>
+          ⚙️  User Settings
         </Link>
         {isLoggedIn ? (
           <button onClick={logout} className="nav-link">
@@ -121,6 +131,8 @@ function App() {
             <Route path="/calculator" element={<ProtectedRoute element={<Calculator />} />} />
             <Route path="/social" element={<ProtectedRoute element={<SocialFeed />} />} />
             <Route path="/playlist" element={<ProtectedRoute element={<PlaylistGenerator />} />} />
+            <Route path="/routinepage" element={<ProtectedRoute element={<RoutinePage />} />} />
+            <Route path="/usersettingspage" element={<ProtectedRoute element={<UserSettingsPage />} />} />
           </Routes>
         </div>
       </Router>

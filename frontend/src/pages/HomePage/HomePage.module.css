@@ -1,0 +1,189 @@
+.homeHeader h1{
+  font-style: italic;
+  font-size: 2.5vw;
+}
+
+.homeHeader{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 10px;
+}
+
+.categoriesHeader{
+  display: flex;
+  gap: 30px;
+  font-size: 0.8rem;
+}
+
+.homeHeader a:link{
+  color: black;
+  text-decoration: none;
+}
+
+.homeHeader a:visited{
+  color: purple;
+  text-decoration: none;
+}
+
+.loginsignupHeader button{
+  color:white;
+  background-image: linear-gradient(180deg, #1E1E2FFF 0%, #50507CFF 100%);
+}
+
+.loginsignupHeader{
+  display: flex;
+  gap: 4px;
+}
+
+
+.homePageContainer{
+    width: 100%;
+    height: 100vh;
+    background-image: linear-gradient(180deg, #1E1E2FFF 0%, #50507CFF 100%);
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.homePageContainer img{
+  width: 40vw;
+  padding-left: 40px;
+}
+
+
+.whatIsMacro{
+  padding: 0 100px;
+}
+
+.whatIsMacro h1{
+  font-size: 20px;
+  font-size: 4vw;
+}
+
+.whatIsMacro p{
+  font-size: 20px;
+  font-size: 2vw;
+}
+
+.imageHome{
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding-right: 30px;
+}
+
+
+/* Home Page Feature Section */
+.features{
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  padding: 10vh 10vw;
+  font-size: 2vh;
+
+}
+
+.topfeature h1{
+  font-size: 50px;
+  padding-bottom: 20px;
+  font-size: 7vh;
+
+}
+
+.topfeature p{
+  font-size: 20px;
+  font-size: 3vh;
+
+}
+
+.featuresCategory{
+  display: flex;
+  align-items: center;
+  padding: 50px 0;
+}
+.featuresCategory img{
+  height: 60vh;
+  width: 40vw;
+  padding-right: 2vw;
+}
+
+.calcSpot{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-right: 1vw;
+  font-size: 1.5vh;
+}
+
+.calcSpot > *{
+  padding-bottom: 30px;
+}
+
+.calcSpot img{
+  height: 6vh;
+  width: 6vw;
+
+}
+
+.calcImage{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  padding-right: 4vw;
+
+}
+
+.musicImage{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  padding-right: 4vw;
+
+}
+
+.foodImage{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  padding-right: 4vw;
+}
+
+.workoutImage{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-right: 4vw;
+}
+
+
+/*About Us Section of Home Page*/
+
+.aboutUs{
+  width: 100vw;
+  height: 100vh;
+  padding: 5vh 10vw;
+}
+.aboutUs h1{
+  padding-bottom: 10px;
+}
+
+
+.aboutUsHeader{
+  padding: 50px 0;
+}
+
+.aboutUsParagraph{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+}
+.aboutUsParagraph h4{
+  padding-bottom: 20px;
+}
+
+
+.aboutUsParagraph p{
+  margin-left: 50px;
+  margin-right: 50px;
+  text-indent: 40px;
+  padding-bottom: 40px;
+}

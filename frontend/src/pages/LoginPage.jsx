@@ -2,6 +2,9 @@ import '../login.css'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { loginWithEmail } from '../firebase'
+import {auth, google} from '../firebase.js'
+import {signInWithPopup} from 'firebase/auth'
+
 
 function LoginPage() {
     const navigate = useNavigate();
@@ -67,6 +70,36 @@ function LoginPage() {
         }
     }
 
+    
+    const handleGoogleClick = async () =>{
+        setError('');
+        setLoading(true);
+        try{
+            const result = await signInWithPopup(auth, google);
+            const idToken = await result.user.getIdToken();
+
+            const response = await fetch('http://localhost:5000/api/auth/login',{
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify({idToken})
+            });
+            const data = await response.json();
+            if(data.user.created_at === data.user.updated_at){
+                localStorage.setItem('firebase_token', idToken);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                navigate('/routinepage')    
+            }else{
+                navigate('/signinpage')
+            }
+        }catch(error){
+            setError("Google Sign-in failed. Please try again.");
+        }
+
+    }
+
+
     return (
         <div className="loginInfo">
             <div className="gradient"></div>
@@ -120,7 +153,7 @@ function LoginPage() {
                 <div className="after_or">
                     <p className="ORline">OR</p>
                     <div className="button-Google">
-                        <button className="google" type="button">
+                        <button className="google" type="button" onClick={handleGoogleClick}>
                             <img src="/google-logo.png" className="googleLogo" alt="Google Logo" />
                             Google
                         </button>
