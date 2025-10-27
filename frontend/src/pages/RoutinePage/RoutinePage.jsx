@@ -45,7 +45,7 @@ function RoutinePage(){
                 });
                 if(result.status === 401){
                     localStorage.removeItem("firebase_token");
-                    navigate('/loginpage')
+                    navigate('/login')
                     return
                 }
                 if(result.ok){
@@ -101,7 +101,7 @@ function RoutinePage(){
                     });
                     if(response.status === 401){
                         localStorage.removeItem("firebase_token")
-                        navigate('/loginpage')
+                        navigate('/login')
                         return
                     }
                     if(response.ok){

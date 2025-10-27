@@ -113,7 +113,7 @@ function SignInPage() {
                 localStorage.setItem('user', JSON.stringify(data.user));
                 navigate('/routinepage')
             }else{
-                navigate('/loginpage')
+                navigate('/login')
             }
         }catch(error){
             console.error("Error with signing up with google: ", error);
@@ -192,7 +192,7 @@ function SignInPage() {
                                 {loading ? 'Signing up...' : 'Sign Up'}
                             </button>
                             
-                            <p>Already have an account? <Link to="/loginpage">log in</Link></p>
+                            <p>Already have an account? <Link to="/login">log in</Link></p>
                             
                             <p className='Or'>OR</p>
                             <div className="googleButton">
