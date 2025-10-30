@@ -5,7 +5,7 @@ import { UserProvider } from './components/UserContext';
 import { useUser } from './components/UserContext';
 import SigninPage from "./pages/SigninPage";
 import LoginPage from "./pages/LoginPage";
-import HomePage from "./pages/HomePage";
+import HomePage from "./pages/HomePage/HomePage.jsx";
 import Calculator from './components/Calculator';
 import SocialFeed from './components/SocialFeed';
 import PlaylistGenerator from './components/PlaylistGenerator';

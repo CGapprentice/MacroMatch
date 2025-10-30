@@ -23,6 +23,7 @@ def create_app(config_name=None):
     
     # setup cors for frontend
     CORS(app, origins=app.config['CORS_ORIGINS'], supports_credentials=True)
+    CORS(app, origins=['http://127.0.0.1:5173'], supports_credentials=True)
     
     # setup firebase
     initialize_firebase(app)
