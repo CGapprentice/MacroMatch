@@ -19,22 +19,35 @@ def create_meal():
             return jsonify({'error': 'no data provided'}), 400
 
         # check required fields
+        '''
         if not data.get('name') or not data.get('meal_type'):
             return jsonify({'error': 'need name and meal_type'}), 400
-
+        '''
+        if not data.get('meal'):
+            return jsonify({'error': 'need meal name and meal type'}), 400
         # create meal
+        '''
         meal = Meal(
             name=data['name'].strip(),
             meal_type=data['meal_type'].strip(),
             calories=data.get('calories', 0),
             notes=data.get('notes', '')
         )
-
+        '''
+        meal = Meal(
+            meal = data['meal'].strip(),
+            mealType = data.get('mealType', ''),
+            calories = data.get('calories', 0),
+            notes = data.get('note', ''),
+            date = data.get('date', ''),
+            time = data.get('time','')
+        )
         # validate
+        
         validation_errors = meal.validate()
         if validation_errors:
             return jsonify({'error': 'validation failed', 'details': validation_errors}), 400
-
+        
         # save to mongodb
         meals_collection = get_meals_collection()
         meal_data = meal.to_dict()
@@ -45,6 +58,7 @@ def create_meal():
 
         return jsonify({
             'message': 'meal created! :)',
+            '''
             'meal': {
                 'id': str(result.inserted_id),
                 'name': meal.name,
@@ -52,6 +66,17 @@ def create_meal():
                 'calories': meal.calories,
                 'notes': meal.notes,
                 'timestamp': meal.timestamp.isoformat()
+            }
+            '''
+            'meal': {
+                'id' : str(result.inserted_id),
+                'meal' : meal.meal,
+                'mealType' : meal.mealType,
+                'calories' : meal.calories,
+                'date' : meal.date,
+                'time' : meal.time,
+                'notes' : meal.notes,
+                'created_at': meal.created_at.isoformat()
             }
         }), 201
 

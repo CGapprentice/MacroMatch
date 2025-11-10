@@ -11,6 +11,7 @@ import SocialFeed from './components/SocialFeed';
 import PlaylistGenerator from './components/PlaylistGenerator';
 import UserSettingsPage from './pages/UserSettingPage/UserSettingsPage.jsx'
 import RoutinePage from './pages/RoutinePage/RoutinePage.jsx'
+import MealLog from './pages/MealLog/MealLog.jsx'
 import './main.css'
 import './login.css';
 import './App.css';
@@ -91,6 +92,9 @@ const Navigation = () => {
         <Link to="/routinepage" className={`nav-link ${isActive('/routinepage')}`}>
           🏋️  Routine
         </Link>
+        <Link to="/mealLog" className={`nav-link ${isActive('/mealLog')}`}>
+          🥗  Meal Log
+        </Link>
         <Link to="/usersettingspage" className={`nav-link ${isActive('/usersettingspage')}`}>
           ⚙️  User Settings
         </Link>
@@ -128,11 +132,20 @@ function App() {
             <Route path="/signin" element={<SigninPage />} /> 
 
             {/* 3. PROTECTED ROUTES: Only accessible if logged in */}
+            {/*
             <Route path="/calculator" element={<ProtectedRoute element={<Calculator />} />} />
             <Route path="/social" element={<ProtectedRoute element={<SocialFeed />} />} />
             <Route path="/playlist" element={<ProtectedRoute element={<PlaylistGenerator />} />} />
             <Route path="/routinepage" element={<ProtectedRoute element={<RoutinePage />} />} />
             <Route path="/usersettingspage" element={<ProtectedRoute element={<UserSettingsPage />} />} />
+            
+            */}
+            <Route path="/calculator" element={<Calculator />} />
+            <Route path="/social" element={<SocialFeed />} />
+            <Route path="/playlist" element={<PlaylistGenerator />} />
+            <Route path="/routinepage" element={<RoutinePage />} />
+            <Route path="/usersettingspage" element={<UserSettingsPage />} />
+            <Route path="/mealLog" element={<MealLog />} />
           </Routes>
         </div>
       </Router>

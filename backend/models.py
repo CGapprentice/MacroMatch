@@ -65,30 +65,60 @@ class User:
 
 class Meal:
     # simple meal model - just name, type, and basic info
+    '''
     def __init__(self, name, meal_type, calories=0, notes=""):
         self.name = name
         self.meal_type = meal_type  # breakfast, lunch, dinner, snack
         self.calories = calories
         self.notes = notes
         self.timestamp = datetime.utcnow()
-    
+    '''
+    def __init__(self, mealType, meal="", calories=0, notes="", date="", time=""):
+        self.meal = meal
+        self.mealType = mealType
+        self.calories = calories
+        self.notes = notes
+        self.date = date
+        self.time = time
+        self.created_at = datetime.utcnow()
+
+
     def validate(self):
         # basic validation
+        '''
         errors = []
         if not self.name or len(self.name.strip()) < 1:
             errors.append("meal needs a name")
         if self.meal_type not in ['breakfast', 'lunch', 'dinner', 'snack']:
             errors.append("meal type should be breakfast, lunch, dinner, or snack")
         return errors
+        '''
+        
+        errors =[]
+        if not self.meal or len(self.meal.strip()) < 1:
+            errors.append("There should be a name to the meal")
+        return errors
+        
     
     def to_dict(self):
         # convert to dict for firebase
+        '''
         return {
             'name': self.name,
             'meal_type': self.meal_type,
             'calories': self.calories,
             'notes': self.notes,
             'timestamp': self.timestamp
+        }
+        '''
+        return {
+            'meal' : self.meal,
+            'mealType' : self.mealType,
+            'calories' : self.calories,
+            'date' : self.date,
+            'time' : self.time,
+            'notes' : self.notes,
+            'created_at': self.created_at
         }
 
 

@@ -17,6 +17,7 @@ function RoutinePage(){
     const token = localStorage.getItem('firebase_token')
 
     const [routineSummary, setRoutineSummary] = useState(false);
+    //Change to an array of objects and each object has a unique identifier
     const[data, setData] = useState({});
     const[chooseDay, setChooseDay] = useState({
         sunday: false,

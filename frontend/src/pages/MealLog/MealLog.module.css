@@ -1,0 +1,151 @@
+.mealContainer{
+    display:flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+.mealLogBox{
+    border: 1px solid lightgray;
+    width: 70%;
+    border-radius: 5px;
+    display: flex;
+    padding: 20px 20px;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.title{
+    border-bottom: 1px solid rgb(196, 193, 193);
+    width: 100%;
+}
+
+.title h1{
+    padding-bottom: 10px;
+}
+
+
+.option{
+    display: flex;
+    justify-content: space-between;
+}
+
+.option button{
+    color: black;
+    background-color: white;
+    padding: 0px 0px;
+}
+.option button:hover{
+    background-image: inherit !important;
+    background-color: inherit !important;
+}
+
+.grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 5px;
+}
+
+.grid input{
+    width: 65%;
+    margin-bottom: 20px;
+}
+
+.grid select{
+    width: 65%;
+    padding: 5px 5px;
+}
+
+.dateColumn, .timeColumn, .mealTypeColumn, .caloriesColumn{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.caloriesColumn{
+    width: 150px;
+}
+
+.caloriesRow{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.caloriesRow button{
+    background-image: inherit !important;
+    background-color: white;
+    padding: 0px 0px;
+    width: 0px;
+    height: 0px;
+}
+
+.caloriesRow button:hover{
+    background-image: inherit !important;
+    background-color: inherit !important;
+}
+
+.caloriesRow img{
+    width: 40px;
+    height: 40px;
+    padding: 0px 0px;
+}
+
+.mealColumn{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.mealColumn textarea{
+    resize: vertical;
+}
+
+.addButton{
+    display: flex;
+    justify-content: flex-end;
+    font-style: normal;
+}
+
+.addButton button{
+    background-color: black;
+    padding: 10px 10px;
+    background-image: inherit !important;
+}
+
+.mealLogHistory{
+    border: 1px solid lightgray;
+    width: 70%;
+    border-radius: 5px;
+    display: flex;
+    padding: 20px 20px;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.historyTitle{
+    border-bottom: 1px solid rgb(196, 193, 193);
+    width: 100%;
+}
+
+.historyTitle h1{
+    padding-bottom: 10px;
+}
+
+.showLogNoLog{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.addMeal{
+    margin-bottom: 20px;
+}
+
+.addMeal button{
+    background-color: black;
+    padding: 15px 15px;
+}

@@ -69,9 +69,9 @@ function SignInPage() {
                 // Save Firebase token and user data
                 localStorage.setItem('firebase_token', idToken);
                 localStorage.setItem('user', JSON.stringify(data.user));
-                
+
                 // Redirect to calculator page
-                navigate('/calculatorpage');
+                navigate('/calculator');
             } else {
                 setError(data.error || 'Registration failed');
             }
@@ -111,7 +111,7 @@ function SignInPage() {
             if(data.user.created_at === data.user.updated_at){
                 localStorage.setItem('firebase_token', idToken);
                 localStorage.setItem('user', JSON.stringify(data.user));
-                navigate('/routinepage')
+                navigate('/calculator')
             }else{
                 navigate('/login')
             }

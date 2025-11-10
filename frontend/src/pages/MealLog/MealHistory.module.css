@@ -1,0 +1,88 @@
+.mealLogHistory{
+    border: 1px solid lightgray;
+    width: 70%;
+    border-radius: 5px;
+    display: flex;
+    padding: 20px 20px;
+    flex-direction: column;
+    
+    margin-bottom: 30px;
+}
+
+.historyTitle{
+    border-bottom: 1px solid rgb(196, 193, 193);
+    width: 100%;
+}
+
+.historyTitle h1{
+    padding-bottom: 10px;
+}
+
+.eachDay h3{
+    font-size: 2vw;
+    font-size: max(1rem, 1.5vw);
+}
+
+.eachDay p{
+    font-size: 1.2vw;
+    font-size: max(1rem,vw);
+}
+
+.eachDay{
+    
+    display: grid;
+    grid-template-columns: 15vw 20vw 30vw;
+    flex-direction: row;
+    padding-top: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgb(196, 193, 193);
+    width: 100%;
+    /*grid-template-columns: repeat(auto-fit, minmax(1px, 1fr));*/
+   
+}
+
+
+.options{
+    width: 100%;
+    display:flex;
+    justify-content: flex-end;
+    gap: 25px;
+    padding-right: 10px;
+}
+
+
+.options img{
+    width: 20px;
+    
+}
+.options button{
+    padding: 0px 0px;
+    background-color: white;
+    background-image: inherit !important;
+    background-color: inherit !important;
+
+}
+
+.options button:focus{
+    outline:none;
+    border:none;
+}
+
+.meals{
+    display:flex;
+    flex-direction: row;
+    gap: 4vw;
+}
+
+.totalCalories{
+    display:flex;
+    width: 100%;
+    justify-content: flex-end;
+   
+}
+
+.calories{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
