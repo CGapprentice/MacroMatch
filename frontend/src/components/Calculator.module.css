@@ -1,0 +1,465 @@
+/* src/components/Calculator.module.css */
+
+/* --- Outer Layout (Already mostly covered) --- */
+.contentWrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--color-background-alt);
+}
+
+.calculatorHeader {
+    background-color: var(--color-background-card);
+    border-bottom: 1px solid var(--color-border);
+    padding: 15px 20px;
+}
+
+.headerContent {
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.headerTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.headerUser {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.userWelcome { /* NEW: user-welcome */
+    font-size: 0.9rem;
+    color: var(--color-text);
+}
+
+.logoutButton { /* NEW: logout-button */
+    padding: 8px 15px;
+    background-color: var(--color-danger);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.logoutButton:hover {
+    background-color: #a02020;
+}
+
+.calculatorMain {
+    flex-grow: 1;
+    padding: 30px 20px;
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+    width: 100%;
+}
+
+.mainTitle {
+    font-size: 2.2rem;
+    color: var(--color-primary-dark);
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: var(--color-secondary-text);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.saveStatus { /* NEW: save-status */
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--color-success);
+    margin-top: -15px;
+    margin-bottom: 15px;
+}
+
+/* --- Utility / Form --- */
+.card { /* NEW: card */
+    background-color: var(--color-background-card);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.sectionTitle { /* NEW: section-title */
+    color: var(--color-primary);
+    margin-bottom: 5px;
+    font-size: 1.5rem;
+}
+
+.sectionSubtitle { /* NEW: section-subtitle */
+    color: var(--color-secondary-text);
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+}
+
+.formGrid { /* NEW: form-grid */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.formLabel { /* NEW: form-label */
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--color-text);
+    font-size: 0.9rem;
+}
+
+.formInput { /* NEW: form-input */
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    color: var(--color-text);
+}
+
+.preferencesSection { /* NEW: preferences-section */
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--color-border);
+}
+
+.preferencesTitle { /* NEW: preferences-title */
+    color: var(--color-secondary);
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+}
+
+.buttonContainer { /* NEW: button-container */
+    margin-top: 30px;
+}
+
+.calculateButton { /* Existing (ensure full styling) */
+    width: 100%;
+    padding: 15px;
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.calculateButton:hover {
+    background-color: var(--color-primary-dark);
+}
+
+
+/* --- Results Section --- */
+.resultsGrid { /* NEW: results-grid */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 30px
+}
+
+.cardTitle { /* NEW: card-title */
+    color: var(--color-primary-dark);
+    margin-bottom: 5px;
+    font-size: 1.4rem;
+    border-bottom: 2px solid var(--color-primary-light);
+    padding-bottom: 5px;
+}
+
+.cardSubtitle { /* NEW: card-subtitle */
+    color: var(--color-secondary-text);
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+.resultItems { /* NEW: result-items */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.resultItem { /* NEW: result-item */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--color-border);
+}
+
+.resultLabel { /* NEW: result-label */
+    font-size: 0.95rem;
+    color: var(--color-secondary-text);
+}
+
+.resultValue { /* NEW: result-value */
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-text);
+}
+
+.resultGoal { /* NEW: result-goal */
+    font-weight: 800;
+    font-size: 1.3rem;
+}
+
+.goalLoss { /* NEW: goal-loss (for weight loss) */
+    color: var(--color-success); /* Green for being in a calorie deficit */
+}
+
+.goalGain { /* NEW: goal-gain (for muscle gain) */
+    color: var(--color-danger); /* Red/Orange for being in a calorie surplus */
+}
+
+.disclaimer { /* NEW: disclaimer */
+    font-size: 0.75rem;
+    color: var(--color-secondary-text);
+    padding-top: 15px;
+    border-top: 1px solid var(--color-border);
+    text-align: center;
+}
+
+/* --- Workout Plan Table --- */
+
+
+.tableContainer { /* NEW: table-container */
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.dataTable { /* NEW: data-table */
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.tableHeader { /* NEW: table-header */
+    background-color: var(--color-background-alt);
+    color: var(--color-text);
+}
+
+.tableCell { /* NEW: table-cell */
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.tableEmpty { /* NEW: table-empty */
+    text-align: center;
+    color: var(--color-secondary-text);
+    padding: 20px;
+}
+
+.playlistButton { /* NEW: playlist-button */
+    text-align: center;
+    margin-top: 20px;
+}
+
+.playlistButtonStyle { /* NEW: playlist-button-style */
+    padding: 10px 20px;
+    background-color: var(--color-secondary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.playlistButtonStyle:hover {
+    background-color: #e68900;
+}
+
+.playlistStatus { /* NEW: playlist-status */
+    font-size: 0.8rem;
+    color: var(--color-success);
+    margin-top: 5px;
+}
+
+/* --- Macro Breakdown --- */
+.macroBreakdownCard { /* NEW: macro-breakdown-card */
+    grid-column: 1 / -1; /* Make it full width below the 2-column grid */
+}
+
+.macroContainer { /* NEW: macro-container */
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.macroChart { /* NEW: macro-chart */
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: conic-gradient(
+        var(--color-success) 0% 40%,    /* Protein */
+        var(--color-info) 40% 75%,      /* Carbs */
+        var(--color-secondary) 75% 100% /* Fats */
+    );
+    position: relative;
+    flex-shrink: 0;
+}
+
+.chartCenter { /* NEW: chart-center */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--color-background-card);
+    width: 60%;
+    height: 60%;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.macroPercent { /* NEW: macro-percent */
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text);
+    text-align: center;
+}
+
+.macroDetails { /* NEW: macro-details */
+    flex-grow: 1;
+}
+
+.macroLegend { /* NEW: macro-legend */
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.legendItem { /* NEW: legend-item */
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.legendColor { /* NEW: legend-color */
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    margin-right: 8px;
+}
+
+/* Specific color classes for the legend */
+.purple800 { background-color: var(--color-success); }
+.purple600 { background-color: var(--color-info); }
+.cyan600 { background-color: var(--color-secondary); }
+
+.macroValues { /* Existing (ensure full styling) */
+    display: flex;
+    justify-content: space-around;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-border);
+}
+
+.macroValue { /* Existing (ensure full styling) */
+    text-align: center;
+}
+
+.valueNumber { /* Existing (ensure full styling) */
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 5px;
+}
+
+.valueLabel { /* Existing (ensure full styling) */
+    font-size: 0.9rem;
+    color: var(--color-secondary-text);
+}
+
+
+/* --- Footer --- */
+.calculatorFooter { /* Existing (ensure full styling) */
+    background-color: var(--color-background-card);
+    border-top: 1px solid var(--color-border);
+    padding: 15px 20px;
+    margin-top: auto;
+}
+
+.footerContent { /* Existing (ensure full styling) */
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+}
+
+.footerLinks a { /* Existing (ensure full styling) */
+    color: var(--color-secondary-text);
+    text-decoration: none;
+    margin: 0 10px;
+    transition: color 0.2s;
+}
+
+.footerLinks a:hover {
+    color: var(--color-primary);
+}
+
+.footerLinks span {
+    color: var(--color-border);
+}
+
+.footerSocial { /* NEW: footer-social */
+    display: flex;
+    gap: 10px;
+}
+
+.socialLink { /* NEW: social-link */
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: color 0.2s;
+}
+
+.socialLink:hover {
+    color: var(--color-primary-dark);
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 900px) {
+    .resultsGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .macroContainer {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .macroLegend {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .footerContent {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

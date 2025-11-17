@@ -1,0 +1,185 @@
+
+.social-feed-container {
+    max-width: 1100px;
+    margin: 30px auto; 
+    display: flex;
+    gap: 30px;
+    align-items: flex-start; /* Aligns content to the top */
+    padding: 0 20px;
+}
+
+.posts-section {
+    flex: 2; /* Takes up more space */
+    min-width: 450px;
+}
+
+.sidebar-section {
+    flex: 1; /* Takes up less space */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: sticky; /* Keep it visible while scrolling */
+    top: 20px;
+}
+
+/* Post Card Styling */
+.post-card {
+    margin-bottom: 20px; /* Separates individual posts */
+}
+
+.new-post-card {
+    margin-bottom: 30px;
+}
+
+.new-post-form textarea {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1rem;
+    resize: vertical;
+    min-height: 80px;
+    margin-bottom: 10px;
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.post-button {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.post-button:disabled {
+    background-color: #b0b0b0;
+    cursor: not-allowed;
+}
+
+.char-count {
+    font-size: 0.8rem;
+    color: var(--color-secondary-text);
+}
+
+
+/* Individual Post Header */
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.user-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    border: 2px solid var(--color-primary);
+}
+
+.post-user-name {
+    font-weight: 600;
+    color: var(--color-text);
+    display: block;
+}
+
+.post-time {
+    font-size: 0.8rem;
+    color: var(--color-secondary-text);
+}
+
+.post-body {
+    margin-bottom: 15px;
+}
+
+.post-body p {
+    margin: 0;
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+/* Post Footer (Likes/Comments) */
+.post-footer {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--color-border);
+}
+
+.post-like, .post-comment, .share-icon {
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--color-secondary-text);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.post-like:hover {
+    color: var(--color-danger);
+}
+
+.post-like.liked {
+    color: var(--color-danger);
+    font-weight: 600;
+}
+
+/* Sidebar List Styles */
+.trending-list, .challenges-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.trending-item, .challenges-item {
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--color-border);
+    font-size: 0.95rem;
+    color: var(--color-text);
+}
+
+.trending-item:last-child, .challenges-item:last-child {
+    border-bottom: none;
+}
+
+.trending-stats, .challenges-stats {
+    font-size: 0.8rem;
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* --- Responsive Adjustments for Social Feed --- */
+@media (max-width: 768px) {
+  .social-feed-container {
+    /* Stack columns vertically on smaller screens */
+    flex-direction: column;
+    gap: 20px;
+    /* Use full width of the app-container (minus padding) */
+    padding: 0 20px; 
+  }
+
+  .posts-section {
+    /* When stacked, the post section should be 100% wide */
+    width: 100%;
+    /* Re-set min-width to its initial state to enforce 100% width on stacked columns */
+    min-width: unset; 
+  }
+
+  .trending-section {
+    /* Allow the sidebar to take up the full width when stacked */
+    width: 100%;
+  }
+}

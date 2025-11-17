@@ -1,0 +1,16 @@
+.playlist-container {
+  max-width: 700px; 
+  margin: 20px auto; 
+  padding: 20px; 
+  text-align: center;
+}
+
+.playlist-button-style:hover {
+  background-color: #1ed760;
+}
+
+.playlistOptions {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}

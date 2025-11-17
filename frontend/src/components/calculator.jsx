@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useUser } from './UserContext';
 import { useSpotify } from './SpotifyIntegration';
 import { useNavigate } from 'react-router-dom';
+import styles from './Calculator.module.css';
 
 // Workout database (keep your existing database)
 const workoutDatabase = {
@@ -351,91 +352,91 @@ const Calculator = () => {
 };
 
   return (
-    <div className="content-wrapper">
+    <div className={styles.contentWrapper}>
       {/* Header */}
-      <header className="calculator-header">
-        <div className="header-content">
-          <div className="header-title">MacroMatch</div>
-          <div className="header-user">
-            <span className="user-welcome">Welcome, {user?.name || user?.email}</span>
-            <button onClick={handleLogout} className="logout-button">Logout</button>
+      <header className={styles.calculatorHeader}>
+        <div className={styles.headerContent}>
+          <div className={styles.headerTitle}>MacroMatch</div>
+          <div className={styles.headerUser}>
+            <span className={styles.userWelcome}>Welcome, {user?.name || user?.email}</span>
+            <button onClick={handleLogout} className={styles.logoutButton}>Logout</button>
           </div>
         </div>
       </header>
-      
-      <main className="calculator-main">
+
+      <main className={styles.calculatorMain}>
         {/* Title */}
         <h1>Macro Calculator</h1>
-        <div className="title-section">
-          <h1 className="main-title">Enhanced Caloric Intake Calculator</h1>
-          <p className="subtitle">Get personalized caloric recommendations, dynamic workout plans, and calculated macronutrient breakdowns.</p>
+        <div className={styles.titleSection}>
+          <h1 className={styles.mainTitle}>Enhanced Caloric Intake Calculator</h1>
+          <p className={styles.subtitle}>Get personalized caloric recommendations, dynamic workout plans, and calculated macronutrient breakdowns.</p>
           {lastSaved && (
-            <div className="save-status">✓ Last saved: {lastSaved.toLocaleTimeString()}</div>
+            <div className={styles.saveStatus}>✓ Last saved: {lastSaved.toLocaleTimeString()}</div>
           )}
         </div>
 
         {/* Form Card */}
-        <div className="card">
-          <h2 className="section-title">Basic Information</h2>
-          <p className="section-subtitle">Enter your current metrics and goals.</p>
+        <div className={styles.card}> 
+          <h2 className={styles.sectionTitle}>Basic Information</h2> 
+          <p className={styles.sectionSubtitle}>Enter your current metrics and goals.</p> 
 
-          <div className="form-grid">
-            <div>
-              <label className="form-label">Current Weight</label>
+          <div className={styles.formGrid}> 
+            <div className={styles.inputGroup}> 
+              <label className={styles.formLabel}>Current Weight</label>
               <input
                 type="number"
                 name="weight"
                 value={formData.weight}
                 onChange={handleInputChange}
                 placeholder={getPlaceholder('weight')}
-                className="form-input"
+                className={styles.formInput}
               />
             </div>
 
-            <div>
-              <label className="form-label">Height</label>
+          <div className={styles.inputGroup}>
+            <label className={styles.formLabel}>Height</label>
               <input
                 type="number"
                 name="height"
                 value={formData.height}
                 onChange={handleInputChange}
                 placeholder={getPlaceholder('height')}
-                className="form-input"
+                className={styles.formInput}
               />
             </div>
 
-            <div>
-              <label className="form-label">Age</label>
+            <div className={styles.inputGroup}>
+              <label className={styles.formLabel}>Age</label>
               <input
                 type="number"
                 name="age"
                 value={formData.age}
                 onChange={handleInputChange}
                 placeholder="30"
-                className="form-input"
+                className={styles.formInput}
               />
             </div>
 
-            <div>
-              <label className="form-label">Gender</label>
+            <div className={styles.inputGroup}>
+              <label className={styles.formLabel}>Gender</label>
               <select
                 name="gender"
                 value={formData.gender}
                 onChange={handleInputChange}
-                className="form-input"
+                className={styles.formInput}
               >
                 <option value="male">Male</option>
                 <option value="female">Female</option>
               </select>
             </div>
 
-            <div>
-              <label className="form-label">Activity Level</label>
+            <div className={styles.inputGroup}>
+              <label className={styles.formLabel}>Activity Level</label>
               <select
                 name="activity"
                 value={formData.activity}
                 onChange={handleInputChange}
-                className="form-input"
+                className={styles.formInput}
               >
                 <option value="1.2">Sedentary</option>
                 <option value="1.375">Light Activity</option>
@@ -445,20 +446,20 @@ const Calculator = () => {
               </select>
             </div>
 
-            <div>
-              <label className="form-label">Target Weight</label>
+            <div className={styles.inputGroup}>
+              <label className={styles.formLabel}>Target Weight</label>
               <input
                 type="number"
                 name="targetWeight"
                 value={formData.targetWeight}
                 onChange={handleInputChange}
                 placeholder={getPlaceholder('targetWeight')}
-                className="form-input"
+                className={styles.formInput}
               />
             </div>
 
-            <div>
-              <label className="form-label">Body Fat % (optional)</label>
+            <div className={styles.inputGroup}>
+              <label className={styles.formLabel}>Body Fat % (optional)</label>
               <input
                 type="number"
                 name="bodyFat"
@@ -468,17 +469,17 @@ const Calculator = () => {
                 min="5"
                 max="50"
                 step="0.1"
-                className="form-input"
+                className={styles.formInput}
               />
             </div>
 
-            <div>
-              <label className="form-label">Units</label>
+            <div className={styles.inputGroup}>
+              <label className={styles.formLabel}>Units</label>
               <select
                 name="units"
                 value={formData.units}
                 onChange={handleInputChange}
-                className="form-input"
+                className={styles.formInput}
               >
                 <option value="imperial">Imperial (lbs / inches)</option>
                 <option value="metric">Metric (kg / cm)</option>
@@ -487,17 +488,17 @@ const Calculator = () => {
           </div>
 
           {/* Fitness Preferences Section */}
-          <div className="preferences-section">
-            <h4 className="preferences-title">Fitness Preferences</h4>
-            
-            <div className="form-grid">
+          <div className={styles.preferencesSection}>
+            <h4 className={styles.preferencesTitle}>Fitness Preferences</h4>
+
+            <div className={styles.formGrid}>
               <div>
-                <label className="form-label">Fitness Level</label>
+                <label className={styles.formLabel}>Fitness Level</label>
                 <select
                   name="fitnessLevel"
                   value={formData.fitnessLevel}
                   onChange={handleInputChange}
-                  className="form-input"
+                  className={styles.formInput}
                 >
                   <option value="beginner">Beginner</option>
                   <option value="intermediate">Intermediate</option>
@@ -506,12 +507,12 @@ const Calculator = () => {
               </div>
 
               <div>
-                <label className="form-label">Available Equipment</label>
+                <label className={styles.formLabel}>Available Equipment</label>
                 <select
                   name="equipment"
                   value={formData.equipment}
                   onChange={handleInputChange}
-                  className="form-input"
+                  className={styles.formInput}
                 >
                   <option value="none">No Equipment</option>
                   <option value="basic">Basic (Dumbbells/Resistance Bands)</option>
@@ -521,12 +522,12 @@ const Calculator = () => {
               </div>
 
               <div>
-                <label className="form-label">Workout Time Available</label>
+                <label className={styles.formLabel}>Workout Time Available</label>
                 <select
                   name="timeAvailable"
                   value={formData.timeAvailable}
                   onChange={handleInputChange}
-                  className="form-input"
+                  className={styles.formInput}
                 >
                   <option value="15-30">15-30 minutes</option>
                   <option value="30-45">30-45 minutes</option>
@@ -536,12 +537,12 @@ const Calculator = () => {
               </div>
 
               <div>
-                <label className="form-label">Primary Goal</label>
+                <label className={styles.formLabel}>Primary Goal</label>
                 <select
                   name="primaryGoal"
                   value={formData.primaryGoal}
                   onChange={handleInputChange}
-                  className="form-input"
+                  className={styles.formInput}
                 >
                   <option value="weight_loss">Weight Loss</option>
                   <option value="muscle_gain">Muscle Gain</option>
@@ -551,12 +552,12 @@ const Calculator = () => {
               </div>
 
               <div>
-                <label className="form-label">Preferred Workout Type</label>
+                <label className={styles.formLabel}>Preferred Workout Type</label>
                 <select
                   name="workoutType"
                   value={formData.workoutType}
                   onChange={handleInputChange}
-                  className="form-input"
+                  className={styles.formInput}
                 >
                   <option value="cardio">Cardio Focus</option>
                   <option value="strength">Strength Focus</option>
@@ -566,12 +567,12 @@ const Calculator = () => {
               </div>
 
               <div>
-                <label className="form-label">Dietary Preference</label>
+                <label className={styles.formLabel}>Dietary Preference</label>
                 <select
                   name="dietType"
                   value={formData.dietType}
                   onChange={handleInputChange}
-                  className="form-input"
+                  className={styles.formInput}
                 >
                   <option value="balanced">Balanced</option>
                   <option value="low_carb">Low Carb</option>
@@ -582,15 +583,15 @@ const Calculator = () => {
             </div>
           </div>
 
-          <div className="button-container">
+          <div className={styles.buttonContainer}>
             <button
               onClick={calculateCalories}
               disabled={loading}
-              className="calculate-button"
+              className={styles.calculateButton}
             >
               {loading ? (
                 <>
-                  <span className="spinner"></span>
+                  <span className={styles.spinner}></span>
                   Saving...
                 </>
               ) : (
@@ -601,75 +602,75 @@ const Calculator = () => {
         </div>
 
         {/* Results Row */}
-        <div className="results-grid">
+        <div className={styles.resultsGrid}>
           {/* Caloric Snapshot */}
-          <div className="card result-card">
-            <h3 className="card-title">Your Caloric Snapshot</h3>
-            <p className="card-subtitle">Personalized recommendations for your goals.</p>
+          <div className={styles.resultCard}>
+            <h3 className={styles.cardTitle}>Your Caloric Snapshot</h3>
+            <p className={styles.cardSubtitle}>Personalized recommendations for your goals.</p>
 
-            <div className="result-items">
-              <div className="result-item">
-                <span className="result-label">Basal Metabolic Rate (BMR)</span>
-                <span className="result-value">{formatKcal(results.bmr)}</span>
+            <div className={styles.resultItems}>
+              <div className={styles.resultItem}>
+                <span className={styles.resultLabel}>Basal Metabolic Rate (BMR)</span>
+                <span className={styles.resultValue}>{formatKcal(results.bmr)}</span>
               </div>
-              <div className="result-item">
-                <span className="result-label">Total Daily Energy Expenditure</span>
-                <span className="result-value">{formatKcal(results.tdee)}</span>
+              <div className={styles.resultItem}>
+                <span className={styles.resultLabel}>Total Daily Energy Expenditure</span>
+                <span className={styles.resultValue}>{formatKcal(results.tdee)}</span>
               </div>
-              <div className="result-item">
-                <span className="result-label">Recommended Daily Intake</span>
-                <span className="result-value">{formatKcal(results.recommendedIntake)}</span>
+              <div className={styles.resultItem}>
+                <span className={styles.resultLabel}>Recommended Daily Intake</span>
+                <span className={styles.resultValue}>{formatKcal(results.recommendedIntake)}</span>
               </div>
-              <div className="result-item">
-                <span className="result-label">Daily Caloric Goal</span>
-                <span className={`result-goal ${
-                  results.dailyGoal < results.recommendedIntake ? 'goal-loss' :
-                  results.dailyGoal > results.recommendedIntake ? 'goal-gain' : ''
+              <div className={styles.resultItem}>
+                <span className={styles.resultLabel}>Daily Caloric Goal</span>
+                <span className={`${styles.resultGoal} ${
+                  results.dailyGoal < results.recommendedIntake ? styles.goalLoss :
+                  results.dailyGoal > results.recommendedIntake ? styles.goalGain : ''
                 }`}>
                   {formatKcal(results.dailyGoal)}
                 </span>
               </div>
             </div>
 
-            <p className="disclaimer">Calculations based on your personal metrics and goals. Consult a professional for personalized advice.</p>
+            <p className={styles.disclaimer}>Calculations based on your personal metrics and goals. Consult a professional for personalized advice.</p>
           </div>
 
           {/* Workout Plan */}
-          <div className="card workout-plan-card">
-            <h3 className="card-title">Personalized Workout Plan</h3>
-            <p className="card-subtitle">Customized exercises based on your preferences and goals.</p>
+          <div className={`${styles.card} ${styles.workoutPlanCard}`}>
+            <h3 className={styles.cardTitle}>Personalized Workout Plan</h3>
+            <p className={styles.cardSubtitle}>Customized exercises based on your preferences and goals.</p>
 
-            <div className="table-container">
-              <table className="data-table">
+            <div className={styles.tableContainer}>
+              <table className={styles.dataTable}>
                 <thead>
-                  <tr className="table-header">
-                    <th className="table-cell">Exercise</th>
-                    <th className="table-cell">Duration</th>
-                    <th className="table-cell">Estimated Burn</th>
+                  <tr className={styles.tableHeader}>
+                    <th className={styles.tableCell}>Exercise</th>
+                    <th className={styles.tableCell}>Duration</th>
+                    <th className={styles.tableCell}>Estimated Burn</th>
                   </tr>
                 </thead>
                 <tbody>
                   {results.workouts.length > 0 ? (
                     results.workouts.map((workout, index) => (
-                      <tr key={index} className="table-row">
-                        <td className="table-cell">{workout.name}</td>
-                        <td className="table-cell">{workout.duration}</td>
-                        <td className="table-cell">{workout.estimatedBurn} kcal</td>
+                      <tr key={index} className={styles.tableRow}>
+                        <td className={styles.tableCell}>{workout.name}</td>
+                        <td className={styles.tableCell}>{workout.duration}</td>
+                        <td className={styles.tableCell}>{workout.estimatedBurn} kcal</td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="3" className="table-empty">Complete the form to see your personalized workout plan</td>
+                      <td colSpan="3" className={styles.tableEmpty}>Complete the form to see your personalized workout plan</td>
                     </tr>
                   )}
                 </tbody>
               </table>
             </div>
 
-            <div className="playlist-button">
+            <div className={styles.playlistButton}>
               <button
                 onClick={handleGeneratePlaylist}
-                className="playlist-button-style"
+                className={styles.playlistButtonStyle}
               >
                 {spotifyConnected ? (
                   <>🎵 Generate Workout Playlist</>
@@ -678,53 +679,53 @@ const Calculator = () => {
                 )}
               </button>
               {spotifyConnected && (
-                <div className="playlist-status">✓ Spotify connected</div>
+                <div className={styles.playlistStatus}>✓ Spotify connected</div>
               )}
             </div>
           </div>
         </div>
 
         {/* Macronutrient Breakdown */}
-        <div className="card macro-breakdown-card">
-          <h3 className="card-title">Dynamic Macronutrient Breakdown</h3>
-          <p className="card-subtitle">Calculated distribution based on your goals and dietary preferences.</p>
+        <div className={`${styles.card} ${styles.macroBreakdownCard}`}>
+          <h3 className={styles.cardTitle}>Dynamic Macronutrient Breakdown</h3>
+          <p className={styles.cardSubtitle}>Calculated distribution based on your goals and dietary preferences.</p>
 
-          <div className="macro-container">
+          <div className={styles.macroContainer}>
             {/* Placeholder for chart - replace with plain CSS styling if needed */}
-            <div className="macro-chart">
-              <div className="chart-center">
-                <div className="macro-percent">{results.macros.carbs}% / {results.macros.protein}% / {results.macros.fats}%</div>
+            <div className={styles.macroChart}>
+              <div className={styles.chartCenter}>
+                <div className={styles.macroPercent}>{results.macros.carbs}% / {results.macros.protein}% / {results.macros.fats}%</div>
               </div>
             </div>
 
-            <div className="macro-details">
-              <div className="macro-legend">
-                <div className="legend-item">
-                  <div className="legend-color purple-800"></div>
+            <div className={styles.macroDetails}>
+              <div className={styles.macroLegend}>
+                <div className={styles.legendItem}>
+                  <div className={`${styles.legendColor} ${styles.purple800}`}></div>
                   <span>Proteins — <strong>{results.macros.protein}%</strong></span>
                 </div>
-                <div className="legend-item">
-                  <div className="legend-color purple-600"></div>
+                <div className={styles.legendItem}>
+                  <div className={`${styles.legendColor} ${styles.purple600}`}></div>
                   <span>Carbohydrates — <strong>{results.macros.carbs}%</strong></span>
                 </div>
-                <div className="legend-item">
-                  <div className="legend-color cyan-600"></div>
+                <div className={styles.legendItem}>
+                  <div className={`${styles.legendColor} ${styles.cyan600}`}></div>
                   <span>Fats — <strong>{results.macros.fats}%</strong></span>
                 </div>
               </div>
 
-              <div className="macro-values">
-                <div className="macro-value">
-                  <div className="value-number">{results.macroGrams.protein}g</div>
-                  <div className="value-label">Protein Daily</div>
+              <div className={styles.macroValues}>
+                <div className={styles.macroValue}>
+                  <div className={styles.valueNumber}>{results.macroGrams.protein}g</div>
+                  <div className={styles.valueLabel}>Protein Daily</div>
                 </div>
-                <div className="macro-value">
-                  <div className="value-number">{results.macroGrams.carbs}g</div>
-                  <div className="value-label">Carbs Daily</div>
+                <div className={styles.macroValue}>
+                  <div className={styles.valueNumber}>{results.macroGrams.carbs}g</div>
+                  <div className={styles.valueLabel}>Carbs Daily</div>
                 </div>
-                <div className="macro-value">
-                  <div className="value-number">{results.macroGrams.fats}g</div>
-                  <div className="value-label">Fats Daily</div>
+                <div className={styles.macroValue}>
+                  <div className={styles.valueNumber}>{results.macroGrams.fats}g</div>
+                  <div className={styles.valueLabel}>Fats Daily</div>
                 </div>
               </div>
             </div>
@@ -732,18 +733,18 @@ const Calculator = () => {
         </div>
       </main>
 
-      <footer className="calculator-footer">
-        <div className="footer-content">
-          <div className="footer-links">
-            <a href="#" className="footer-link">Product</a>
+      <footer className={styles.calculatorFooter}>
+        <div className={styles.footerContent}>
+          <div className={styles.footerLinks}>
+            <a href="#" className={styles.footerLink}>Product</a>
             <span>|</span>
-            <a href="#" className="footer-link">Legal</a>
+            <a href="#" className={styles.footerLink}>Legal</a>
           </div>
-          <div className="footer-social">
-            <a href="#" className="social-link">f</a>
-            <a href="#" className="social-link">t</a>
-            <a href="#" className="social-link">ig</a>
-            <a href="#" className="social-link">in</a>
+          <div className={styles.footerSocial}>
+            <a href="#" className={styles.socialLink}>f</a>
+            <a href="#" className={styles.socialLink}>t</a>
+            <a href="#" className={styles.socialLink}>ig</a>
+            <a href="#" className={styles.socialLink}>in</a>
           </div>
         </div>
       </footer>

@@ -9,6 +9,7 @@ import HomePage from "./pages/HomePage";
 import Calculator from './components/Calculator';
 import SocialFeed from './components/SocialFeed';
 import PlaylistGenerator from './components/PlaylistGenerator';
+import ProgressDashboard from './components/ProgressDashboard';
 import UserSettingsPage from './pages/UserSettingPage/UserSettingsPage.jsx'
 import RoutinePage from './pages/RoutinePage/RoutinePage.jsx'
 import './main.css'
@@ -90,6 +91,9 @@ const Navigation = () => {
         </Link>
         <Link to="/routinepage" className={`nav-link ${isActive('/routinepage')}`}>
           🏋️  Routine
+        </Link>
+        <Link to="/dashboard" className={`nav-link ${isActive('/dashboard')}`}>
+          📈 Progress
         </Link>
         <Link to="/usersettingspage" className={`nav-link ${isActive('/usersettingspage')}`}>
           ⚙️  User Settings
