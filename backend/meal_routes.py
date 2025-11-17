@@ -58,16 +58,6 @@ def create_meal():
 
         return jsonify({
             'message': 'meal created! :)',
-            '''
-            'meal': {
-                'id': str(result.inserted_id),
-                'name': meal.name,
-                'meal_type': meal.meal_type,
-                'calories': meal.calories,
-                'notes': meal.notes,
-                'timestamp': meal.timestamp.isoformat()
-            }
-            '''
             'meal': {
                 'id' : str(result.inserted_id),
                 'meal' : meal.meal,

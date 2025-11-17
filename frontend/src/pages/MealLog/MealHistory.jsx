@@ -2,53 +2,65 @@ import styles from './MealHistory.module.css'
 import MealLog from '../MealLog/MealLog.jsx'
 import { useNavigate } from "react-router-dom"
 import { useState, useEffect} from 'react'
+import ViewPopup from "./ViewPopup/ViewPopup.jsx"
 
 
-function MealHistory({dayMeal, totalCalories}){
-    /*const navigate = useNavigate();
-    const[errorMessage, setErrorMessage] = useState('');
-    useEffect(()=>{
-        const getMealLogHistory = async () =>{
-            try{
-                const result = await fetch('http://localhost:5000/api/v1/meals/',{
-                    method: 'GET',
-                    headers:{
-                        'Content-Type' : 'applicatoin/json',
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                if(result.status === 401){
-                    localStorage.removeItem("firebase_token");
-                    navigate('/login')
-                    return
+function MealHistory({dayMeal, setDayMeal}){
+    const[checkOption, setCheckOption] = useState(null);
+    const navigate = useNavigate();
+    const token = localStorage.getItem('firebase_token');
+    const[showView, setShowView] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(null);
+
+    const handleView = (day) =>{
+        setSelectedDate(day);
+        setShowView(true);
+    }
+
+    const handleDelete = async(day) =>{
+        console.log("Delete button was clicked");
+        const date = dayMeal.find(meal => meal.date === day);
+        let check = true;
+        if(date){
+            for (const meal of date.newMeal){
+                if(!meal.id){
+                    console.log("There's no id for ", meal);
+                    check = false;
+                    break;
                 }
-                if(result.ok){
-                    const response = await result.json();
-                    
-                    const groupByDate = response.reduce((acc, obj)=>{
-                        const key = obj.date;
-                        if(!acc[key]){
-                            acc[key] =[];
+                try{
+                    const response = await fetch(`http://localhost:5000/api/v1/meals/${meal.id}`,{
+                        method: 'DELETE',
+                        headers:{
+                            'Content-type' : 'application/json',
+                            Authorization: `Bearer ${token}`
                         }
-                        acc[key].push(obj);
-                        return acc;
-                    },{});
-
-                    const sortedData = groupByDate.sort((a,b) => b.date - a.date);
-                    const groupDates = Object.entries(sortedData).map(([date,meal])=>({
-                        date,
-                        newMeal: meal
-                    }));
-                    setDayMeal(groupDates);
-
-
+                    });
+                    if(response.status === 401){
+                        localStorage.removeItem("firebase_token")
+                        navigate('/login')
+                        check = false;
+                        return
+                    }
+                    if(response.ok){
+                        console.log("Successfully deleted meal: ", meal);
+                    }else{
+                        console.log("Connected to backend but couldn't delete meal: " , meal);
+                        check = false;
+                        break;
+                    }
+                }catch(error){
+                    console.log("Failed to delete: ", error);
+                    check = false;
+                    break;
                 }
-            }catch(error){
-                console.error('Getting User History Meals error: ', error);
-                setErrorMessage(error);
-            }; getMealLogHistory();
+            }
         }
-    })*/
+        {check && setDayMeal(prevDay => prevDay.filter(date => date.date !== day));}
+
+    }
+  
+
     return(
         <>
             <div className={styles.mealLogHistory}>
@@ -57,7 +69,7 @@ function MealHistory({dayMeal, totalCalories}){
                 </div>
                 <>
                     <div className={styles.mealHistory}>
-                        {dayMeal.map (day => (
+                        {dayMeal.map ((day,index)=> (
                             <div key={day.date} className={styles.eachDay}>
                                 <h3>{day.date}</h3>
                                 <div className={styles.meals}>
@@ -65,7 +77,7 @@ function MealHistory({dayMeal, totalCalories}){
                                         <div key={meal.meal}>
                                             <p><b>{meal.mealType}</b></p>
                                             <p>{meal.meal}</p>
-                                            <p>{meal.calories}</p>                                  
+                                            <p>{meal.calories}</p>                                
                                         </div>
                                         
                                     ))}
@@ -74,9 +86,19 @@ function MealHistory({dayMeal, totalCalories}){
                                 <div className={styles.options}>
                                     <div className={styles.calories}>
                                         <p><b>Total Calories</b></p>
-                                        <p>{totalCalories}</p>
+                                        <p>{day.totalCalories}</p>
                                     </div>
-                                    <button><img src='../../public/mealLogOption.png'/> </button>
+                                    <div style={{position: "relative", display: "inline-block"}}>
+
+                                        <button onClick={() => setCheckOption(checkOption === index ? null : index)}><img src='../../public/mealLogOption.png'/> </button>
+                                        {checkOption === index && (
+                                            <div className={styles.optionBox}>
+                                                <button onClick={() => handleView(day)}>View</button>
+                                                <button onClick={()=> handleDelete(day.date)}>Delete</button>
+                                            </div>
+                                        )}
+                                    </div>
+                                    
                                 </div>
                             </div>  
                         ))}
@@ -85,6 +107,7 @@ function MealHistory({dayMeal, totalCalories}){
                 </>
             
              </div>
+             {showView && selectedDate ? <ViewPopup day={selectedDate} setShowView={setShowView} setCheckOption={setCheckOption} /> : null}
         </>
     )
 }

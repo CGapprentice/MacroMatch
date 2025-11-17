@@ -40,29 +40,40 @@ function MealLog(){
             date,
             time,
             mealType,
-            calories,
+            calories: Number(calories),
             meal,
             note
         }
 
-        setTotalCalories(prev => prev + calories);
+        setTotalCalories(prev => prev + Number(calories));
 
-        setDayMeal(day => {
+        /*setDayMeal(day => {
             const dateExist = day.findIndex( d => d.date === newMeal.date);
             let addMeal;
             if(dateExist === -1){
                 addMeal = [
                     ...day,
-                    {date, newMeal: [newMeal]}
+                    {date, newMeal: [newMeal], totalCalories: calories}
                 ]
             }else{
-                //this is when date does exists
-               addMeal = day.map((day) =>
-                day.date === date ? {...day , newMeal: [...day.newMeal, newMeal]} : day )
+                //this is when date does exists 
+                addMeal = day.map((day) =>{
+                    if(day.date === date){
+                        const allMeals = [...day.newMeal, newMeal];
+                        const totalCal = allMeals.reduce((add, meal) => add + Number(meal.calories || 0), 0);
+                        return{
+                            ...day,
+                            newMeal: allMeals,
+                            totalCalories: totalCal
+                        };
+                    }
+                    return day
+                })
             }
             return addMeal.sort((a,b) => new Date(b.date) - new Date(a.date));
         })
-        console.log(dayMeal);
+        console.log(dayMeal);*/
+
         
         try{
             const response = await fetch('http://localhost:5000/api/v1/meals/',{
@@ -78,6 +89,35 @@ function MealLog(){
                 console.log(result.error);
                 setErrorMessage(result.error);
             }
+
+            const sentMeal = result.meal;
+
+            setDayMeal(day => {
+                const dateExist = day.findIndex( d => d.date === sentMeal.date);
+                let addMeal;
+                if(dateExist === -1){
+                    addMeal = [
+                        ...day,
+                        {date: sentMeal.date, newMeal: [sentMeal], totalCalories: sentMeal.calories}
+                    ]
+                }else{
+                    //this is when date does exists 
+                    addMeal = day.map((day) =>{
+                        if(day.date === sentMeal.date){
+                            const allMeals = [...day.newMeal, sentMeal];
+                            const totalCal = allMeals.reduce((add, meal) => add + Number(meal.calories || 0), 0);
+                            return{
+                                ...day,
+                                newMeal: allMeals,
+                                totalCalories: totalCal
+                            };
+                        }
+                        return day
+                    })
+                }
+                return addMeal.sort((a,b) => new Date(b.date) - new Date(a.date));
+            })
+            console.log(dayMeal);
         }catch(error){
             console.error('Adding meal error: ', error);
             setErrorMessage(error.message || String(error));
@@ -118,16 +158,14 @@ function MealLog(){
                         return acc;
                     },{});
 
-                    
                     const groupDates = Object.entries(groupByDate).map(([date,meal])=>({
                         date,
                         newMeal: meal,
-                        
+                        totalCalories: meal.reduce((sum, meal)=> sum+ Number(meal.calories || 0),0)                    
                     }));
                     const sortedGroup = groupDates.sort((a,b) => new Date(b.date) - new Date(a.date));
                     setDayMeal(sortedGroup);
-                    
-
+                    console.log(dayMeal);
                 }
             }catch(error){
                 console.error('Getting User History Meals error: ', error);
@@ -225,6 +263,7 @@ function MealLog(){
                         <MealHistory
                             dayMeal={dayMeal}
                             totalCalories={totalCalories}
+                            setDayMeal={setDayMeal}
                             
                        /> 
                        : null
@@ -240,6 +279,7 @@ function MealLog(){
                         <MealHistory
                             dayMeal={dayMeal}
                             totalCalories={totalCalories}
+                            setDayMeal={setDayMeal}
                             
                        /> 
                        : null

@@ -86,3 +86,33 @@
     flex-direction: column;
     align-items: center;
 }
+
+.optionBox{
+    position: absolute;
+    top: 0;         /* aligns top of popup with button */
+    left: 110%;     /* moves popup to the right of the button; adjust as needed */
+    background: #fff;
+    border: 1px solid #ccc;
+    z-index: 10;
+    border-radius: 0.20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    min-width: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    
+}
+
+.optionBox button{
+    background-color: inherit !important;
+    background-color: white;
+    padding: 0.10rem 1rem;
+    width: 100%;
+    color: black;
+    border-radius: 0px;
+    padding: 5px 0px;
+}
+.optionBox button + button{
+    border-top: 1px solid #ccc;
+    border-radius: 0px;
+}
