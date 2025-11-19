@@ -1,0 +1,28 @@
+/* src/styles/variables.css */
+
+:root {
+    /* Primary Colors */
+    --color-primary: #9c27b0;   /* Purple (used in Navigation, Calculator) */
+    --color-primary-light: #e1bee7;
+    --color-primary-dark: #7b1fa2;
+
+    /* Secondary Colors */
+    --color-secondary: #ff9800; /* Orange (used for Fats/Carbs) */
+    --color-secondary-light: #ffcc80;
+
+    /* Status/Feedback Colors */
+    --color-success: #4caf50;   /* Green (used for Protein) */
+    --color-danger: #d32f2f;    /* Red (used for Over target/Error) */
+    --color-info: #2196f3;      /* Blue (used for Carbs) */
+
+    /* Background and Text */
+    --color-background: #ffffff;
+    --color-background-alt: #f5f5f5;
+    --color-background-card: #ffffff;
+    --color-text: #333333;
+    --color-secondary-text: #666666;
+    --color-border: #eeeeee;
+
+    /* Layout */
+    --max-content-width: 1000px;
+}

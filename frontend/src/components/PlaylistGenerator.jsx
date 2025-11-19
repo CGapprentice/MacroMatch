@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useUser } from './UserContext';
 import { useSpotify } from './SpotifyIntegration';
 import { Music } from 'lucide-react';
+import styles from './PlaylistGenerator.module.css';
 
 // --- Helper Functions (You should implement these or import them) ---
 // Mock function to simulate generating a playlist from the calculator results
@@ -80,27 +81,26 @@ const PlaylistGenerator = () => {
         setPlaylistStatus('Custom playlist generated locally.');
     }
 
-
     return (
-        <main className="app-container calculator-content">
-            <div className="results-grid">
-                <div className="playlist-card card">
+        <main className={'app-container ' + styles.calculatorContent}>
+            <div className={styles.resultsGrid}>
+                <div className={`${styles.playlistCard} card`}>
                     <h2 className="card-title">Your Workout Playlist</h2>
                     <p className="card-subtitle">Music recommendations based on your **{workout.type}** workout plan.</p>
 
                     {/* Spotify Connection Status/Button */}
-                    <div className="spotify-connection-status" style={{marginBottom: '20px'}}>
-                        <div className="legend-item">
-                            <span className="legend-color" style={{backgroundColor: isConnected ? 'var(--color-success)' : 'var(--color-danger)'}}></span>
+                    <div className={styles.spotifyConnectionStatus} style={{marginBottom: '20px'}}>
+                        <div className={styles.legendItem}>
+                            <span className={styles.legendColor} style={{backgroundColor: isConnected ? 'var(--color-success)' : 'var(--color-danger)'}}></span>
                             **Spotify Status:** {isConnected ? 'Connected' : 'Not Connected'}
                         </div>
                     </div>
 
                     {!isConnected && (
-                        <div className="playlist-button">
+                        <div className={styles.playlistButton}>
                              <button 
                                 onClick={connectSpotify}
-                                className="playlist-button-style"
+                                className={`${styles.playlistButtonStyle} button`}
                                 style={{backgroundColor: '#1DB954'}} // Spotify Green
                             >
                                 Connect with Spotify
@@ -110,29 +110,29 @@ const PlaylistGenerator = () => {
 
 
                     {/* Playlist Display */}
-                    <div className="table-container">
-                        <table className="data-table">
-                            <thead className="table-header">
+                    <div className={styles.tableContainer}>
+                        <table className={styles.dataTable}>
+                            <thead className={styles.tableHeader}>
                                 <tr>
-                                    <th className="table-cell"><Music size={14} /> Track Name</th>
-                                    <th className="table-cell">Artist</th>
-                                    <th className="table-cell">Genre</th>
-                                    <th className="table-cell">Duration</th>
+                                    <th className={styles.tableCell}><Music size={14} /> Track Name</th>
+                                    <th className={styles.tableCell}>Artist</th>
+                                    <th className={styles.tableCell}>Genre</th>
+                                    <th className={styles.tableCell}>Duration</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {currentPlaylist && currentPlaylist.length > 0 ? (
                                     currentPlaylist.map((track, index) => (
-                                        <tr key={index} className="table-row">
-                                            <td className="table-cell">{track}</td>
-                                            <td className="table-cell">Mock Artist {index + 1}</td>
-                                            <td className="table-cell">{['Pop', 'Rock', 'Electronic', 'Hip-Hop'][index % 4]}</td>
-                                            <td className="table-cell">{Math.floor(Math.random() * 5) + 2} min</td>
+                                        <tr key={index} className={styles.tableRow}>
+                                            <td className={styles.tableCell}>{track}</td>
+                                            <td className={styles.tableCell}>Mock Artist {index + 1}</td>
+                                            <td className={styles.tableCell}>{['Pop', 'Rock', 'Electronic', 'Hip-Hop'][index % 4]}</td>
+                                            <td className={styles.tableCell}>{Math.floor(Math.random() * 5) + 2} min</td>
                                         </tr>
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan="4" className="table-cell table-empty">
+                                        <td colSpan="4" className={`${styles.tableCell} ${styles.tableEmpty}`}>
                                             {hasCalculatorData 
                                                 ? "Run the calculator to generate an initial playlist plan!"
                                                 : "Please complete the Macro Calculator first."
@@ -145,27 +145,27 @@ const PlaylistGenerator = () => {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="playlist-button">
+                    <div className={styles.playlistButton}>
                         {isConnected && currentPlaylist && (
                             <button 
                                 onClick={handleGenerateSpotifyPlaylist}
                                 disabled={playlistStatus === 'Generating...'}
-                                className="playlist-button-style"
+                                className={`${styles.playlistButtonStyle} button`}
                             >
                                 {playlistStatus === 'Generating...' ? 'Adding to Spotify...' : 'Add Playlist to Spotify Now'}
                             </button>
                         )}
-                        {playlistStatus && <p className="playlist-status" style={{color: playlistStatus.includes('Failed') ? 'var(--color-danger)' : 'var(--color-success)'}}>{playlistStatus}</p>}
+                        {playlistStatus && <p className={styles.playlistStatus} style={{color: playlistStatus.includes('Failed') ? 'var(--color-danger)' : 'var(--color-success)'}}>{playlistStatus}</p>}
 
                         {/* Options to erase/start new (from your previous component logic) */}
                         {currentPlaylist ? (
-                            <div className="playlist-options" style={{marginTop: '15px'}}>
-                                <button onClick={handleEraseAndStartNew} className='playlist-button-style' style={{backgroundColor: '#666', fontSize: '0.9rem'}}>
+                            <div className={styles.playlistOptions} style={{marginTop: '15px'}}>
+                                <button onClick={handleEraseAndStartNew} className={`${styles.playlistButtonStyle} button`} style={{backgroundColor: '#666', fontSize: '0.9rem'}}>
                                     Erase Current & Start New Playlist
                                 </button>
                             </div>
                         ) : (
-                            <div className="playlist-options" style={{marginTop: '15px'}}>
+                            <div className={styles.playlistOptions} style={{marginTop: '15px'}}>
                                 <button 
                                     onClick={() => {
                                         setIsCustom(false); 
@@ -173,7 +173,7 @@ const PlaylistGenerator = () => {
                                         setPlaylistStatus('Initial plan re-generated.');
                                     }}
                                     disabled={!hasCalculatorData}
-                                    className='playlist-button-style'
+                                    className={`${styles.playlistButtonStyle} button`}
                                     style={{backgroundColor: '#9c27b0', fontSize: '0.9rem'}}
                                 >
                                     Re-generate Initial Plan

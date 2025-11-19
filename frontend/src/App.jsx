@@ -9,6 +9,7 @@ import HomePage from "./pages/HomePage/HomePage.jsx";
 import Calculator from './components/Calculator';
 import SocialFeed from './components/SocialFeed';
 import PlaylistGenerator from './components/PlaylistGenerator';
+import ProgressDashboard from './components/ProgressDashboard';
 import UserSettingsPage from './pages/UserSettingPage/UserSettingsPage.jsx'
 import RoutinePage from './pages/RoutinePage/RoutinePage.jsx'
 import MealLog from './pages/MealLog/MealLog.jsx'
@@ -94,6 +95,9 @@ const Navigation = () => {
         </Link>
         <Link to="/mealLog" className={`nav-link ${isActive('/mealLog')}`}>
           🥗  Meal Log
+        </Link>
+        <Link to="/dashboard" className={`nav-link ${isActive('/dashboard')}`}>
+          📈 Progress
         </Link>
         <Link to="/usersettingspage" className={`nav-link ${isActive('/usersettingspage')}`}>
           ⚙️  User Settings

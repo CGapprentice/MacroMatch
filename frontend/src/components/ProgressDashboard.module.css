@@ -1,0 +1,139 @@
+/* src/components/ProgressDashboard.module.css */
+
+.dashboardPage {
+    padding: 20px;
+    /* Uses the global variable from variables.css */
+    max-width: var(--max-content-width); 
+    margin: 20px auto;
+}
+
+.dashboardTitle {
+    color: var(--color-primary);
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.dashboardTitle svg {
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.dashboardGrid {
+    display: grid;
+    grid-template-columns: 1fr 2fr; 
+    gap: 30px;
+}
+
+@media (max-width: 768px) {
+    .dashboardGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Card Styles */
+.card {
+    padding: 30px;
+    background-color: var(--color-background-card); 
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Summary Card */
+.summaryHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 15px;
+}
+
+.summaryHeader h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.summaryHeader svg {
+    color: var(--color-primary);
+    margin-right: 15px;
+}
+
+.calorieCount {
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Status-specific classes use CSS variables for colors */
+.overTarget {
+    color: var(--color-danger);
+}
+
+.underTarget {
+    color: var(--color-primary);
+}
+
+.calorieLabel {
+    margin: 5px 0 0;
+    font-size: 1rem;
+    color: var(--color-secondary-text);
+}
+
+.goalInfo {
+    font-size: 0.9rem;
+    padding: 15px;
+    background-color: var(--color-background-alt);
+    border-radius: 8px;
+}
+
+/* Progress Bars Card */
+.progressHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 15px;
+}
+
+.progressHeader h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.progressHeader svg {
+    color: var(--color-success); /* Using green for macro progress */
+    margin-right: 15px;
+}
+
+.progressNote {
+    margin-top: 30px;
+    font-size: 0.85rem;
+    color: var(--color-secondary-text);
+    text-align: center;
+}
+
+/* Progress Bar Helper Component Styles */
+.progressBarContainer {
+    margin-bottom: 15px;
+}
+
+.progressBarLabel {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.progressBarTrack {
+    height: 10px;
+    background-color: var(--color-background-alt);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progressBarFill {
+    height: 100%; 
+    transition: width 0.5s ease-in-out; 
+    /* The color is set inline in JSX for dynamic macro/calorie status */
+}

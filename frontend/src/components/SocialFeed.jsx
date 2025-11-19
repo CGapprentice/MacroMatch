@@ -4,6 +4,7 @@ import { Heart, MessageCircle, Share2, TrendingUp, Users } from 'lucide-react';
 import { useUser } from './UserContext';
 import { db } from '../firebase';
 import { collection, addDoc, getDocs, query, orderBy, serverTimestamp } from 'firebase/firestore';
+import styles from './SocialFeed.module.css';
 
 const SocialFeed = () => {
   const { user } = useUser();
@@ -80,12 +81,12 @@ const SocialFeed = () => {
     ];
 
     return (
-        <div className="social-feed-container">
+        <div className={styles.socialFeedContainer}>
             {/* 1. Main Content - Posts and New Post Form */}
-            <div className="posts-section">
+            <div className={styles.postsSection}>
                 
                 {/* A. New Post Form */}
-                <div className="new-post-card card">
+                <div className={`${styles.newPostCard} card`}>
                     <h3 className="card-title">Share Your Progress</h3>
                     <form onSubmit={handlePostSubmit} className="new-post-form">
                         <textarea
@@ -110,27 +111,27 @@ const SocialFeed = () => {
                         <p className="table-empty">No posts yet. Be the first to share!</p>
                     ) : (
                         posts.map((post) => (
-                            <div key={post.id} className="post-card card">
-                                <div className="post-header">
-                                    <img src={post.userAvatar || 'default-avatar.png'} alt="Avatar" className="user-avatar" />
-                                    <div className="user-info">
-                                        <span className="post-user-name">{post.userName}</span>
-                                        <span className="post-time">{post.createdAt.toDate().toLocaleDateString()}</span>
+                            <div key={post.id} className={styles.postCard + ' card'}>
+                                <div className={styles.postHeader}>
+                                    <img src={post.userAvatar || 'default-avatar.png'} alt="Avatar" className={styles.userAvatar} />
+                                    <div className={styles.userInfo}>
+                                        <span className={styles.postUserName}>{post.userName}</span>
+                                        <span className={styles.postTime}>{post.createdAt.toDate().toLocaleDateString()}</span>
                                     </div>
                                 </div>
-                                <div className="post-body">
+                                <div className={styles.postBody}>
                                     <p>{post.text}</p>
                                 </div>
-                                <div className="post-footer">
+                                <div className={styles.postFooter}>
                                     <div className={`post-like ${post.isLiked ? 'liked' : ''}`} onClick={() => handleLike(post.id)}>
                                         <Heart size={14} fill={post.isLiked ? 'red' : 'none'} color={post.isLiked ? 'red' : 'var(--color-secondary-text)'} />
-                                        <span className="like-count">{post.likes}</span>
+                                        <span className={styles.likeCount}>{post.likes}</span>
                                     </div>
-                                    <div className="post-comment">
+                                    <div className={styles.postComment}>
                                         <MessageCircle size={14} color="var(--color-secondary-text)" />
-                                        <span className="comment-count">{post.comments}</span>
+                                        <span className={styles.commentCount}>{post.comments}</span>
                                     </div>
-                                    <Share2 size={14} color="var(--color-secondary-text)" className="share-icon" />
+                                    <Share2 size={14} color="var(--color-secondary-text)" className={styles.shareIcon} />
                                 </div>
                             </div>
                         ))
@@ -139,29 +140,29 @@ const SocialFeed = () => {
             </div>
 
             {/* 2. Sidebar - Trending and Challenges */}
-            <div className="sidebar-section">
+            <div className={styles.sidebarSection}>
                 
-                <div className="trending-section card">
-                    <div className="trending-title card-title">
+                <div className={`${styles.trendingSection} card`}>
+                    <div className={`${styles.trendingTitle} card-title`}>
                         <span>📈 Trending Posts</span>
                     </div>
-                    <ul className="trending-list">
+                    <ul className={styles.trendingList}>
                         {trendingPosts.map((post, index) => (
-                            <li key={index} className="trending-item">
-                                {post.title} <span className="trending-stats">({post.likes} likes)</span>
+                            <li key={index} className={styles.trendingItem}>
+                                {post.title} <span className={styles.trendingStats}>({post.likes} likes)</span>
                             </li>
                         ))}
                     </ul>
                 </div>
 
-                <div className="challenges-section card">
-                    <div className="challenges-title card-title">
+                <div className={styles.challengesSection + ' card'}>
+                    <div className={styles.challengesTitle + ' card-title'}>
                         <span>👥 Challenges</span>
                     </div>
-                    <ul className="challenges-list">
+                    <ul className={styles.challengesList}>
                         {challenges.map((challenge, index) => (
-                            <li key={index} className="challenges-item">
-                                {challenge.name} <span className="challenges-stats">({challenge.participants} participants)</span>
+                            <li key={index} className={styles.challengesItem}>
+                                {challenge.name} <span className={styles.challengesStats}>({challenge.participants} participants)</span>
                             </li>
                         ))}
                     </ul>
