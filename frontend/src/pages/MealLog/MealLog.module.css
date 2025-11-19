@@ -149,3 +149,15 @@
     background-color: black;
     padding: 15px 15px;
 }
+
+.mealTypeColumn select{
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    height: 35px;
+}
+
+.mealColumn textarea{
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 10px 10px;
+}

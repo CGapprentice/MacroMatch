@@ -10,7 +10,7 @@ import DayPopup from './components/DayPopup.jsx'
 function RoutinePage(){
     useEffect(()=>{
         document.title = 'Routine Page';
-    },[])
+    },[]);
 
     const[errorMessage, setErrorMessage] = useState('');
     const navigate= useNavigate();
