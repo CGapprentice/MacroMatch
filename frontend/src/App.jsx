@@ -20,9 +20,10 @@ import './App.css';
 const ProtectedRoute = ({ element: Element }) => {
     // Check user login status using the hook
     const { userData } = useUser(); 
+    const token = localStorage.getItem('firebase_token');
 
     // If userData is NOT present (not logged in), redirect to /login
-    if (!userData) {
+    if (!userData && !token) {
         return <Navigate to="/login" replace />;
     }
 
@@ -136,20 +137,21 @@ function App() {
             <Route path="/signin" element={<SigninPage />} /> 
 
             {/* 3. PROTECTED ROUTES: Only accessible if logged in */}
-            {/*
+            
             <Route path="/calculator" element={<ProtectedRoute element={<Calculator />} />} />
             <Route path="/social" element={<ProtectedRoute element={<SocialFeed />} />} />
             <Route path="/playlist" element={<ProtectedRoute element={<PlaylistGenerator />} />} />
             <Route path="/routinepage" element={<ProtectedRoute element={<RoutinePage />} />} />
             <Route path="/usersettingspage" element={<ProtectedRoute element={<UserSettingsPage />} />} />
-            
-            */}
+            <Route path="/mealLog" element={<ProtectedRoute element={<MealLog />} />} />
+            {/*
             <Route path="/calculator" element={<Calculator />} />
             <Route path="/social" element={<SocialFeed />} />
             <Route path="/playlist" element={<PlaylistGenerator />} />
             <Route path="/routinepage" element={<RoutinePage />} />
             <Route path="/usersettingspage" element={<UserSettingsPage />} />
             <Route path="/mealLog" element={<MealLog />} />
+            */}
           </Routes>
         </div>
       </Router>
