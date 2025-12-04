@@ -35,3 +35,9 @@
     background-color: black;
     background-image: inherit !important;
 }
+
+.errorMessage{
+    color:red;
+    padding-top: 10px;
+    padding-left: 5px;
+}

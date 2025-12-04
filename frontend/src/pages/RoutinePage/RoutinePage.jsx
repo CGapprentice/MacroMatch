@@ -8,17 +8,37 @@ import { useNavigate } from "react-router-dom"
 import DayPopup from './components/DayPopup.jsx'
 
 function RoutinePage(){
+
+    //Changes tab title to be Routine Page
     useEffect(()=>{
         document.title = 'Routine Page';
     },[]);
 
+    //errorMessage is to be able to let user know if anything is wrong
     const[errorMessage, setErrorMessage] = useState('');
-    const navigate= useNavigate();
+    const navigate = useNavigate();
+
+    //Brings to specific user
     const token = localStorage.getItem('firebase_token')
 
+
+    // routineSummary is boolean where if there is a routine
+    // to show the routine page instead of creating another workout
     const [routineSummary, setRoutineSummary] = useState(false);
-    //Change to an array of objects and each object has a unique identifier
+
+    //data is an array that will contain objectID from mongo and will 
+    //be an array containing the day and the workout routine.
     const[data, setData] = useState({});
+
+    //chooseDay will show which days the user has clicked to 
+    //add to their routine
+
+    /*
+        REMINDER:
+            - Need to update chooseDay status
+            when updating data so that it can not 
+            automatically set to false when they are not
+    */
     const[chooseDay, setChooseDay] = useState({
         sunday: false,
         monday: false,
@@ -29,9 +49,13 @@ function RoutinePage(){
         saturday: false
     });
 
+    //showPopup is for each day choices.
     const[showPopup, setShowPopup] = useState(false);
+
+    //activaeDay is the day user have clicked
     const[activeDay, setActiveDay] = useState('');
 
+    //this checks if all days are false to just have the add routine button if there's no popup
     const check = Object.values(chooseDay).every(value => value === false);
     
     useEffect (()=>{
@@ -53,11 +77,14 @@ function RoutinePage(){
                     const response = await result.json();
 
                     const routinesEachDay = {}
+                    const updatedDays = {...chooseDay};
                     response.routine.forEach(routine=>{
                         routinesEachDay[routine.activeDay] = routine;
+                        updatedDays[routine.activeDay] = true;
                     });
                     setData(routinesEachDay);
                     setRoutineSummary(true);
+                    setChooseDay(updatedDays);
                 }
             }catch(error){
                 console.error('Get User routine error: ', error);
@@ -66,62 +93,53 @@ function RoutinePage(){
         }; getSummaryRoutine();
     },[]);
 
-
+  
     const handleDayClick = async(selectedDay) =>{
         const changed= chooseDay[selectedDay]
-        setChooseDay(prevState => {
-           const newState = { ...prevState,
-            [selectedDay]: !prevState[selectedDay]};
-            
-            if(newState[selectedDay]){
-                setActiveDay(selectedDay);
-                setShowPopup(true);
-            }else{
-                setShowPopup(false);
-                setData(prev=>{
-                    const update = {...prev};
-                    delete update[selectedDay];
-                    return update;
-                });
-
+        setChooseDay(prevState => ({
+            ...prevState,
+            [selectedDay]: !prevState[selectedDay]
+        })); 
+        if(!changed && !data[selectedDay]?.id){
+            setActiveDay(selectedDay);
+            setShowPopup(true);
+        }else{
+            const routineId = data[selectedDay]?.id;
+            if(!routineId){
+                return;
             }
-            
-            return newState;
-        }); 
-        if(changed){
-            const routineId= data[selectedDay]?.id;
-            console.log(data);
-            if(routineId){
-                try{
-                    const response = await fetch(`http://localhost:5000/api/v1/routine/${routineId}`,{
-                        method: 'DELETE',
-                        headers:{
-                            'Content-type' : 'application/json',
-                            Authorization: `Bearer ${token}`
-                        }
-                    });
-                    if(response.status === 401){
-                        localStorage.removeItem("firebase_token")
-                        navigate('/login')
-                        return
+            try{
+                const response = await fetch(`http://localhost:5000/api/v1/routine/${routineId}`,{
+                    method: 'DELETE',
+                    headers:{
+                        'Content-type' : 'application/json',
+                        Authorization : `Bearer ${token}`
                     }
-                    if(response.ok){
-                        setData(prev=>{
-                            const update = {...prev};
-                            delete update[selectedDay];
-                            return update;
-                        });
-                        console.log(selectedDay, "was successfully deleted");
-                    }else{
-                        const dataError = await response.json();
-                        console.error("Failed to delete: ", dataError);
-                    }
-                }catch(error){
-                    console.error('Delete Routine Failed: ' ,error);
-                    setErrorMessage("Wasn't able to delete routine")
+                });
+                if(response.status === 401){
+                    localStorage.removeItem("firebase_token")
+                    navigate('/login')
+                    return
                 }
-            } else{
-                console.error("no routine id found");
+                if(response.ok){
+                    setShowPopup(false);
+                    setData(prev=>{
+                        const update = {...prev};
+                        delete update[selectedDay];
+                        return update;
+                    });
+                    setChooseDay(prev => ({
+                        ...prev,
+                        [selectedDay]: false
+                    }));
+                    console.log("Successfully deleted workout!!")
+                }else{
+                    const dataError = await response.json();
+                    console.error("Failed to delete: ", dataError);
+                }
+            }catch(error){
+                console.error("Delete Routine Failed: ", error);
+                setErrorMessage("Wasn't able to delete routine try later");
             }
         }
             
@@ -131,7 +149,6 @@ function RoutinePage(){
 
     const addRoutine= ()=>{
         setRoutineSummary(true);
-        console.log(data);
     }
 
 
@@ -141,7 +158,7 @@ function RoutinePage(){
             <HomePageHeader />
         </header>
         {routineSummary ? (
-            <SummaryPage data={data} setRoutineSummary={setRoutineSummary} setData={setData} />
+            <SummaryPage data={data} setRoutineSummary={setRoutineSummary}/>
         ): <main className={styles.mainRoutine}>
             <section className={styles.chooseContainer}>
                 <div className={styles.days}>
@@ -170,9 +187,9 @@ function RoutinePage(){
                         eachDayChange={(day, data) => 
                             setData(prev => ({...prev, [day]: data})) 
                         }
-                        data={data[activeDay]}
+                        data={data[day]}
                         setActiveDay={setActiveDay}
-                        routineId = {data[activeDay]?.id}
+                        routineId = {data[day]?.id}
                         />
                     </div>
                 ))}
