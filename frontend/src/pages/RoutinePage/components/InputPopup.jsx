@@ -191,6 +191,7 @@ function InputPopup({selected, setSelected, duration, setDuration, speed, setSpe
                                             <select id="highIntensity" value={highIntensityUnit} onChange={handleHighIntensityUnit}>
                                                 <option value="seconds">seconds</option>
                                                 <option value="minutes">minutes</option>
+                                                <option value="minute">minute</option>
                                             </select>
 
                                         </label>
@@ -208,6 +209,7 @@ function InputPopup({selected, setSelected, duration, setDuration, speed, setSpe
                                             <select id="lowIntensity" value={lowIntensityUnit} onChange={handleLowIntensityUnit}>
                                                 <option value="seconds">seconds</option>
                                                 <option value="minutes">minutes</option>
+                                                <option value="minute">minute</option>
                                             </select>
                                         </label>
                                     </div>
@@ -224,6 +226,7 @@ function InputPopup({selected, setSelected, duration, setDuration, speed, setSpe
                                             <select id="rest" value={restTimeUnit} onChange={handleRestTimeUnit}>
                                                 <option value="seconds">seconds</option>
                                                 <option value="minutes">minutes</option>
+                                                <option value="minute">minute</option>
                                             </select>
                                         </label>
                                     </div>
