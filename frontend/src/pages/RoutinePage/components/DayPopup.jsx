@@ -95,7 +95,7 @@ function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, rout
                 });
                 const result = await response.json();
                 console.log(result);
-                if(response.status === 401){
+                if(response.status === 401 || (data.error && data.error === "invalid firebase token")){
                     localStorage.removeItem("firebase_token")
                     navigate('/login')
                     return
@@ -128,6 +128,10 @@ function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, rout
                     body: JSON.stringify(routineData)
                 });
                 const result = await response.json();
+                if(response.status === 401 || (data.error && data.error === "invalid firebase token")){
+                    localStorage.removeItem("firebase_token")
+                    navigate('/login')
+                }
                 if(response.ok){
                     eachDayChange(activeDay, result.routine);
                     setSaved(true);

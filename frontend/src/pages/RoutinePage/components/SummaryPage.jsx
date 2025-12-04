@@ -7,6 +7,10 @@ function SummaryPage({data,setRoutineSummary}){
     
     const days = data;
    
+    const dayOrder = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday","saturday"];
+
+    const sortedDays = Object.entries(days).sort(([a],[b]) => dayOrder.indexOf(a) - dayOrder.indexOf(b));
+
     return(
         <>
         <div className={styles.editButton}>
@@ -14,7 +18,7 @@ function SummaryPage({data,setRoutineSummary}){
         </div>
         <div className={styles.summaryPage}>
             
-            {days && Object.entries(days).map(([day, routine])=> (
+            {sortedDays.map(([day, routine])=> (
                 <div className={styles.boxes} key={day}>
                     <h1>{typeof routine.activeDay === "string"? routine.activeDay.charAt(0).toUpperCase() + routine.activeDay.slice(1): ""}</h1>
                     {routine.selected === "Cycling" || routine.selected==="Walking" || routine.selected==="Running" || routine.selected==="Swimming" || routine.selected==="Elliptical" || routine.selected === "Treadmill" ? 
