@@ -94,7 +94,6 @@ function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, rout
                     body: JSON.stringify(routineData)
                 });
                 const result = await response.json();
-                console.log(result);
                 if(response.status === 401){
                     localStorage.removeItem("firebase_token")
                     navigate('/login')
