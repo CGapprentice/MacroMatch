@@ -58,6 +58,12 @@ function RoutinePage(){
     //this checks if all days are false to just have the add routine button if there's no popup
     const check = Object.values(chooseDay).every(value => value === false);
     
+
+    /*
+        The following brings the user's previous data onto the screen.
+        Meaning that it will bring in the Routine that the user has previously
+        submitted
+    */
     useEffect (()=>{
         const getSummaryRoutine = async () => {
             try{
@@ -94,6 +100,11 @@ function RoutinePage(){
     },[]);
 
   
+    /*
+        Deals with when the user clicks the days button to either show the popup
+        for the specific day or remove it. If it is removed with data in it. It 
+        will delete the data from both the backend and the frontend.
+    */
     const handleDayClick = async(selectedDay) =>{
         const changed= chooseDay[selectedDay]
         setChooseDay(prevState => ({
@@ -146,7 +157,7 @@ function RoutinePage(){
     };
 
     
-
+    //The purpose for this is to set the user to the summaryPage when they are done updating their routine
     const addRoutine= ()=>{
         setRoutineSummary(true);
     }

@@ -163,3 +163,17 @@
 .timeform select, .highform select, .lowform select, .restform select{
    width: 100px;
 }
+
+.eachExercise{
+    display: flex;
+}
+
+.eachExercise button{
+    font-size: 15px;
+    background-color: black;
+    padding: 1px 5px;
+}
+
+.updateStyle input{
+    width: 100px;
+}

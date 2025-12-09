@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 
 function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, routineId }){
 
+    //SEE IF YOU WANT TO ADD AN X BUTTON ONTO THE POPUP
+
     const capitalizedDay = activeDay.charAt(0).toUpperCase() + activeDay.slice(1);
     
     const[errorMessage, setErrorMessage]= useState("");
@@ -35,7 +37,7 @@ function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, rout
 
     const[saved, setSaved] = useState(false);
     
-    
+    //This brings the data from the backend into the popups
     useEffect(()=>{
         if(data && showPopup){
             setActiveDay(data.activeDay);
@@ -55,7 +57,6 @@ function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, rout
             setExercise(data.exercise || []);
             setNotes(data.notes || '');
             setExercisePerRound(data.exercisePerRound || '');
-            //see if need to add reps and sets separately
         }
     },[showPopup, data]);
 
@@ -199,7 +200,7 @@ function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, rout
                     />
                     <div className={styles.saveButton}><button onClick={handleEachDayData}>save</button></div>
                     <div className={styles.errorMessage}>
-                        {errorMessage ? <p>Error: {errorMessage.map((item,index) => (<p key={index}>{item}</p>))}</p> : null}
+                        {errorMessage ? <div><p>Error:</p> {errorMessage.map((item,index) => (<p key={index}>{item}</p>))} </div>: null}
                     </div> 
                     {saved ? <p>Saved!</p> : null}
                 </div>

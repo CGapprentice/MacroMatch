@@ -5,6 +5,12 @@ import DayPopup from "./DayPopup.jsx"
 
 function InputPopup({selected, setSelected, duration, setDuration, speed, setSpeed, distance, setDistance, highIntensity,setHighIntensity, lowIntensity, setLowIntensity, restTime, setRestTime, exercise, setExercise, addingExercise, setAddingExercise, notes, setNotes, exercisePerRound, setExercisePerRound, reps, setReps, sets, setSets, durationUnit, setDurationUnit, speedUnit, setSpeedUnit, distanceUnit, setDistanceUnit, highIntensityUnit, setHighIntensityUnit, lowIntensityUnit, setLowIntensityUnit, restTimeUnit, setRestTimeUnit}){
 
+    const [changeExercise, setChangeExercise] = useState(false);
+    const[editIdx, setEditIdx] = useState(null);
+    const[editName, setEditName] = useState('');
+    const[editSet, setEditSet] = useState(0);
+    const[editRep, setEditRep] = useState(0);
+
     function onClickRep(){
         setReps(reps+1);
     }
@@ -28,9 +34,10 @@ function InputPopup({selected, setSelected, duration, setDuration, speed, setSpe
             setSets(0);
             setReps(0);
         }
+        console.log("Added Exercise: ", exercise);
     }
 
- 
+
 
     const handleChange = (event)=>{
         setSelected(event.target.value);
@@ -60,6 +67,39 @@ function InputPopup({selected, setSelected, duration, setDuration, speed, setSpe
         setRestTimeUnit(event.target.value);
     }
     
+    const handleChangeExercise = (e) =>{
+        setEditIdx(e);
+        setEditName(exercise[e].name || '');
+        setEditRep(exercise[e].reps);
+        setEditSet(exercise[e].sets);
+        setChangeExercise(true);
+    }
+
+    const handleUpdateExercise = (e) =>{
+        const updatedExercise = exercise.map((ex,index) => 
+        index === e ? {...ex, name: editName, sets: editSet, reps: editRep} : ex);
+        setExercise(updatedExercise); 
+        setChangeExercise(false);
+        setAddingExercise('');
+        setSets(0);
+        setReps(0);
+        /*
+        Will need to go through the array of exercise to update the specific 
+        element that was being changed
+        */
+       console.log("Updated exercise to: ", exercise);
+
+    }
+
+    //Need to implement the ability to delete the specific element in exercise 
+    const handleDeleteExercise = (elementToDelete) =>{
+        const updateExercise = exercise.filter((exerciseElement, index) =>
+        index !== elementToDelete);
+        setExercise(updateExercise);
+        setAddingExercise('');
+        setSets(0);
+        setReps(0);
+    }
 
     return(
         <div className={styles.workoutOptions}>
@@ -67,18 +107,18 @@ function InputPopup({selected, setSelected, duration, setDuration, speed, setSpe
                 <div>
                     <label className={styles.spacebetweentypes} htmlFor="choiceofWorkout"><h4>Types of workout</h4></label>
                         <select id="choiceofWorkout" value={selected} onChange={handleChange}>
-                        <option value="Walking">Walking</option>
-                        <option value="Running">Running</option>
-                        <option value="Cycling">Cycling</option>
-                        <option value="Swimming">Swimming</option>
-                        <option value="Elliptical">Elliptical</option>
-                        <option value="Treadmill">Treadmill</option>
-                        <option value="HIIT">HIIT</option>
-                        <option value="Cardio intervals">Cardio Intervals</option>
-                        <option value="Strength"> Strength</option>
-                        <option value="Yoga">Yoga</option>
-                        <option value="Pilates">Pilates</option>
-                </select>
+                            <option value="Walking">Walking</option>
+                            <option value="Running">Running</option>
+                            <option value="Cycling">Cycling</option>
+                            <option value="Swimming">Swimming</option>
+                            <option value="Elliptical">Elliptical</option>
+                            <option value="Treadmill">Treadmill</option>
+                            <option value="HIIT">HIIT</option>
+                            <option value="Cardio intervals">Cardio Intervals</option>
+                            <option value="Strength"> Strength</option>
+                            <option value="Yoga">Yoga</option>
+                            <option value="Pilates">Pilates</option>
+                        </select>
 
                 </div>
                 
@@ -269,11 +309,33 @@ function InputPopup({selected, setSelected, duration, setDuration, speed, setSpe
                             <div className={styles.addExerciseButton}>
                                 <button className={styles.addExercise} onClick={addExercise}>+ add</button> 
                             </div>
-                            <ul>
-                                {exercise.map((ex,idx) => (
-                                    <li key={idx}> {ex.name} (reps: {ex.reps} sets: {ex.sets})</li>
-                                ))}
-                            </ul>
+                            <div className={styles.eachExercise}>
+                                {changeExercise ? 
+                                    <div className={styles.updateStyle}>
+                                        {exercise.map((ex,idx) => (
+                                            <li key={idx}> 
+                                                {editIdx === idx ? (
+                                                    <>
+                                                    <input value={editName} onChange= {(e) => setEditName(e.target.value)}/> 
+                                                    (<label htmlFor="repts">reps: </label> <input id="reps" type="number" value={editRep} placeholder={ex.reps} onChange = {(e) => setEditRep(e.target.value) }/>  
+                                                    <label htmlFor="sets">sets: </label> <input id="sets" type="number" placeholder={ex.sets} value={editSet} onChange ={(e) => setEditSet(e.target.value)}/>)  
+                                                    <button onClick={()=> handleUpdateExercise(idx)}>update</button>  <button onClick={()=> handleDeleteExercise(idx)}>delete</button></>)
+                                                : (
+                                                    <>
+                                                        {ex.name} (reps: {ex.reps} sets: {ex.sets})
+                                                        <button onClick={()=> handleChangeExercise(idx)}>change</button>
+                                                    </>
+                                                )}
+                                            </li> 
+                                        ))}
+                                    </div>
+                                    :
+                                    <ul>
+                                    {exercise.map((ex,idx) => (
+                                        <li key={idx}> {ex.name} (reps: {ex.reps} sets: {ex.sets})  <button onClick={() => handleChangeExercise(idx)}>change</button>  <button onClick={()=> handleDeleteExercise(idx)}>delete</button></li> 
+                                    ))}
+                                </ul> }
+                            </div>
                             
                         </div>
                     )

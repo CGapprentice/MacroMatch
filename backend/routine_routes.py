@@ -115,6 +115,35 @@ def update_routine(routine_id):
         if not data:
             return jsonify({'error' : 'no data is given'}), 400
         
+        def floatToString(value):
+            if value in (None, ''):
+                return None;
+            return float(value)
+       
+        routine = Routine(
+            activeDay=data['activeDay'],
+            selected=data['selected'],
+            duration=floatToString(data.get('duration')),
+            durationUnit = data['durationUnit'],
+            speed=floatToString(data.get('speed')),
+            speedUnit=data['speedUnit'],
+            distance=floatToString(data.get('distance')),
+            distanceUnit=data['distanceUnit'],
+            highIntensity=floatToString(data.get('highIntensity')),
+            highIntensityUnit=data['highIntensityUnit'],
+            lowIntensity=floatToString(data.get('lowIntensity')),
+            lowIntensityUnit=data['lowIntensityUnit'],
+            restTime=floatToString(data.get('restTime', None)),
+            restTimeUnit=data['restTimeUnit'],
+            exercise=data.get('exercise', []),
+            notes=data.get('notes',''),
+            exercisePerRound=data.get('exercisePerRound','')
+        )
+        
+        validation_errors = routine.validate()
+        if validation_errors:
+            return jsonify({'error' : 'validation failed', 'details':validation_errors}), 400
+        
         allowed_field = ['activeDay','selected','duration', 'durationUnit','speed', 'speedUnit','distance', 'distanceUnit', 'highIntensity', 'highIntensityUnit', 'lowIntensity', 'lowIntensityUnit', 'restTime', 'restTimeUnit', 'exercise','notes','exercisePerRound']
         updated_data = {}
         #updated = {key: value for key, value in data.items() if key in allowed_field}

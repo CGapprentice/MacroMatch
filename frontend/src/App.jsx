@@ -138,6 +138,7 @@ function App() {
 
             {/* 3. PROTECTED ROUTES: Only accessible if logged in */}
             
+            
             <Route path="/calculator" element={<ProtectedRoute element={<Calculator />} />} />
             <Route path="/social" element={<ProtectedRoute element={<SocialFeed />} />} />
             <Route path="/playlist" element={<ProtectedRoute element={<PlaylistGenerator />} />} />
