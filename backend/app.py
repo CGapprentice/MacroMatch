@@ -10,6 +10,7 @@ from firebase_mongo_auth_routes import firebase_mongo_auth_bp
 from meal_routes import meal_bp
 from error_handlers import error_bp
 from routine_routes import routine_bp
+from pictures_routes import pictures_bp
 from firebase_config import get_firebase_service
 from mongodb_config import get_mongodb
 
@@ -61,6 +62,7 @@ def register_blueprints(app):
     app.register_blueprint(meal_bp)
     app.register_blueprint(error_bp)
     app.register_blueprint(routine_bp)
+    app.register_blueprint(pictures_bp)
     print("routes registered! :)")
 
 def add_health_check(app):
@@ -84,7 +86,8 @@ def add_health_check(app):
                 'auth': '/api/v1/auth',
                 'meals': '/api/v1/meals',
                 'users': '/api/v1/users',
-                'routine': '/api/v1/routine'
+                'routine': '/api/v1/routine',
+                'pictures': '/api/v1/pictures'
             },
             'timestamp': datetime.utcnow().isoformat()
         }), 200

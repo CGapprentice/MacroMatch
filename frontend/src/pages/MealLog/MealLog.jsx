@@ -122,6 +122,11 @@ function MealLog(){
             console.error('Adding meal error: ', error);
             setErrorMessage(error.message || String(error));
         }
+        setDate('');
+        setTime('');
+        setCalories('');
+        setMeal('');
+        setNote('');
         
     }
    

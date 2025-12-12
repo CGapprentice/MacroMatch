@@ -241,3 +241,26 @@ class Routine:
         if hasattr(self, '_id') and self._id:
             routine_dict['id'] = str(self._id)
         return routine_dict
+    
+
+class UploadPictures:
+    def __init__ (self, uploadPicture=None, fileType=None, fileSize=None):
+        self.uploadPicture = uploadPicture
+        self.fileType = fileType
+        self.fileSize = fileSize
+        self.created_at = datetime.utcnow()
+
+    '''
+    def validate(self):
+        errors=[]
+        if self.upladPicture == None:
+            return("User needs to pick a file");
+        return errors
+    '''
+    def to_dict(self):
+        uploadPictures_dict = {
+            'UploadPicture' : self.uploadPicture,
+            'fileType': self.fileType,
+            'fileSize': self.fileSize,
+            'created_at' : self.created_at
+        }

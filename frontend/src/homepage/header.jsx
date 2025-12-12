@@ -3,13 +3,17 @@ import { Link } from 'react-router-dom'
 import { getAuth, signOut } from 'firebase/auth'
 import{useNavigate} from 'react-router-dom'
 
+import { useUser } from '../components/UserContext.jsx'
+
 function HomePageHeader() {
+    const{resetClickGooglePopUp} = useUser()
     const auth = getAuth();
     const navigate = useNavigate();
     const handleLogout = () =>{
         signOut(auth).then(()=>{
             localStorage.removeItem('firebase_token');
             localStorage.removeItem('user');
+            resetClickGooglePopUp();
             console.log("User signed out")
             navigate('/')
         }).catch((error)=>{
