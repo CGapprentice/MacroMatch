@@ -40,7 +40,8 @@ def create_meal():
             calories = data.get('calories', 0),
             notes = data.get('note', ''),
             date = data.get('date', ''),
-            time = data.get('time','')
+            time = data.get('time',''),
+            calculatorResults= data.get('calculatorResults', '')
         )
         # validate
         
@@ -66,6 +67,7 @@ def create_meal():
                 'date' : meal.date,
                 'time' : meal.time,
                 'notes' : meal.notes,
+                'calculatorResults' : meal.calculatorResults,
                 'created_at': meal.created_at.isoformat()
             }
         }), 201

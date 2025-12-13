@@ -3,6 +3,7 @@ import MealLog from '../MealLog/MealLog.jsx'
 import { useNavigate } from "react-router-dom"
 import { useState, useEffect} from 'react'
 import ViewPopup from "./ViewPopup/ViewPopup.jsx"
+import { useUser } from '../../components/UserContext.jsx'
 
 
 function MealHistory({dayMeal, setDayMeal}){
@@ -11,11 +12,14 @@ function MealHistory({dayMeal, setDayMeal}){
     const token = localStorage.getItem('firebase_token');
     const[showView, setShowView] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
+    const{ calculatorResults } = useUser();
+    const mealOrder = ["Breakfast", "Lunch", "Dinner", "Snack"];
 
     const handleView = (day) =>{
         setSelectedDate(day);
         setShowView(true);
     }
+    dayMeal.sort((a,b) => mealOrder.indexOf(a.mealType) - mealOrder.indexOf(b.mealType));
 
     const handleDelete = async(day) =>{
         console.log("Delete button was clicked");
@@ -65,7 +69,7 @@ function MealHistory({dayMeal, setDayMeal}){
         <>
             <div className={styles.mealLogHistory}>
                 <div className={styles.historyTitle}>
-                    <h1>Meal Log History</h1>
+                    <h1>Meal Log History </h1>
                 </div>
                 <>
                     <div className={styles.mealHistory}>
@@ -85,8 +89,24 @@ function MealHistory({dayMeal, setDayMeal}){
                                 
                                 <div className={styles.options}>
                                     <div className={styles.calories}>
-                                        <p><b>Total Calories</b></p>
-                                        <p>{day.totalCalories}</p>
+                                        {(calculatorResults.dailyGoal - day.totalCalories)> 0 ?
+                                            <div className={styles.withinGoal}>
+                                                <p><b>Total Calories</b></p>
+                                                <p className={styles.changegreen}>{day.totalCalories}</p>
+                                                <p><b>Goal: </b></p>
+                                                <p>{calculatorResults.dailyGoal}</p>
+
+                                            </div>
+                                        : <div className={styles.outOfGoal}>
+                                                <p><b>Total Calories</b></p>
+                                                <p className={styles.changered}>{day.totalCalories}</p>
+                                                <p><b>Goal: </b></p>
+                                                <p>{calculatorResults.dailyGoal}</p>
+
+                                            </div>
+                                        }
+                                        
+                                        
                                     </div>
                                     <div style={{position: "relative", display: "inline-block"}}>
 

@@ -15,6 +15,10 @@ export const useUser = () => {
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [calculatorResults, setCalculatorResults] = useState(()=>{{
+    const saved = localStorage.getItem('calculatorResults');
+    return saved ? JSON.parse(saved) : null;
+  }});
   const [clickGooglePopUp, setClickGooglePopUp] = useState(() => {
     return localStorage.getItem('clickGooglePopUp') === 'true';
   });
@@ -161,6 +165,11 @@ export const UserProvider = ({ children }) => {
     localStorage.removeItem('clickGooglePopUp');
   }
 
+  const saveCalculatorData = (data) =>{
+    setCalculatorResults(data);
+    localStorage.setItem('calculatorResults', JSON.stringify(data));
+  }
+
   return (
     <UserContext.Provider value={{
       user,
@@ -170,6 +179,9 @@ export const UserProvider = ({ children }) => {
       updateUserProfile,
       clickedGooglePopUp,
       resetClickGooglePopUp,
+      calculatorResults,
+      setCalculatorResults,
+      saveCalculatorData,
       clickGooglePopUp,
       loading,
       logout

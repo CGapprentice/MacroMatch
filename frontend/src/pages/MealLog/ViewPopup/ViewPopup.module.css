@@ -53,3 +53,22 @@
     flex-direction: column;
     align-items: center;
 }
+
+.calorieOptions{
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+}
+
+.calorieNum{
+    display: flex;
+    flex-direction: row;
+    gap: 100px;
+}
+
+.good, .adviceGreen{
+    color:green;
+}
+.bad, .adviceRed{
+    color: red;
+}

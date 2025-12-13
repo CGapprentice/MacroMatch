@@ -1,6 +1,8 @@
 import styles from "./ViewPopup.module.css"
+import { useUser } from '../../../components/UserContext.jsx'
 
 function ViewPopup({day, setShowView, setCheckOption}){
+    const{ calculatorResults } = useUser();
 
     const handleClose = () =>{
         setShowView(false);
@@ -27,8 +29,33 @@ function ViewPopup({day, setShowView, setCheckOption}){
                     </div>
                 ))}
                 <div className={styles.calories}>
-                    <p><b>Total Calories</b></p>
-                    <p>{day.totalCalories}</p>                
+                    <div className={styles.calorieOptions}>
+                        <p><b>Total Calories</b></p>
+                        <p><b>Calorie Goal</b></p>
+                    </div>
+                    <div className={styles.calorieNum}>
+                        {(calculatorResults.dailyGoal - day.totalCalories) > 0 ?
+                            <>
+                                <p className={styles.good}>{day.totalCalories}</p>  
+                                <p>{calculatorResults.dailyGoal}</p> 
+                            </>
+                        :   <>
+                                <p className={styles.bad}>{day.totalCalories}</p>  
+                                <p>{calculatorResults.dailyGoal}</p> 
+                            </>}
+                    </div>
+                    <div className={styles.advice}>
+                        {(calculatorResults.dailyGoal - day.totalCalories) > 0 ?
+                            <div className={styles.adviceGreen}>
+                                <p>You have stayed within your daily calorie limit!!</p>
+                            </div>
+                        :
+                            <div className={styles.adviceRed}>
+                                <p>You have passed your daily calorie limit </p>
+                            </div>
+                        }
+                    </div>
+                              
                 </div>
             </div>
             

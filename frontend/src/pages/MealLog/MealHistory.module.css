@@ -116,3 +116,11 @@
     border-top: 1px solid #ccc;
     border-radius: 0px;
 }
+
+.changegreen{
+    color: green;
+}
+
+.changered{
+    color: red;
+}
