@@ -146,6 +146,7 @@ function App() {
             <Route path="/routinepage" element={<ProtectedRoute element={<RoutinePage />} />} />
             <Route path="/usersettingspage" element={<ProtectedRoute element={<UserSettingsPage />} />} />
             <Route path="/mealLog" element={<ProtectedRoute element={<MealLog />} />} />
+             <Route path="/dashboard" element={<ProtectedRoute element={<ProgressDashboard />} />} />
           </Routes>
         </div>
       </Router>

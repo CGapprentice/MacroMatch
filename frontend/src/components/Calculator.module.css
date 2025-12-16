@@ -270,11 +270,12 @@
 .playlistButton { /* NEW: playlist-button */
     text-align: center;
     margin-top: 20px;
+    background-color: inherit !important;
+    background-image: inherit !important;
 }
 
 .playlistButtonStyle { /* NEW: playlist-button-style */
     padding: 10px 20px;
-    background-color: var(--color-secondary);
     color: white;
     border: none;
     border-radius: 6px;

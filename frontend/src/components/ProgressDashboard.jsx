@@ -45,11 +45,11 @@ const ProgressBar = ({ label, consumed, target, unit, color }) => {
 };
 
 const ProgressDashboard = () => {
-    const { userData } = useUser();
+    const { user } = useUser();
     const [todayLog, setTodayLog] = useState(null);
 
     // Get the targets calculated from Calculator.jsx
-    const targets = userData?.calculatorData;
+    const targets = user?.calculatorData.lastCalculation;
 
     useEffect(() => {
         // Find today's log entry (or fetch it from your API)
@@ -58,7 +58,7 @@ const ProgressDashboard = () => {
         setTodayLog(log || { totalCalories: 0, protein: 0, carbs: 0, fats: 0 });
     }, []);
 
-    if (!targets) {
+    if (!targets ) {
         return (
             <div style={{ padding: '20px', maxWidth: '800px', margin: '50px auto', textAlign: 'center' }}>
                 <h2 style={{ color: 'var(--color-primary)' }}>Progress Dashboard</h2>
@@ -67,7 +67,7 @@ const ProgressDashboard = () => {
         );
     }
 
-    if (!todayLog) {
+    if (!todayLog ) {
         return <div style={{ textAlign: 'center', marginTop: '50px' }}>Loading progress...</div>;
     }
 
