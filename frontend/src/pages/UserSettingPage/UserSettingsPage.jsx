@@ -4,72 +4,259 @@ import { Link, useNavigate } from 'react-router-dom'
 import HomePageHeader from '../../homepage/header.jsx'
 import styles from './UserSettings.module.css'
 
+import { useUser } from '../../components/UserContext.jsx'
 
-import { getAuth, updateProfile, updateEmail, reauthenticateWithCredential , onAuthStateChanged } from "firebase/auth";
+
+import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "firebase/auth";
 import ToggleSwitch from './toggleSwitch/toggleSwitch.jsx';
+import { set } from 'react-hook-form';
 
 
 function UserSettingsPage(){
+    const {clickGooglePopUp} = useUser()
     useEffect(()=>{
         document.title = "User Settings"
         //loadUserData();
     }, [])
 
+    
+    const token = localStorage.getItem('firebase_token');
+    const navigate = useNavigate();
+
+    const[uploadPicture, setUploadPicture] = useState(null);
+    
+    const uploadFile = (e) =>{
+        e.preventDefault();
+        console.log("Picture uploaded: ", uploadPicture);
+    }
+
     // Temporary variables until authentication is properly implemented
     const[loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
+    const[userFormMessage, setUserFormMessage] = useState("");
     const [userForm, setUserForm] = useState({
         firstName: '',
         lastName: '',
         email: ''
     });
-    /*
-    const loadUserData = async (e) => {
-        e.preventDefault();
+    
+    const[currentPassword, setCurrentPassword] = useState('');
+    const[changePassword, setChangePassword] = useState('');
+    const[confirmChangePassword, setConfirmChangePassword] = useState('');
+    const[passwordErrorMessage, setPasswordErrorMessage] = useState('');
+    const[passwordMessage, setPasswordMessage] = useState('');
 
-        const userCredential = getAuth().currentUser;
-        const token = await userCredential.getIdToken();
-        try{
-            const response = await fetch('http://localhost:5000/api/v1/auth/profile',{
-                method: 'GET',
-                headers: {
-                    'Authorization' : `Bearer ${token}`,
-                    'Content-Type' : 'application/json'
+    useEffect(()=>{
+        const postPicture = async() =>{
+            try{
+                const response = await fetch('http://localhost:5000/api/v1/pictures/',{
+                    method: 'GET',
+                    headers:{
+                        'Content-Type' : 'application/json',
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                if(response.status === 401){
+                    localStorage.removeItem("firebase_token");
+                    navigate('/login')
+                    return
                 }
-            });
-            if(!response.ok){
-                throw new Error("Failed to get Users information", response.status);
+                const data = await response.json();
+                if(response.ok){
+                    setUploadPicture(data.pictures.uploadPicture);
+                }
+                if(!response.ok){
+                    setMessage("Error", response.error || response.detail);
+                }
+            }catch(error){
+                console.log("Error getting user profile picture: ", error);
+                setMessage("Error with getting user profile picture");
             }
-            const data = await response.json();
-            setUserForm({
-                firstName: data.user.name?.split(' ')[0]|| '',
-                lastName: data.user.name?.split(' ')[1]|| '',
-                email: data.user.email || ''
+        }; postPicture();
+    },[]);
+
+    const changePicture = async(e) =>{
+        e.preventDefault();
+        if(!uploadPicture) return;
+
+        const formData = new FormData();
+        formData.append('uploadPicture', uploadPicture);
+
+
+        try{
+            response = await fetch('http://localhost:5000/api/v1/pictures/',{
+                method: 'POST',
+                headers:{
+                    Authorization: `Bearer ${token}`
+                },
+                body: formData
             });
+            if(response.status === 401){
+                localStorage.removeItem("firebase_token");
+                navigate('/login');
+                return;
+            }
+            const data = await response.json()
+            if(response.ok){
+                setUploadPicture(data.pictures.uploadPicture);
+            }
+            if(!response.ok){
+                setMessage("Error: ", data.detail);
+            }
         }catch(error){
-            console.error("Error fetching user data: ", error);
+            console.log("Error with changing picture: ", error );
+            setMessage("Error with changing picture: ", error );
         }
-    }*/
+    }
+    
+
+    //Brings User's name and email
+    useEffect (()=>{
+        const loadUserData = async () => {
+            try{
+                const response = await fetch('http://localhost:5000/api/auth/profile',{
+                    method: 'GET',
+                    headers: {
+                        'Content-Type' : 'application/json',
+                        Authorization : `Bearer ${token}`  
+                    }
+                });
+                if(response.status === 401){
+                    localStorage.removeItem("firebase_token");
+                    navigate('/login')
+                    return
+                }
+                if(!response.ok){
+                    throw new Error("Failed to get Users information", response.status);
+                }
+                const data = await response.json();
+                if(response.ok){
+                    setUserForm({
+                        firstName: data.user.name?.split(' ')[0]|| '',
+                        lastName: data.user.name?.split(' ')[1] || '',
+                        email: data.user.email || ''
+                    }); 
+                }
+                
+            }catch(error){
+                console.error("Error fetching user data: ", error);
+            }
+        }; loadUserData();
+    },[]);
+
+    //Updates User's name and email
+    const handleUpdateProfile = async() =>{
+        const updatedData ={
+            name: `${userForm.firstName} ${userForm.lastName}`.trim(),
+            email: userForm.email
+        };
+        try{
+            const response = await fetch('http://localhost:5000/api/auth/profile',{
+                method: 'PUT',
+                headers: {
+                    'Content-Type' : 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(updatedData)
+            });
+            
+            if(response.status === 401){
+                localStorage.removeItem("firebase_token")
+                navigate('/login')
+                return 
+            }
+            const result = await response.json();
+            if(response.ok){
+                setUserForm({
+                    firstName: result.user.name?.split(' ')[0] || '',
+                    lastName: result.user.name?.split(' ')[1] || '',
+                    email: result.user.email || ''
+                })
+                setUserFormMessage("Profile has been updated!")
+            }
+            if(!response.ok){
+                setUserFormMessage(result.error || "Failed to update profile");
+            }
+        }catch(error){
+            setUserFormMessage("Error in updating profile information: " + error);
+        }
+
+    }
+    
+
+    const handleUpdatePassword = () =>{
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        const credential = EmailAuthProvider.credential(
+            user.email,
+            currentPassword
+        )
+
+        if(!currentPassword || currentPassword.trim() === '' || !changePassword || changePassword.trim() === '' ||  !confirmChangePassword || confirmChangePassword.trim() === ''){
+            setPasswordMessage('All inputs can not have a blank submission');
+        }else{
+            reauthenticateWithCredential(user,credential).then( () =>{
+                console.log('Password is correct. User can change password');
+                if(changePassword === confirmChangePassword){
+                    if(changePassword !== currentPassword){
+                        updatePassword(user, changePassword).then(()=>{
+                            console.log('User successfully changed password');
+                            setPasswordMessage('Successfully changed password');
+                            setCurrentPassword('');
+                            setChangePassword('');
+                            setConfirmChangePassword('');
+                        }).catch((error) => {
+                            setPasswordMessage('Failed to update Password.');
+                            console.error('User was unable to change password: ', error);
+                        })
+                    }else{
+                        setPasswordMessage('The new password can not match current password');
+                    }
+                
+                }else{
+                    setPasswordMessage('The new password and confirm new password does not match');
+                }
+            
+
+            }).catch((error)=>{
+                console.error('The password just entered does not match current password');
+                setPasswordMessage('The password just entered does not match current password');
+            })
+        }
+
+        
+        
+    }
+
+
     const handleInput = (e) =>{
         const{name, value} = e.target;
         setUserForm(prev => ({...prev, [name]: value}));
     }
 
+    
 
+
+    
+       
     /*
+     useEffect (()=>{
         const auth = getAuth();
-        const[message, setMessage] = useState("");
-
-        const fullname = auth.currentUser.displayName.split(" ");
-        const firstName = fullname[0];
-        const lastName = fullname[1];
-        const email = auth.currentUser.email;
-
-        const[userForm, setUserForm] = useState({
-            firstName: firstName,
-            lastName: lastName,
-            email: email
-        });
+        const user = auth.currentUser;
+            
+        if(user && user.displayName){
+            const fullname = user.displayName.split(" ");
+            const firstname = fullname[0];
+            const lastname = fullname[1];
+            const email = auth.currentUser.email;
+            setUserForm({
+                firstName: firstname,
+                lastName: lastname,
+                email: email
+            })
+        }
+    },[])
 
     
    
@@ -77,8 +264,8 @@ function UserSettingsPage(){
         const{name, value} = e.target;
         setUserForm(prev => ({...prev, [name]: value}))
     };
-        
     */
+    
 
 
 
@@ -121,98 +308,123 @@ function UserSettingsPage(){
                             <h4>Personal Details</h4>
                             {/*placeholder for profile picture upload*/}
                             <div className={styles.picPlaceholder}>
-                                <img src="/updateUserGuest.png" alt = "Profile Picture"/>
-                                <button> Change Photo </button>
+                                {uploadPicture === null ? 
+                                    (<img src="/updateUserGuest.png" alt = "Profile Picture"/>)
+                                    :
+                                    (<img src={uploadPicture ? URL.createObjectURL(uploadPicture) : "/updateUserGuest.png"} alt="Profile Picture"/>)
+                                }
+                                
+                                <input 
+                                    type="file" 
+                                    accept="image/png, image/jpeg, image/jpg, image/gif, image/webp" 
+                                    onChange={(e)=> setUploadPicture(e.target.files[0])}/>
+                                <button type='submit' onClick={changePicture}> Change Photo </button>
                             </div>
                         </div>
-                        <div className={styles.personalInfo}>
-                            <form className={styles.personalInfoForm}>
+                        {clickGooglePopUp ? null : 
+                        (
+                            <>
+                                <div className={styles.personalInfo}>
+                                    <form className={styles.personalInfoForm}>
 
-                                <div>
-                                    <label for="firstName">First Name </label>
-                                    {/* TODO: Uncomment when userForm is available */}
-                                    <input
-                                        type="text"
-                                        id="firstName"
-                                        name="firstName"
-                                        value={userForm.firstName}
-                                        onChange={handleInput}
-                                    />
-                                </div>
-                                
-                                <div>
-                                     <label for="LastName"> Last Name </label>
-                                     {/* TODO: Uncomment when userForm is available */}
+                                    <div>
+                                        <label htmlFor="firstName">First Name </label>
+                                        {/* TODO: Uncomment when userForm is available */}
                                         <input
-                                        type="text"
-                                        id="lastName"
-                                        name="lastName"
-                                        value={userForm.lastName}
-                                        onChange={handleInput}
+                                            type="text"
+                                            id="firstName"
+                                            name="firstName"
+                                            value={userForm.firstName}
+                                            onChange={handleInput}
                                         />
-                                </div>
+                                    </div>
+                                
+                                    <div>
+                                        <label htmlFor="LastName"> Last Name </label>
+                                            {/* TODO: Uncomment when userForm is available */}
+                                            <input
+                                                type="text"
+                                                id="lastName"
+                                                name="lastName"
+                                                value={userForm.lastName}
+                                                onChange={handleInput}
+                                            />
+                                    </div>
                                
-                                <div>
-                                    <label for="email"> Email</label>
-                                    <input
-                                        type="email"
-                                        id="email"
-                                        name="email"
-                                        value={userForm.email}
-                                        onChange={handleInput}
-                                    />
+                                    <div>
+                                        <label htmlFor="email"> Email</label>
+                                        <input
+                                            type="email"
+                                            id="email"
+                                            name="email"
+                                            value={userForm.email}
+                                            onChange={handleInput}
+                                        />
 
-                                </div>
-                                <div>
-                                    <label for="username"> Username </label>
-                                    <input
-                                        type="text"
-                                        id="username"
-                                        name="username"
-                                    />
+                                    </div>
+                                    {/*<div>
+                                        <label htmlFor="username"> Username </label>
+                                        <input
+                                            type="text"
+                                            id="username"
+                                            name="username"
+                                        />
 
-                                </div>
+                                    </div>*/}
                                 
                                 
-                             </form>
-                             <div className={styles.profileUpdateButton}>
-                                    <button type="submit"> Update Profile</button>
-                            </div>
-                        </div>
-                        <div className={styles.changepassword}>
-                            <h3>Change Password</h3>
-                            <form>
-                                <label for="currentPassword"> Current Password </label>
-                                <input
-                                    type="password"
-                                    id="currentPassword"
-                                    name="currentPassword"
-                                    placeholder="Current Password"
-                                />
+                                </form>
+                                <div className={styles.profileUpdateButton}>
+                                    <button type="button" onClick={handleUpdateProfile}> Update Profile</button>
+                                    <p>{userFormMessage}</p>
+                                </div>
+                                </div>
+                                <div className={styles.changepassword}>
+                                    <h3>Change Password</h3>
+                                    <form>
+                                        <label htmlFor="currentPassword"> Current Password </label>
+                                        <input
+                                            type="password"
+                                            id="currentPassword"
+                                            name="currentPassword"
+                                            placeholder="Current Password"
+                                            value={currentPassword}
+                                            onChange= {(e) => setCurrentPassword(e.target.value)}
+                                            required
+                                        />
 
-                                <label for="newPassword"> New Password </label>
-                                <input
-                                    type="password"
-                                    id="newPassword"
-                                    name="newPassword"
-                                    placeholder="New Password"
-                                    required
-                                />
+                                        <label htmlFor="newPassword"> New Password </label>
+                                        <input
+                                            type="password"
+                                            id="newPassword"
+                                            name="newPassword"
+                                            placeholder="New Password"
+                                            value={changePassword}
+                                            onChange={(e) => setChangePassword(e.target.value)}
+                                            required
+                                        />
 
-                                <label for="confirmNewPassword"> Confirm New Password </label>
-                                <input
-                                    type="password"
-                                    id="confirmNewPassword"
-                                    name="confirmNewPassword"
-                                    placeholder="Confirm New Password"
-                                    required
-                                />
+                                        <label htmlFor="confirmNewPassword"> Confirm New Password </label>
+                                        <input
+                                            type="password"
+                                            id="confirmNewPassword"
+                                            name="confirmNewPassword"
+                                            placeholder="Confirm New Password"
+                                            value={confirmChangePassword}
+                                            onChange={(e) => setConfirmChangePassword(e.target.value)}
+                                            required
+                                        />
 
-                                <button type="submit"> Update Password</button>
-                                <p>{message}</p>
+                                        <button type="button" onClick={handleUpdatePassword}> Update Password</button>
 
-                            </form>
-                        </div>
+                                        {passwordMessage === 'Successfully changed password' ?  <div className={styles.passwordMessage}>{passwordMessage} </div> : <div className={styles.passwordErrorMessage}> {passwordMessage}</div> }
+
+                                    </form>
+                                </div>
+                            </>
+                        )
+                        }
+                        
 
                     </div>
                     

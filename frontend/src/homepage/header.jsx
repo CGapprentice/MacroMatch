@@ -3,13 +3,17 @@ import { Link } from 'react-router-dom'
 import { getAuth, signOut } from 'firebase/auth'
 import{useNavigate} from 'react-router-dom'
 
+import { useUser } from '../components/UserContext.jsx'
+
 function HomePageHeader() {
+    const{resetClickGooglePopUp} = useUser()
     const auth = getAuth();
     const navigate = useNavigate();
     const handleLogout = () =>{
         signOut(auth).then(()=>{
             localStorage.removeItem('firebase_token');
             localStorage.removeItem('user');
+            resetClickGooglePopUp();
             console.log("User signed out")
             navigate('/')
         }).catch((error)=>{
@@ -21,14 +25,7 @@ function HomePageHeader() {
         <header>
                 <div className={styles.header}>
                     <h1>MacroMatch</h1>
-                    <div className={styles.links}>
-                        <Link to='/social'>Social Feed</Link> {/* Change to link when have social feed page*/}
-                        <Link to='/calculator'>Caloric Intake</Link>
-                        <Link to='/playlist'><p>Spotify Integration </p></Link>
-                        <Link to='/routinepage'><p>Your Routine</p></Link>
-                        <Link to='/mealLog'><p>Meal Log</p></Link>
-                        <Link to='/usersettingspage'><p>User Settings</p></Link>
-                    </div>
+                    
                     <div className={styles.logoutButton}>
                         <button onClick={handleLogout}> Logout </button>
                     </div>

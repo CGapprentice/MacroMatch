@@ -18,7 +18,13 @@
 
 
 .cardioSelect input{
-    width: 100%;
+    width: 60%;
+}
+
+.cardioSelect select{
+    width: auto;
+    min-width: 40px;
+    max-width: 100%;;
 }
 
 .spacebetweentypes{
@@ -142,4 +148,32 @@
     height: 100px;
     padding: 10px 10px;
     width: 100%;
+}
+
+.speedForm, .timeform, .distanceForm, .timeform, .highform, .lowform, .restform, .totaltime{
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+.distanceForm select{
+    width: 90px;
+}
+
+.timeform select, .highform select, .lowform select, .restform select{
+   width: 100px;
+}
+
+.eachExercise{
+    display: flex;
+}
+
+.eachExercise button{
+    font-size: 15px;
+    background-color: black;
+    padding: 1px 5px;
+}
+
+.updateStyle input{
+    width: 100px;
 }

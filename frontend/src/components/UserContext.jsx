@@ -15,6 +15,13 @@ export const useUser = () => {
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [calculatorResults, setCalculatorResults] = useState(()=>{{
+    const saved = localStorage.getItem('calculatorResults');
+    return saved ? JSON.parse(saved) : null;
+  }});
+  const [clickGooglePopUp, setClickGooglePopUp] = useState(() => {
+    return localStorage.getItem('clickGooglePopUp') === 'true';
+  });
 
   // Load user from localStorage on mount
   useEffect(() => {
@@ -142,9 +149,26 @@ export const UserProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('macromatch_user');
+    localStorage.removeItem('firebase_token');
+    resetClickGooglePopUp();
     localStorage.removeItem('auth_token');
     localStorage.removeItem('spotify_access_token'); // Clear Spotify token too
   };
+
+  const clickedGooglePopUp = () =>{
+    setClickGooglePopUp(true);
+    localStorage.setItem('clickGooglePopUp', 'true');
+  }
+
+  const resetClickGooglePopUp = () =>{
+    setClickGooglePopUp(false);
+    localStorage.removeItem('clickGooglePopUp');
+  }
+
+  const saveCalculatorData = (data) =>{
+    setCalculatorResults(data);
+    localStorage.setItem('calculatorResults', JSON.stringify(data));
+  }
 
   return (
     <UserContext.Provider value={{
@@ -153,6 +177,12 @@ export const UserProvider = ({ children }) => {
       saveUserData,
       loadUserData,
       updateUserProfile,
+      clickedGooglePopUp,
+      resetClickGooglePopUp,
+      calculatorResults,
+      setCalculatorResults,
+      saveCalculatorData,
+      clickGooglePopUp,
       loading,
       logout
     }}>

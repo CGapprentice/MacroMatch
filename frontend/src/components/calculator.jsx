@@ -89,7 +89,7 @@ const workoutDatabase = {
 
 // Main Calculator Component
 const Calculator = () => {
-  const { user, saveUserData, loadUserData, loading, logout } = useUser();
+  const { user, saveUserData, loadUserData, loading, logout, saveCalculatorData } = useUser();
   const { isConnected: spotifyConnected, generatePlaylist } = useSpotify();
   const navigate = useNavigate();
   
@@ -313,6 +313,7 @@ const Calculator = () => {
     };
 
     setResults(newResults);
+    saveCalculatorData(newResults);
 
     // Save to user profile
     const dataToSave = {

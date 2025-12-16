@@ -1,12 +1,21 @@
-import '../login.css'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { loginWithEmail } from '../firebase'
-import {auth, google} from '../firebase.js'
+import { loginWithEmail } from '../../firebase.js'
+import {auth, google} from '../../firebase.js'
 import {signInWithPopup} from 'firebase/auth'
+import { motion } from 'framer-motion'
+
+
+
+import styles from './LoginPage.module.css'
+
+import { useUser } from '../../components/UserContext.jsx'
 
 
 function LoginPage() {
+    
+    const { clickedGooglePopUp } = useUser();
+    
     const navigate = useNavigate();
 
     useState(() => {
@@ -41,6 +50,7 @@ function LoginPage() {
             });
 
             const data = await response.json();
+            console.log(data.user)
 
             if (response.ok) {
                 // Save Firebase ID token and user data
@@ -77,6 +87,7 @@ function LoginPage() {
         try{
             const result = await signInWithPopup(auth, google);
             const idToken = await result.user.getIdToken();
+            clickedGooglePopUp();
 
             const response = await fetch('http://localhost:5000/api/auth/login',{
                 method: 'POST',
@@ -98,12 +109,19 @@ function LoginPage() {
         }
 
     }
-
+    
+    
+    
 
     return (
-        <div className="loginInfo">
-            <div className="gradient"></div>
-            <div className="loginContext">
+        <div className={styles.loginInfo}>
+            <motion.div
+                className={styles.gradient}
+                initial={{width: "0%"}}
+                animate={{width: "60%"}}
+                transition= {{duration: 0.5}}
+            />
+            <div className={styles.loginContext}>
                 <h1>MacroMatch</h1>
                 <h2>Welcome Back!</h2>
                 
@@ -120,7 +138,7 @@ function LoginPage() {
                     </div>
                 )}
                 
-                <form className="loginText" onSubmit={submit}>
+                <form className={styles.loginText} onSubmit={submit}>
                     <label htmlFor="email">Email: </label>
                     <input 
                         type="email" 
@@ -131,9 +149,9 @@ function LoginPage() {
                         required 
                     />
                     
-                    <label htmlFor="password" className="password">
+                    <label htmlFor="password" className={styles.password}>
                         Password:
-                        <a href="#forgot">Forgot Password?</a>
+                        <Link to='/forgotPassword'>Forgot Password?</Link>
                     </label>
                     <input 
                         type="password" 
@@ -150,11 +168,11 @@ function LoginPage() {
                     </button>
                 </form>
                 
-                <div className="after_or">
-                    <p className="ORline">OR</p>
-                    <div className="button-Google">
-                        <button className="google" type="button" onClick={handleGoogleClick}>
-                            <img src="/google-logo.png" className="googleLogo" alt="Google Logo" />
+                <div className={styles.afterOr}>
+                    <p className={styles.ORline}>OR</p>
+                    <div className={styles.buttonGoogle}>
+                        <button className={styles.google} type="button" onClick={handleGoogleClick}>
+                            <img src="/google-logo.png" className={styles.googleLogo} alt="Google Logo" />
                             Google
                         </button>
                     </div>
@@ -163,6 +181,7 @@ function LoginPage() {
                 <p>Don't have an account? <Link to="/signinpage">Sign up</Link></p>
             </div>
         </div>
+        
     )
 }
 

@@ -218,7 +218,7 @@ def update_profile():
             return jsonify({'error': 'No data provided'}), 400
 
         # Allowed fields to update
-        allowed_fields = ['name', 'age', 'weight', 'height', 'activity_level', 'dietary_goals', 'gender']
+        allowed_fields = ['name', 'email', 'age', 'weight', 'height', 'activity_level', 'dietary_goals', 'gender']
         update_data = {k: v for k, v in data.items() if k in allowed_fields}
 
         if not update_data:
@@ -226,12 +226,28 @@ def update_profile():
 
         update_data['updated_at'] = datetime.utcnow()
 
-        # Update in MongoDB
         users_collection = get_users_collection()
+        if 'email' in data:
+            query = {"email": data['email']}
+            existingUser = users_collection.find_one(query)
+
+            if existingUser and existingUser.get('firebase_uid') != request.firebase_uid:
+                return jsonify({'error': 'There is another user with the same email. Please use another email'}), 400
+            
+            try:
+                firebase_auth.update_user(request.firebase_uid, email = data['email'])
+            except firebase_auth.EmailAlreadyExistsError:
+                return jsonify({'error': 'Email already exist in firebase. Try another.'}),400
+            except Exception as e:
+                print(f"Update email failed: {str(e)}")
+                return jsonify({'error': 'Server error'}), 500
+
+        
         result = users_collection.update_one(
             {'firebase_uid': request.firebase_uid},
             {'$set': update_data}
         )
+        
 
         if result.matched_count == 0:
             return jsonify({'error': 'User not found'}), 404

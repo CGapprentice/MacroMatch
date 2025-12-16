@@ -73,13 +73,14 @@ class Meal:
         self.notes = notes
         self.timestamp = datetime.utcnow()
     '''
-    def __init__(self, mealType, meal="", calories=0, notes="", date="", time=""):
+    def __init__(self, mealType, meal="", calories=0, notes="", date="", time="", calculatorResults=None):
         self.meal = meal
         self.mealType = mealType
         self.calories = calories
         self.notes = notes
         self.date = date
         self.time = time
+        self.calculatorResults = calculatorResults
         self.created_at = datetime.utcnow()
 
 
@@ -118,24 +119,80 @@ class Meal:
             'date' : self.date,
             'time' : self.time,
             'notes' : self.notes,
+            'calculatorResults' : self.calculatorResults,
             'created_at': self.created_at
         }
 
 
 class Routine:
-    def __init__ (self, activeDay, selected, showPopup=False, duration="", speed="", distance="", highIntensity="", lowIntensity="", restTime="", exercise=[], notes="", exercisePerRound=""):
-        self.showPopup = showPopup #check if this is really needed 
+    '''ADD DURATIONUNIT, SPEEDUNIT, DISTANCEUNIT, AND THE REST TO BE ABLE TO ADD THE MINUTES, HOURS, MPH KM/H, AND THE REST '''
+    def __init__ (self, activeDay, selected, durationUnit, speedUnit, distanceUnit, highIntensityUnit, lowIntensityUnit, restTimeUnit, duration=None, speed=None, distance=None, highIntensity=None, lowIntensity=None, restTime=None, exercise=[], notes="", exercisePerRound=""):
         self.activeDay = activeDay
         self.selected = selected
         self.duration = duration
+        self.durationUnit = durationUnit
         self.speed = speed
+        self.speedUnit = speedUnit
         self.distance = distance
+        self.distanceUnit = distanceUnit
         self.highIntensity= highIntensity
+        self.highIntensityUnit = highIntensityUnit
         self.lowIntensity = lowIntensity
+        self.lowIntensityUnit = lowIntensityUnit
         self.restTime = restTime
+        self.restTimeUnit = restTimeUnit
         self.exercise = exercise
         self.notes = notes
         self.exercisePerRound = exercisePerRound
+        self.created_at = datetime.utcnow()
+    
+    def validate(self):
+        errors=[]
+        if self.selected == "Walking" or self.selected == "Running" or self.selected == "Cycling" or self.selected =="Swimming" or self.selected == "Elliptical" or self.selected == "Treadmill":
+            if self.duration == None:
+                errors.append("Need to add total time")
+            if self.duration is not None and self.duration < 1:
+                errors.append("Time can't be negative or zero")
+            if self.speed == None:
+                errors.append("Need to have speed input")
+            if self.speed is not None and self.speed < 1:
+                errors.append("There can't be a zero speed or negative speed")
+            if self.distance == None:
+                errors.append("There needs to be a distance input")
+            if self.distance is not None and self.distance <= 0:
+                errors.append("There can't be zero distance or negative distance")
+        if self.selected == "HIIT" or self.selected == "Carido intervals":
+            if not self.exercisePerRound or not self.exercisePerRound.strip():
+                errors.append("User needs to add exercise for each round")
+            if self.duration == None:
+                errors.append("User needs to input a total time")
+            if self.duration is not None and self.duration <= 0:
+                errors.append("User can't input a 0 for total time or negative")
+            if self.highIntensity == None:
+                errors.append("User needs to add have an input")
+            if self.highIntensity is not None and self.highIntensity <= 0:
+                errors.append("user can't input a high intensity time of 0 or less")
+            if self.lowIntensity == None: 
+                errors.append("User needs to add low intensity time")
+            if self.lowIntensity is not None and self.lowIntensity <= 0:
+                errors.append("User can't input a zero or negative low intensity time")
+            if self.restTime == None:
+                errors.append("User needs to add rest time")
+            if self.restTime is not None and self.restTime <= 0:
+                errors.append("User can't input a negative or a 0 for rest time")
+        if self.selected == "Strength":
+            if not self.exercise:
+                errors.append("User can't add this to routine with no exercise added to it")
+        if self.selected == "Yoga" or self.selected == "Pilates":
+            if self.duration == None:
+                errors.append("User needs to add total time for their session")
+            if self.duration is not None and self.duration <= 0:
+                errors.append("User can't put zero or anything less than zero for their total duration")
+            if not self.notes or not self.notes.strip():
+                errors.append("User needs to add notes about their session")
+        
+        return errors
+    
     """"
     def validate(self):
         errors = []
@@ -164,19 +221,59 @@ class Routine:
     def to_dict(self):
         routine_dict = {
             'activeDay': self.activeDay,
-            'showPopup': self.showPopup,
             'selected': self.selected,
             'duration': self.duration,
+            'durationUnit': self.durationUnit,
             'speed': self.speed,
+            'speedUnit' : self.speedUnit,
             'distance': self.distance,
+            'distanceUnit': self.distanceUnit,
             'highIntensity': self.highIntensity,
+            'highIntensityUnit' : self.highIntensityUnit,
             'lowIntensity': self.lowIntensity,
+            'lowIntensityUnit': self.lowIntensityUnit,
             'restTime': self.restTime,
+            'restTimeUnit': self.restTimeUnit,
             'exercise' : [ex.to_dict() if hasattr(ex,"to_dict") else ex for ex in self.exercise],
             'notes': self.notes,
-            'exercisePerRound': self.exercisePerRound
+            'exercisePerRound': self.exercisePerRound,
+            'created_at' : self.created_at
         }
         # Add id if present (for MongoDB documents)
         if hasattr(self, '_id') and self._id:
             routine_dict['id'] = str(self._id)
         return routine_dict
+    
+
+class UploadPictures:
+    def __init__ (self, uploadPicture=None, fileType=None, fileSize=None):
+        self.uploadPicture = uploadPicture
+        self.fileType = fileType
+        self.fileSize = fileSize
+        self.created_at = datetime.utcnow()
+
+    '''
+    def validate(self):
+        errors=[]
+        if self.upladPicture == None:
+            return("User needs to pick a file");
+        return errors
+    '''
+    def to_dict(self):
+        uploadPictures_dict = {
+            'UploadPicture' : self.uploadPicture,
+            'fileType': self.fileType,
+            'fileSize': self.fileSize,
+            'created_at' : self.created_at
+        }
+
+class ProgressRoutine:
+    def __init__ (self, progress = None):
+        self.progress = progress
+        self.created_at = datetime.utcnow()
+    def to_dict(self):
+        progress_dict = {
+            'date': self.created_at,
+            'progress' : self.progress
+        }
+        return progress_dict

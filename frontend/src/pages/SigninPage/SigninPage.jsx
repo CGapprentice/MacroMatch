@@ -1,11 +1,15 @@
-import '../sign.css'
+import styles from './SigninPage.module.css'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { registerWithEmail } from '../firebase'
-import {auth,google} from '../firebase.js'
+import { registerWithEmail } from '../../firebase'
+import {auth,google} from '../../firebase.js'
 import {signInWithPopup} from 'firebase/auth'
 
+import{ useUser } from '../../components/UserContext.jsx'
+
+
 function SignInPage() {
+    const {clickedGooglePopUp} = useUser()
     const navigate = useNavigate();
     
     useState(() => {
@@ -99,6 +103,7 @@ function SignInPage() {
         try{
             const result = await signInWithPopup(auth, google);
             const idToken = await result.user.getIdToken();
+            clickedGooglePopUp();
             
             const response = await fetch('http://localhost:5000/api/auth/login',{
                 method:'POST',
@@ -122,8 +127,8 @@ function SignInPage() {
     }
 
     return (
-        <div className="signIn-background">
-            <div className='signContainer'>
+        <div className={styles.signInBackground}>
+            <div className={styles.signContainer}>
                 <h1>Sign up</h1>
                 
                 {error && (
@@ -140,7 +145,7 @@ function SignInPage() {
                     </div>
                 )}
                 
-                <div className="flName">
+                <div className={styles.flName}>
                     <form onSubmit={handleSubmit}>
                         <label htmlFor="firstName">First Name </label>
                         <input 
@@ -175,7 +180,7 @@ function SignInPage() {
                             required 
                         />
                         
-                        <label htmlFor="password" className="password">Password</label>
+                        <label htmlFor="password" className={styles.password}>Password</label>
                         <input 
                             type="password" 
                             id="password" 
@@ -187,17 +192,17 @@ function SignInPage() {
                             required 
                         />
                         
-                        <div className="afterform">
-                            <button className="signUp" type="submit" disabled={loading}>
+                        <div className={styles.afterform}>
+                            <button className={styles.signUp} type="submit" disabled={loading}>
                                 {loading ? 'Signing up...' : 'Sign Up'}
                             </button>
                             
                             <p>Already have an account? <Link to="/login">log in</Link></p>
                             
-                            <p className='Or'>OR</p>
-                            <div className="googleButton">
-                                <button className="google-signin" type="button" onClick={handleGoogleClick}>
-                                    <img src="/google_logo.png" className="googleLogo" alt="Google Logo" />
+                            <p className={styles.Or}>OR</p>
+                            <div className={styles.googleButton}>
+                                <button className={styles.googleSignin} type="button" onClick={handleGoogleClick}>
+                                    <img src="/google_logo.png" className={styles.googleLogo} alt="Google Logo" />
                                 </button>
                             </div>
                             

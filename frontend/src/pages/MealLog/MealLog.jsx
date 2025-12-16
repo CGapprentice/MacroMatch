@@ -3,12 +3,21 @@ import {useEffect, useState} from 'react'
 import HomePageHeader from '../../homepage/header.jsx'
 import MealHistory from '../MealLog/MealHistory.jsx'
 import { useNavigate } from "react-router-dom"
+import { useUser } from '../../components/UserContext.jsx'
+const mealOrder = ["Breakfast", "Lunch", "Dinner", "Snack"];
 
+/*
+    TO DO:
+    - Fix Meal Order When User Clicks + meal it should order from Breakfast, Lunch, Dinner, and Snack
+    - Change Design for when user has passed daily calorie goal or not.
+    - 
+*/
 
 function MealLog(){
     useEffect(()=>{
         document.title = 'Meal Log';
     },[])
+    const{ calculatorResults } = useUser();
 
     const token = localStorage.getItem('firebase_token')
 
@@ -22,6 +31,8 @@ function MealLog(){
     const[dayMeal, setDayMeal] = useState([]);
     const[totalCalories, setTotalCalories] = useState(0);
     const[errorMessage, setErrorMessage] = useState('');
+    
+    
     
     const handleClose = () =>{
         setDate('');
@@ -42,38 +53,16 @@ function MealLog(){
             mealType,
             calories: Number(calories),
             meal,
+            calculatorResults,
             note
         }
-
+        
+        if(!date || !time || !calories || !meal){
+            setErrorMessage('Date, time, Calories, or What is your meal do not have an input. Please fill these in.');
+            return;
+        }
+        setErrorMessage('');
         setTotalCalories(prev => prev + Number(calories));
-
-        /*setDayMeal(day => {
-            const dateExist = day.findIndex( d => d.date === newMeal.date);
-            let addMeal;
-            if(dateExist === -1){
-                addMeal = [
-                    ...day,
-                    {date, newMeal: [newMeal], totalCalories: calories}
-                ]
-            }else{
-                //this is when date does exists 
-                addMeal = day.map((day) =>{
-                    if(day.date === date){
-                        const allMeals = [...day.newMeal, newMeal];
-                        const totalCal = allMeals.reduce((add, meal) => add + Number(meal.calories || 0), 0);
-                        return{
-                            ...day,
-                            newMeal: allMeals,
-                            totalCalories: totalCal
-                        };
-                    }
-                    return day
-                })
-            }
-            return addMeal.sort((a,b) => new Date(b.date) - new Date(a.date));
-        })
-        console.log(dayMeal);*/
-
         
         try{
             const response = await fetch('http://localhost:5000/api/v1/meals/',{
@@ -108,7 +97,7 @@ function MealLog(){
                             const totalCal = allMeals.reduce((add, meal) => add + Number(meal.calories || 0), 0);
                             return{
                                 ...day,
-                                newMeal: allMeals,
+                                newMeal: allMeals.sort((a,b)=> mealOrder.indexOf(a.mealType) - mealOrder.indexOf(b.mealType)),
                                 totalCalories: totalCal
                             };
                         }
@@ -122,6 +111,11 @@ function MealLog(){
             console.error('Adding meal error: ', error);
             setErrorMessage(error.message || String(error));
         }
+        setDate('');
+        setTime('');
+        setCalories('');
+        setMeal('');
+        setNote('');
         
     }
    
@@ -157,15 +151,15 @@ function MealLog(){
                         acc[key].push(obj);
                         return acc;
                     },{});
-
+                    
                     const groupDates = Object.entries(groupByDate).map(([date,meal])=>({
                         date,
-                        newMeal: meal,
+                        newMeal: meal.sort((a,b) => mealOrder.indexOf(a.mealType) - mealOrder.indexOf(b.mealType)),
                         totalCalories: meal.reduce((sum, meal)=> sum+ Number(meal.calories || 0),0)                    
                     }));
                     const sortedGroup = groupDates.sort((a,b) => new Date(b.date) - new Date(a.date));
                     setDayMeal(sortedGroup);
-                    console.log(dayMeal);
+                    console.log(response);
                 }
             }catch(error){
                 console.error('Getting User History Meals error: ', error);
@@ -173,6 +167,8 @@ function MealLog(){
             } 
         }; getMealLogHistory();
     },[]);
+
+   
     
     return(
         <>
@@ -183,7 +179,6 @@ function MealLog(){
                 {showLog ? <section className={styles.mealContainer}>
                     <div className={styles.mealLogBox}>
                         <div className={styles.title}>
-                            <h1>{errorMessage}</h1>
                             <h1>Log your meal</h1>
                         </div>
                         <div className={styles.option}>
@@ -253,6 +248,7 @@ function MealLog(){
                                 value={note}
                                 onChange={(e)=>setNote(e.target.value)}
                             /> 
+                            <p className={styles.errorMessage}>{errorMessage}</p>
                         </div>
                         <div className={styles.addButton}>
                             <button onClick={handleAddMeal}>+ meal</button>
@@ -280,8 +276,7 @@ function MealLog(){
                             dayMeal={dayMeal}
                             totalCalories={totalCalories}
                             setDayMeal={setDayMeal}
-                            
-                       /> 
+                        /> 
                        : null
                     }
                 </section>

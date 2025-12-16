@@ -161,3 +161,7 @@
     border: 1px solid #ccc;
     padding: 10px 10px;
 }
+
+.errorMessage{
+    color: red;
+}

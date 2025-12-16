@@ -3,8 +3,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 import { UserProvider } from './components/UserContext';
 import { useUser } from './components/UserContext';
-import SigninPage from "./pages/SigninPage";
-import LoginPage from "./pages/LoginPage";
+import SigninPage from "./pages/SigninPage/SigninPage.jsx";
+import LoginPage from "./pages/LoginPage/LoginPage.jsx";
 import HomePage from "./pages/HomePage/HomePage.jsx";
 import Calculator from './components/Calculator';
 import SocialFeed from './components/SocialFeed';
@@ -13,8 +13,8 @@ import ProgressDashboard from './components/ProgressDashboard';
 import UserSettingsPage from './pages/UserSettingPage/UserSettingsPage.jsx'
 import RoutinePage from './pages/RoutinePage/RoutinePage.jsx'
 import MealLog from './pages/MealLog/MealLog.jsx'
+import ForgotPassword from './pages/ForgotPassword/ForgotPassword.jsx'
 import './main.css'
-import './login.css';
 import './App.css';
 
 const ProtectedRoute = ({ element: Element }) => {
@@ -134,9 +134,12 @@ function App() {
             {/* 2. Login and Signup are public access */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signinpage" element={<SigninPage />} />
-            <Route path="/signin" element={<SigninPage />} /> 
+            <Route path="/signin" element={<SigninPage />} />
+            <Route path="/forgotPassword" element={<ForgotPassword/>}/> 
 
             {/* 3. PROTECTED ROUTES: Only accessible if logged in */}
+            
+            
             <Route path="/calculator" element={<ProtectedRoute element={<Calculator />} />} />
             <Route path="/social" element={<ProtectedRoute element={<SocialFeed />} />} />
             <Route path="/playlist" element={<ProtectedRoute element={<PlaylistGenerator />} />} />
