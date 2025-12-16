@@ -25,14 +25,7 @@ function HomePageHeader() {
         <header>
                 <div className={styles.header}>
                     <h1>MacroMatch</h1>
-                    <div className={styles.links}>
-                        <Link to='/social'>Social Feed</Link> {/* Change to link when have social feed page*/}
-                        <Link to='/calculator'>Caloric Intake</Link>
-                        <Link to='/playlist'><p>Spotify Integration </p></Link>
-                        <Link to='/routinepage'><p>Your Routine</p></Link>
-                        <Link to='/mealLog'><p>Meal Log</p></Link>
-                        <Link to='/usersettingspage'><p>User Settings</p></Link>
-                    </div>
+                    
                     <div className={styles.logoutButton}>
                         <button onClick={handleLogout}> Logout </button>
                     </div>

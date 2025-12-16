@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { loginWithEmail } from '../../firebase.js'
 import {auth, google} from '../../firebase.js'
 import {signInWithPopup} from 'firebase/auth'
+import { motion } from 'framer-motion'
 
 
 
@@ -114,7 +115,12 @@ function LoginPage() {
 
     return (
         <div className={styles.loginInfo}>
-            <div className={styles.gradient}></div>
+            <motion.div
+                className={styles.gradient}
+                initial={{width: "0%"}}
+                animate={{width: "60%"}}
+                transition= {{duration: 0.5}}
+            />
             <div className={styles.loginContext}>
                 <h1>MacroMatch</h1>
                 <h2>Welcome Back!</h2>

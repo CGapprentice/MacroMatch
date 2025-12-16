@@ -77,3 +77,7 @@ def get_routine_collection():
 def get_uploadPicture_collection():
     """Get picture collection"""
     return get_mongodb().get_collection('pictures')
+
+def get_progress_collection():
+    """Get progress routine collection"""
+    return get_mongodb().get_collection('progress')

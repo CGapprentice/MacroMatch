@@ -266,3 +266,14 @@ class UploadPictures:
             'fileSize': self.fileSize,
             'created_at' : self.created_at
         }
+
+class ProgressRoutine:
+    def __init__ (self, progress = None):
+        self.progress = progress
+        self.created_at = datetime.utcnow()
+    def to_dict(self):
+        progress_dict = {
+            'date': self.created_at,
+            'progress' : self.progress
+        }
+        return progress_dict

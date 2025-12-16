@@ -13,6 +13,7 @@ from routine_routes import routine_bp
 from pictures_routes import pictures_bp
 from firebase_config import get_firebase_service
 from mongodb_config import get_mongodb
+from progress_route import progress_bp
 
 def create_app(config_name=None):
     # create our flask app
@@ -63,6 +64,7 @@ def register_blueprints(app):
     app.register_blueprint(error_bp)
     app.register_blueprint(routine_bp)
     app.register_blueprint(pictures_bp)
+    app.register_blueprint(progress_bp)
     print("routes registered! :)")
 
 def add_health_check(app):
@@ -87,7 +89,8 @@ def add_health_check(app):
                 'meals': '/api/v1/meals',
                 'users': '/api/v1/users',
                 'routine': '/api/v1/routine',
-                'pictures': '/api/v1/pictures'
+                'pictures': '/api/v1/pictures',
+                'progress': '/api/v1/progress'
             },
             'timestamp': datetime.utcnow().isoformat()
         }), 200

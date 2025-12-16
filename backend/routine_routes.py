@@ -77,7 +77,7 @@ def create_routine():
 
     except Exception as error:
         print(f"create routine error: {str(error)}")
-        return jsonify({'error' : 'servor error'}),500
+        return jsonify({'error' : 'server error'}),500
 
 @routine_bp.route('/', methods=['GET'])
 @require_auth

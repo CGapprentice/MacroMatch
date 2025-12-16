@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import HomePageHeader from '../../homepage/header.jsx'
 import SummaryPage from "./components/SummaryPage.jsx"
 import { useNavigate } from "react-router-dom"
-
+import { isSameWeek } from 'date-fns'
 
 import DayPopup from './components/DayPopup.jsx'
 
@@ -54,9 +54,77 @@ function RoutinePage(){
 
     //activaeDay is the day user have clicked
     const[activeDay, setActiveDay] = useState('');
+    const daysOfWeek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday","saturday"];
+    const today = new Date();
+    const currentDay = daysOfWeek[today.getDay()];
+    const[todayRoutine, setTodayRoutine] = useState(false);
+    const todayInformation = {}
+    const[todayData, setTodayData] = useState({});
+    const[progressData, setProgressData] = useState({});
+    const[postToday, setPostToday] = useState(false);
+    const[progressID, setProgressID] = useState(null);
+    const[checkGet, setCheckGet] = useState(true);
 
     //this checks if all days are false to just have the add routine button if there's no popup
     const check = Object.values(chooseDay).every(value => value === false);
+    useEffect (() =>{
+        const getProgressRoutine = async () =>{
+            try{
+                const response = await fetch('http://localhost:5000/api/v1/progress/',{
+                    method: 'GET',
+                    headers: {
+                        'Content-Type' :'application/json',
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                if(response.status === 401){
+                    localStorage.removeItem("firebase_token");
+                    navigate('/login')
+                    return
+                }
+                const result = await response.json();
+                const days = result.progress[0];
+                if(response.ok){
+                    setProgressData(days.progress);
+                    setProgressID(days.id);
+                    console.log(days.updated_at);
+                    if(!isSameWeek(today,days.updated_at)){
+                        const newWeek = Object.fromEntries(Object.keys(days.progress).map(day => [day,false]))
+                        try{
+                            const response = await fetch(`http://localhost:5000/api/v1/progress/${days.id}`, {
+                                method: 'PUT',
+                                headers:{
+                                    'Content-Type' : 'application/json',
+                                    Authorization: `Bearer ${token}`
+                                },
+                                body: JSON.stringify({progress: newWeek})
+                            })
+                            const result = await response.json()
+                            if(response.ok){
+                                setProgressData(result.progress.progress);
+                                setProgressID(result.progress.id);
+                                console.log(progressData);
+                            }
+                            if(!response.ok){
+                                console.log("Something went wrong with updating: ", result.error)
+                            }
+                        }
+                        catch(error){
+                            console.error("Couldn't update data: ", error);
+                        }
+                    }
+
+                }
+                if(!response.ok){
+                    console.log('Error is: ', result.error)
+                }
+            }
+            catch(error){
+                console.error('failed to get progressData', error);
+            }
+            
+        }; getProgressRoutine();
+    },[]);
     
 
     /*
@@ -81,16 +149,23 @@ function RoutinePage(){
                 }
                 if(result.ok){
                     const response = await result.json();
-
+                    
                     const routinesEachDay = {}
+                    const progressDays = {}
                     const updatedDays = {...chooseDay};
                     response.routine.forEach(routine=>{
                         routinesEachDay[routine.activeDay] = routine;
                         updatedDays[routine.activeDay] = true;
+                        if(currentDay === routine.activeDay){
+                            setTodayRoutine(true);
+                            todayInformation[routine.activeDay] = routine
+                            setTodayData(todayInformation);
+                        }
                     });
                     setData(routinesEachDay);
                     setRoutineSummary(true);
                     setChooseDay(updatedDays);
+                    setCheckGet(false);
                 }
             }catch(error){
                 console.error('Get User routine error: ', error);
@@ -143,23 +218,113 @@ function RoutinePage(){
                         ...prev,
                         [selectedDay]: false
                     }));
+                    
                     console.log("Successfully deleted workout!!")
+                    const removeProgress = {...progressData};
+                    delete removeProgress[selectedDay];
+                    setProgressData(removeProgress);
+                    console.log("progressData delete ", progressData);
+                    try{
+                        const response = await fetch(`http://localhost:5000/api/v1/progress/${progressID}`,{
+                            method: 'PUT',
+                            headers:{
+                                'Content-Type': 'application/json',
+                                Authorization: `Bearer ${token}`
+                            },
+                            body: JSON.stringify({progress: removeProgress})
+                        });
+                        if(response.status === 401){
+                            localStorage.removeItem("firebase_token")
+                            navigate('/login')
+                            return
+                        }
+                        const result = await response.json()
+                        if(response.ok){
+                            setProgressData(result.progress.progress);
+                            console.log(progressData);
+                            setProgressID(result.progress.id);
+                        }
+                        if(!response.ok){
+                            console.log("failed to update progress day by deleting a day")
+                        }
+                    }catch(error){
+                        console.error("Failed to connect to routine's progress" , error);
+                    }
                 }else{
                     const dataError = await response.json();
-                    console.error("Failed to delete: ", dataError);
+                    console.error("Failed to delete day from PUT method: ", dataError);
                 }
             }catch(error){
                 console.error("Delete Routine Failed: ", error);
                 setErrorMessage("Wasn't able to delete routine try later");
             }
+
         }
             
     };
 
+
     
-    //The purpose for this is to set the user to the summaryPage when they are done updating their routine
-    const addRoutine= ()=>{
-        setRoutineSummary(true);
+    const addRoutine =  async ()=>{
+        if(!progressID){
+            console.error('No progressID!');
+            return;
+        }
+        try{
+            const response = await fetch (`http://localhost:5000/api/v1/progress/${progressID}`,{
+                method: 'PUT',
+                headers: {
+                    'Content-Type' : 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({progress: progressData})
+            });
+            const result = await response.json()
+            if(response.ok){
+                setRoutineSummary(true);
+                setProgressData(result.progress.progress);
+                setProgressID(result.progress.id);
+                
+                console.log("Click edit progressData: ", progressData);
+                console.log("Click edit progressData result: ", result.progress);
+            }
+            if(!response.ok){
+                console.log("Connects to backend but error is: ", result.error);
+
+            }
+        }catch(error){
+            console.error("Failed to connect to backend to update data: ", error);
+        }
+    }
+    
+    const initiateProgressData = async () =>{
+        try{
+            const response = await fetch('http://localhost:5000/api/v1/progress/',{
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({progress: progressData})
+            })
+            const result = await response.json();
+            if(response.ok){
+                console.log("Initiated progress routine to have all false for all days the users have added");
+                setProgressData(result.progress.progress);
+                setRoutineSummary(true);
+                setProgressID(result.progress.id);
+                setCheckGet(false);
+                console.log("Post method results" , result.progress);
+            }
+            console.log("POST ID: ", progressID);
+            if(!response.ok){
+                console.log('failed to get progress routine: ', result.error);
+            }
+        }
+        catch(error){
+            console.error('Error with posting initial progress routine', error);
+        }
+        
     }
 
 
@@ -168,8 +333,7 @@ function RoutinePage(){
         <header>
             <HomePageHeader />
         </header>
-        {routineSummary ? (
-            <SummaryPage data={data} setRoutineSummary={setRoutineSummary}/>
+        {(routineSummary || todayRoutine ) ? (<SummaryPage data={data} setRoutineSummary={setRoutineSummary} todayData={todayData} setTodayRoutine={setTodayRoutine} currentDay={currentDay}  todayRoutine={todayRoutine} progressData={progressData} setProgressData={setProgressData} token={token} progressID={progressID} setProgressID ={setProgressID} />
         ): <main className={styles.mainRoutine}>
             <section className={styles.chooseContainer}>
                 <div className={styles.days}>
@@ -201,11 +365,32 @@ function RoutinePage(){
                         data={data[day]}
                         setActiveDay={setActiveDay}
                         routineId = {data[day]?.id}
+                        
+                        //progressData has all workout days setting true or false
+                        progressData={progressData}
+                        setProgressData={setProgressData}
+                        //todayData is needed so if user adds today it should show up with the data
+                        todayData={todayData}
+                        setTodayData={setTodayData}
+
+                        //check if user adds current day to add true to todayRoutine
+                        currentDay={currentDay}
+                        todayRoutine={todayRoutine}
+                        setTodayRoutine={setTodayRoutine}
+
+                        postToday={postToday}
+                        setPostToday={setPostToday}
+
+                        setProgressID={setProgressID}
+                        
+
+
                         />
                     </div>
                 ))}
                 {check || routineSummary ? null : <div className={styles.addbutton}>
-                    <button onClick={addRoutine}>add routine</button> 
+                    {checkGet ?  <button onClick={initiateProgressData}>add routine</button>:<button onClick={addRoutine}>add routine</button>}
+                    
                 </div> }
                        
             </section>

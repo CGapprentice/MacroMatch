@@ -2,7 +2,7 @@ import styles from './DayPopup.module.css'
 import InputPopup from './InputPopup.jsx'
 import { useState, useEffect } from 'react'
 
-function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, routineId }){
+function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, routineId , progressData, setProgressData, setProgressID, todayData, setTodayData, currentDay, postToday, setPostToday}){
 
     //SEE IF YOU WANT TO ADD AN X BUTTON ONTO THE POPUP
 
@@ -11,7 +11,7 @@ function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, rout
     const[errorMessage, setErrorMessage]= useState("");
     const token = localStorage.getItem('firebase_token')
 
-    
+    const todayInformation = {}
     const[selected, setSelected] = useState('Walking');
     const[duration, setDuration] = useState(null);
     const[durationUnit, setDurationUnit] = useState('minutes');
@@ -100,12 +100,12 @@ function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, rout
                     navigate('/login')
                     return
                 }
+                //const day = result.routine.activeDay;
                 if(response.ok){
                     eachDayChange(activeDay, result.routine);
                     setSaved(true);
                     setErrorMessage('');
                     console.log("Successfully Updated Data routine!");
-                    
                 }
                 if(!response.ok){
                     console.log(result.error);
@@ -128,10 +128,15 @@ function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, rout
                     body: JSON.stringify(routineData)
                 });
                 const result = await response.json();
+                //const day = result.routine.activeDay;
                 if(response.ok){
                     eachDayChange(activeDay, result.routine);
                     setSaved(true);
                     setErrorMessage('');
+                    setProgressData(prev =>({
+                        ...prev,
+                        [result.routine.activeDay]: false
+                    }))
                     console.log("Successfully POSTED user routine!");
                 }
                 if(!response.ok){
