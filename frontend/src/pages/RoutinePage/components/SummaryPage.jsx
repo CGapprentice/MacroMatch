@@ -81,11 +81,14 @@ function SummaryPage({data,setRoutineSummary, todayData, setTodayRoutine, curren
                             className={styles.progressbar}
                             intial={{width:0}}
                             animate={{width:`${(progress/ totalDays) * 100}%`}} 
-                            transition={{duration: 0.6, ease: "easeOut"}}
+                            transition={{duration: 1, ease: "easeOut"}}
                         />
                     </div>
-                    <p>{progress} / {totalDays}</p>
-                    {(progress/totalDays) * 100 === 100 ? <p>You finished this week's workout routine!! </p>:null}
+                    <div className={styles.progressInfo}>
+                        <p>{progress} / {totalDays}</p>
+                        {(progress/totalDays) * 100 === 100 ? <p>You finished this week's workout routine!! </p>:null}
+                    </div>
+                    
                 </div>
 
                 <button onClick={()=> setRoutineSummary(false)}>Edit</button>
@@ -104,6 +107,7 @@ function SummaryPage({data,setRoutineSummary, todayData, setTodayRoutine, curren
                                 <p><b>Duration: </b>{routine.duration} {routine.durationUnit}</p>
                                 <p><b>Speed:</b> {routine.speed} {routine.speedUnit}</p>
                                 <p><b>Distance:</b> {routine.distance} {routine.distanceUnit}</p>
+                                <br></br><br></br>
                                 <p>Didn't do the work out? </p> <button onClick={()=>handleDeletingProgress(day)}>yes</button>
                             </div>
                             ) 
@@ -116,6 +120,7 @@ function SummaryPage({data,setRoutineSummary, todayData, setTodayRoutine, curren
                                 <p><b>High Intensity time:</b> {routine.highIntensity} {routine.highIntensityUnit}</p>
                                 <p><b>Low Intensiy time:</b> {routine.lowIntensity} {routine.lowIntensityUnit}</p>
                                 <p><b>Rest time:</b> {routine.restTime} {routine.restTimeUnit}</p>
+                                <br></br><br></br>
                                 <p>Didn't do the work out? </p> <button onClick={()=>handleDeletingProgress(day)}>yes</button>
                             </div>
                             )
@@ -132,6 +137,7 @@ function SummaryPage({data,setRoutineSummary, todayData, setTodayRoutine, curren
                                     </div>
 
                                 ))}
+                                <br></br><br></br>
                                 <p>Didn't do the work out? </p> <button onClick={()=>handleDeletingProgress(day)}>yes</button>
                             </div>
                         ) 
@@ -143,6 +149,7 @@ function SummaryPage({data,setRoutineSummary, todayData, setTodayRoutine, curren
                                 <p><b>Type of workout:</b> {routine.selected}</p>
                                 <p><b>Duration:</b> {routine.duration} {routine.durationUnit}</p>
                                 <p><b>Notes:</b> {routine.notes}</p>
+                                <br></br><br></br>
                                 <p>Didn't do the work out?  </p> <button onClick={()=>handleDeletingProgress(day)}>yes</button>
                             </div>
                         ) 

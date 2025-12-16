@@ -83,7 +83,7 @@ const PlaylistGenerator = () => {
 
     return (
         <main className={'app-container ' + styles.calculatorContent}>
-            <div className={styles.resultsGrid}>
+            <div className={styles.playlistcontainer}>
                 <div className={`${styles.playlistCard} card`}>
                     <h2 className="card-title">Your Workout Playlist</h2>
                     <p className="card-subtitle">Music recommendations based on your **{workout.type}** workout plan.</p>

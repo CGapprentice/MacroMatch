@@ -88,7 +88,7 @@ const SocialFeed = () => {
                 {/* A. New Post Form */}
                 <div className={`${styles.newPostCard} card`}>
                     <h3 className="card-title">Share Your Progress</h3>
-                    <form onSubmit={handlePostSubmit} className="new-post-form">
+                    <form onSubmit={handlePostSubmit} className={styles.newPostForm}>
                         <textarea
                             value={newPost}
                             onChange={(e) => setNewPost(e.target.value)}
@@ -96,11 +96,11 @@ const SocialFeed = () => {
                             rows="3"
                             maxLength="280"
                         />
-                        <div className="post-actions">
-                            <button type="submit" disabled={!newPost.trim()} className="post-button">
+                        <div className={styles.postActions}>
+                            <button type="submit" disabled={!newPost.trim()} className={styles.postButton}>
                                 Post to Feed
                             </button>
-                            <span className="char-count">{newPost.length}/280</span>
+                            <span className={styles.charCount}>{newPost.length}/280</span>
                         </div>
                     </form>
                 </div>

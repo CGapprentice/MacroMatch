@@ -1,5 +1,5 @@
 
-.social-feed-container {
+.socialFeedContainer {
     max-width: 1100px;
     margin: 30px auto; 
     display: flex;
@@ -8,12 +8,12 @@
     padding: 0 20px;
 }
 
-.posts-section {
+.postsSection {
     flex: 2; /* Takes up more space */
     min-width: 450px;
 }
 
-.sidebar-section {
+.sidebarSection {
     flex: 1; /* Takes up less space */
     display: flex;
     flex-direction: column;
@@ -23,15 +23,15 @@
 }
 
 /* Post Card Styling */
-.post-card {
+.postCard {
     margin-bottom: 20px; /* Separates individual posts */
 }
 
-.new-post-card {
+.newPostCard {
     margin-bottom: 30px;
 }
 
-.new-post-form textarea {
+.newPostForm textarea {
     width: 100%;
     border: 1px solid var(--color-border);
     border-radius: 8px;
@@ -43,13 +43,13 @@
     box-sizing: border-box; /* Include padding in width */
 }
 
-.post-actions {
+.postActions {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.post-button {
+.postButton {
     background-color: var(--color-primary);
     color: white;
     border: none;
@@ -60,19 +60,19 @@
     transition: background-color 0.2s;
 }
 
-.post-button:disabled {
+.postButton:disabled {
     background-color: #b0b0b0;
     cursor: not-allowed;
 }
 
-.char-count {
+.charCount {
     font-size: 0.8rem;
     color: var(--color-secondary-text);
 }
 
 
 /* Individual Post Header */
-.post-header {
+.postHeader {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
@@ -80,7 +80,7 @@
     border-bottom: 1px solid var(--color-border);
 }
 
-.user-avatar {
+.userAvatar {
     width: 45px;
     height: 45px;
     border-radius: 50%;
@@ -89,29 +89,29 @@
     border: 2px solid var(--color-primary);
 }
 
-.post-user-name {
+.postUserName {
     font-weight: 600;
     color: var(--color-text);
     display: block;
 }
 
-.post-time {
+.postTime {
     font-size: 0.8rem;
     color: var(--color-secondary-text);
 }
 
-.post-body {
+.postBody {
     margin-bottom: 15px;
 }
 
-.post-body p {
+.postBody p {
     margin: 0;
     color: var(--color-text);
     line-height: 1.6;
 }
 
 /* Post Footer (Likes/Comments) */
-.post-footer {
+.postFooter {
     display: flex;
     align-items: center;
     gap: 20px;
@@ -119,7 +119,7 @@
     border-top: 1px dashed var(--color-border);
 }
 
-.post-like, .post-comment, .share-icon {
+.postLike, .postComment, .shareIcon {
     display: flex;
     align-items: center;
     font-size: 0.85rem;
@@ -128,34 +128,34 @@
     transition: color 0.2s;
 }
 
-.post-like:hover {
+.postLike:hover {
     color: var(--color-danger);
 }
 
-.post-like.liked {
+.postLike.liked {
     color: var(--color-danger);
     font-weight: 600;
 }
 
 /* Sidebar List Styles */
-.trending-list, .challenges-list {
+.trendingList, .challengesList {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.trending-item, .challenges-item {
+.trendingItem, .challengesItem {
     padding: 10px 0;
     border-bottom: 1px dashed var(--color-border);
     font-size: 0.95rem;
     color: var(--color-text);
 }
 
-.trending-item:last-child, .challenges-item:last-child {
+.trendingItem:last-child, .challengesItem:last-child {
     border-bottom: none;
 }
 
-.trending-stats, .challenges-stats {
+.trendingStats, .challengesStats {
     font-size: 0.8rem;
     color: var(--color-primary);
     font-weight: 600;
@@ -171,14 +171,14 @@
     padding: 0 20px; 
   }
 
-  .posts-section {
+  .postsSection {
     /* When stacked, the post section should be 100% wide */
     width: 100%;
     /* Re-set min-width to its initial state to enforce 100% width on stacked columns */
     min-width: unset; 
   }
 
-  .trending-section {
+  .trendingSection {
     /* Allow the sidebar to take up the full width when stacked */
     width: 100%;
   }
