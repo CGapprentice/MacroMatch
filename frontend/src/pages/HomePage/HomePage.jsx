@@ -42,7 +42,7 @@ function HomePage() {
                         <p>MacroMatch is a helping tool for those who wish to reach their fitness goals.
                         Either by losing weight, gaining weight, or maintaining weight. These goals
                         shouldn't be that hard to reach but sometimes there is a need to get some help.
-                        Which is where MacroMatch comes into play. Keep on reading and will show how we help.
+                        Which is where MacroMatch comes into play. Keep on reading and we will show how we can help.
                         </p>
                     </div>
                     <div className={styles.macroimage}>
