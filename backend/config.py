@@ -23,7 +23,7 @@ class Config:
     
     
     # cors config
-    CORS_ORIGINS = os.environ.get('CORS_ORIGINS', 'http://localhost:3000').split(',')
+    CORS_ORIGINS = os.environ.get('CORS_ORIGINS', 'http://localhost:5000').split(',')
 
 class DevelopmentConfig(Config):
     DEBUG = True

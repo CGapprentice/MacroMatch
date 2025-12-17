@@ -1,9 +1,9 @@
 # Firebase + MongoDB authentication routes
 from flask import Blueprint, request, jsonify
 from datetime import datetime
-from mongodb_config import get_users_collection, get_calculator_data_collection
-from firebase_config import get_firebase_service
-from auth_middleware import require_auth, verify_firebase_token
+from database.mongodb_config import get_users_collection, get_calculator_data_collection
+from database.firebase_config import get_firebase_service
+from core.auth_middleware import require_auth, verify_firebase_token
 import firebase_admin
 from firebase_admin import auth as firebase_auth
 

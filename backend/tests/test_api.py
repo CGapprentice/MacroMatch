@@ -1,7 +1,7 @@
-# simple test script for our api :)
 import requests
 import json
 from datetime import datetime
+
 
 BASE_URL = "http://localhost:5000"
 
@@ -43,7 +43,7 @@ def test_register_endpoint():
         }
         
         response = requests.post(
-            f"{BASE_URL}/api/v1/auth/register",
+            f"{BASE_URL}/api/auth/register",
             json=test_user,
             headers={"Content-Type": "application/json"}
         )
@@ -53,7 +53,7 @@ def test_register_endpoint():
         
         if response.status_code == 201:
             data = response.json()
-            return data.get('token')
+            return data.get('customToken')
         else:
             return None
             
@@ -76,8 +76,8 @@ def test_meal_endpoints(token):
         
         # test creating a meal
         test_meal = {
-            "name": "Test Breakfast",
-            "meal_type": "breakfast",
+            "meal": "Test Breakfast",
+            "mealType": "Breakfast",
             "calories": 300,
             "notes": "test meal"
         }
@@ -96,6 +96,11 @@ def test_meal_endpoints(token):
         print(f"error: {e}")
         return False
 
+import os
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv(usecwd=True))
+
 def main():
     # main test function
     print("macromatch api test")
@@ -112,15 +117,35 @@ def main():
     print("\n✅ basic endpoints working")
     
     # test auth
-    token = test_register_endpoint()
+    custom_token = test_register_endpoint()
     
-    if token:
-        print("\n✅ auth working")
-        meal_ok = test_meal_endpoints(token)
-        if meal_ok:
-            print("\n✅ all tests passed! :)")
-        else:
-            print("\n⚠️ some tests failed")
+    if custom_token:
+        try:
+            api_key = os.environ.get('VITE_FIREBASE_API_KEY')
+            if not api_key:
+                raise Exception("FIREBASE_API_KEY not found in environment variables")
+
+            rest_api_url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key={api_key}"
+            
+            response = requests.post(
+                rest_api_url,
+                json={"token": custom_token, "returnSecureToken": True},
+                headers={"Content-Type": "application/json"}
+            )
+            
+            response.raise_for_status()
+            
+            id_token = response.json().get('idToken')
+
+            print("\n✅ auth working")
+            meal_ok = test_meal_endpoints(id_token)
+            if meal_ok:
+                print("\n✅ all tests passed! :)")
+            else:
+                print("\n⚠️ some tests failed")
+        except Exception as e:
+            print(f"\n❌ auth tests failed: {e}")
+            print("note: this might be expected if firebase is not configured")
     else:
         print("\n❌ auth tests failed")
         print("note: this might be expected if firebase is not configured")

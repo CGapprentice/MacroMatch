@@ -6,14 +6,14 @@ from datetime import datetime
 
 # import our stuff
 from config import config
-from firebase_mongo_auth_routes import firebase_mongo_auth_bp
-from meal_routes import meal_bp
-from error_handlers import error_bp
-from routine_routes import routine_bp
-from pictures_routes import pictures_bp
-from firebase_config import get_firebase_service
-from mongodb_config import get_mongodb
-from progress_route import progress_bp
+from api.auth import firebase_mongo_auth_bp
+from api.meals import meal_bp
+from core.error_handlers import error_bp
+from api.routines import routine_bp
+from api.pictures import pictures_bp
+from database.firebase_config import get_firebase_service
+from database.mongodb_config import get_mongodb
+from api.progress import progress_bp
 
 def create_app(config_name=None):
     # create our flask app

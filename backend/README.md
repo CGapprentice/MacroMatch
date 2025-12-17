@@ -42,7 +42,7 @@ FIREBASE_CLIENT_EMAIL=your-service-account@project.iam.gserviceaccount.com
 FIREBASE_CLIENT_ID=your-client-id
 FIREBASE_AUTH_URI=https://accounts.google.com/o/oauth2/auth
 FIREBASE_TOKEN_URI=https://oauth2.googleapis.com/token
-CORS_ORIGINS=http://localhost:3000
+CORS_ORIGINS=http://localhost:5000
 ```
 
 4. Run the app:

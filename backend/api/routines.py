@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
-from mongodb_config import get_routine_collection
-from auth_middleware import require_auth
-from models import Routine
+from database.mongodb_config import get_routine_collection
+from core.auth_middleware import require_auth
+from models.models import Routine
 from bson import ObjectId
 from datetime import datetime
 

@@ -2,9 +2,9 @@
 from flask import Blueprint, request, jsonify
 from datetime import datetime
 from bson import ObjectId
-from models import Meal
-from mongodb_config import get_meals_collection
-from auth_middleware import require_auth
+from models.models import Meal
+from database.mongodb_config import get_meals_collection
+from core.auth_middleware import require_auth
 
 meal_bp = Blueprint('meals', __name__, url_prefix='/api/v1/meals')
 

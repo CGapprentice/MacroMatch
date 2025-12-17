@@ -1,48 +1,49 @@
 from flask import Blueprint, request, jsonify
-from mongodb_config import get_uploadPicture_collection
-from auth_middleware import require_auth
-from models import UploadPictures
+from database.mongodb_config import get_uploadPicture_collection
+from core.auth_middleware import require_auth
+from models.models import UploadPictures
 from bson import ObjectId
 from datetime import datetime
 
 pictures_bp = Blueprint('pictures', __name__, url_prefix='/api/v1/pictures')
 
-@pictures_bp.route('/', methods=['POST'])
-@require_auth
-def create_pictures():
-    try:
-        '''
-            file = request.files['uploadPicture']
-            filepath = f"uploads/{file.filename}"
-            file.save(filepath)
-            pictures = UploadPictures(uploadPicture = filepath)
-        '''
+# TODO: This function is broken and needs to be fixed.
+# @pictures_bp.route('/', methods=['POST'])
+# @require_auth
+# def create_pictures():
+#     try:
+#         '''
+#             file = request.files['uploadPicture']
+#             filepath = f"uploads/{file.filename}"
+#             file.save(filepath)
+#             pictures = UploadPictures(uploadPicture = filepath)
+#         '''
         
-        pictures = request.files['uploadPicture']
-        pictures.save(pictures.filename)
+#         pictures = request.files['uploadPicture']
+#         pictures.save(pictures.filename)
         
 
-        picture_collection = get_uploadPicture_collection();
-        picture_data = pictures.to_dict();
-        picture_data['firebase_uid'] = request.firebase_uid
-        picture_data['user_id'] = str(request.current_user['_id'])
+#         picture_collection = get_uploadPicture_collection();
+#         picture_data = pictures.to_dict();
+#         picture_data['firebase_uid'] = request.firebase_uid
+#         picture_data['user_id'] = str(request.current_user['_id'])
 
-        result = picture_collection.insert_one(picture_data)
+#         result = picture_collection.insert_one(picture_data)
 
-        return jsonify({
-            'message' : 'picture has been added',
-            'pictures' : {
-                'id' : str(result.inserted_id),
-                'uploadPicture': pictures.uploadPicture,
-                'fileType' : pictures.fileType,
-                'fileSize': pictures.fileSize,
-                'created_at' : pictures.created_at.isoformat()
-            }
-        }), 201
+#         return jsonify({
+#             'message' : 'picture has been added',
+#             'pictures' : {
+#                 'id' : str(result.inserted_id),
+#                 'uploadPicture': pictures.uploadPicture,
+#                 'fileType' : pictures.fileType,
+#                 'fileSize': pictures.fileSize,
+#                 'created_at' : pictures.created_at.isoformat()
+#             }
+#         }), 201
     
-    except Exception as error:
-        print(f"Add pictures error; {str(error)}")
-        return jsonify({'error' : 'servor error'}), 500
+#     except Exception as error:
+#         print(f"Add pictures error; {str(error)}")
+#         return jsonify({'error' : 'servor error'}), 500
     
 @pictures_bp.route('/', methods=['GET'])
 @require_auth

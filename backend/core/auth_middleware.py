@@ -2,8 +2,8 @@
 from flask import request, jsonify
 from functools import wraps
 from firebase_admin import auth
-from mongodb_config import get_users_collection
-from firebase_config import get_firebase_service
+from database.mongodb_config import get_users_collection
+from database.firebase_config import get_firebase_service
 
 def require_auth(f):
     """
