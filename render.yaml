@@ -1,29 +1,35 @@
 services:
-  - type: web
-    name: macromatch-backend
-    env: python
-    # A build command to install dependencies.
-    # Render will automatically detect requirements.txt.
-    # It will run pip install -r requirements.txt.
-    buildCommand: "pip install gunicorn" # Ensure gunicorn is installed
-    startCommand: "gunicorn app:app --bind 0.0.0.0:$PORT" # Gunicorn to serve the Flask app
-    # Environment variables (set these in Render dashboard)
-    # FLASK_ENV: production
-    # SECRET_KEY: <your-flask-secret-key>
-    # FIREBASE_PROJECT_ID: <your-firebase-project-id>
-    # FIREBASE_PRIVATE_KEY: <your-firebase-private-key> (needs to be escaped/base64 encoded if multi-line)
-    # FIREBASE_CLIENT_EMAIL: <your-firebase-client-email>
-    # MONGODB_URI: <your-mongodb-connection-string>
-    # CORS_ORIGINS: "https://macromatch-frontend.onrender.com" # Placeholder: Update with your actual frontend URL on Render
-    # Note: Render automatically sets the PORT environment variable.
+   # BACKEND SERVICE
+   - type: web
+      name: macromatch-backend
+      env: python
+      region: virginia
+      plan: free
+      buildCommand: 'pip install -r requirements.txt'
+      startCommand: 'gunicorn app:app'
+      envVars:
+         - key: FLASK_ENV
+            value: production
+         - key: PYTHON_VERSION
+            value: 3.10.0
+         - fromGroup: macromatch-production-env
+      buildFilter:
+         paths:
+            - backend/**
 
-    rootDir: backend
-    healthCheckPath: /health # Optional: Add a health check endpoint
-
-  - type: static
-    name: macromatch-frontend
-    env: static
-    buildCommand: "npm install && npm run build"
-    publishPath: build 
-    
-    rootDir: frontend
+   # FRONTEND SERVICE
+   - type: web
+      name: macromatch-frontend
+      env: node
+      region: oregon
+      plan: free
+      buildCommand: 'npm install && npm run build'
+      startCommand: 'npm run start'
+      staticPublishPath: ./frontend/build
+      envVars:
+         - key: VITE_API_BASE_URL
+            value: "https://macromatch-backend.onrender.com"
+         - fromGroup: macromatch-production-env
+      buildFilter:
+         paths:
+            - frontend/**
