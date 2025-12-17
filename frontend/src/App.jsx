@@ -6,7 +6,7 @@ import { useUser } from './components/UserContext';
 import SigninPage from "./pages/SigninPage/SigninPage.jsx";
 import LoginPage from "./pages/LoginPage/LoginPage.jsx";
 import HomePage from "./pages/HomePage/HomePage.jsx";
-import Calculator from './components/Calculator';
+import Calculator from './components/calculator';
 import SocialFeed from './components/SocialFeed';
 import PlaylistGenerator from './components/PlaylistGenerator';
 import ProgressDashboard from './components/ProgressDashboard';
