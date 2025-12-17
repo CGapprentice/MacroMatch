@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { loginWithEmail } from '../../firebase.js'
-import {auth, google} from '../../firebase.js'
+import {auth, google, API_BASE_URL} from '../../firebase.js' // Import API_BASE_URL
 import {signInWithPopup} from 'firebase/auth'
 import { motion } from 'framer-motion'
 
@@ -41,7 +41,7 @@ function LoginPage() {
             const idToken = await user.getIdToken();
             
             // Send token to backend to sync with MongoDB
-            const response = await fetch('http://localhost:5000/api/auth/login', {
+            const response = await fetch(`${API_BASE_URL}/api/auth/login`, { // Use API_BASE_URL
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ function LoginPage() {
             const idToken = await result.user.getIdToken();
             clickedGooglePopUp();
 
-            const response = await fetch('http://localhost:5000/api/auth/login',{
+            const response = await fetch(`${API_BASE_URL}/api/auth/login`,{ // Use API_BASE_URL
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json'

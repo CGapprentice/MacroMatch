@@ -5,7 +5,7 @@ import HomePageHeader from '../../homepage/header.jsx'
 import styles from './UserSettings.module.css'
 
 import { useUser } from '../../components/UserContext.jsx'
-import { getCurrentUserToken } from '../../firebase.js'; // Import getCurrentUserToken
+import { getCurrentUserToken, API_BASE_URL } from '../../firebase.js'; // Import API_BASE_URL
 
 import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "firebase/auth";
 import ToggleSwitch from './toggleSwitch/toggleSwitch.jsx';
@@ -73,7 +73,7 @@ function UserSettingsPage(){
         if (!token) return;
         const postPicture = async() =>{
             try{
-                const response = await fetch('http://localhost:5000/api/v1/pictures/',{
+                const response = await fetch(`${API_BASE_URL}/api/v1/pictures/`,{
                     method: 'GET',
                     headers:{
                         'Content-Type' : 'application/json',
@@ -108,7 +108,7 @@ function UserSettingsPage(){
 
 
         try{
-            const response = await fetch('http://localhost:5000/api/v1/pictures/',{
+            const response = await fetch(`${API_BASE_URL}/api/v1/pictures/`,{
                 method: 'POST',
                 headers:{
                     Authorization: `Bearer ${token}`
@@ -138,7 +138,7 @@ function UserSettingsPage(){
         if (!token) return;
         const loadUserData = async () => {
             try{
-                const response = await fetch('http://localhost:5000/api/auth/profile',{
+                const response = await fetch(`${API_BASE_URL}/api/auth/profile`,{
                     method: 'GET',
                     headers: {
                         'Content-Type' : 'application/json',
@@ -175,7 +175,7 @@ function UserSettingsPage(){
             email: userForm.email
         };
         try{
-            const response = await fetch('http://localhost:5000/api/auth/profile',{
+            const response = await fetch(`${API_BASE_URL}/api/auth/profile`,{
                 method: 'PUT',
                 headers: {
                     'Content-Type' : 'application/json',

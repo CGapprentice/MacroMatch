@@ -2,7 +2,7 @@ import styles from './SigninPage.module.css'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { registerWithEmail } from '../../firebase'
-import {auth,google} from '../../firebase.js'
+import {auth,google, API_BASE_URL} from '../../firebase.js' // Import API_BASE_URL
 import {signInWithPopup} from 'firebase/auth'
 
 import{ useUser } from '../../components/UserContext.jsx'
@@ -55,7 +55,7 @@ function SignInPage() {
             const idToken = await user.getIdToken();
             
             // Send to backend to create user in MongoDB
-            const response = await fetch('http://localhost:5000/api/auth/register', {
+            const response = await fetch(`${API_BASE_URL}/api/auth/register`, { // Use API_BASE_URL
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ function SignInPage() {
             const idToken = await result.user.getIdToken();
             clickedGooglePopUp();
             
-            const response = await fetch('http://localhost:5000/api/auth/login',{
+            const response = await fetch(`${API_BASE_URL}/api/auth/login`,{ // Use API_BASE_URL
                 method:'POST',
                 headers:{
                     'Content-Type' : 'application/json'
