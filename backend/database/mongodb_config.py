@@ -3,6 +3,7 @@ import os
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 from dotenv import load_dotenv
+import certifi
 
 load_dotenv()
 
@@ -24,7 +25,13 @@ class MongoDB:
         """Connect to MongoDB"""
         try:
             mongo_uri = os.environ.get('MONGODB_URI', 'mongodb://localhost:27017/')
-            self._client = MongoClient(mongo_uri, serverSelectionTimeoutMS=5000)
+            
+            # Use certifi for SSL certificates
+            self._client = MongoClient(
+                mongo_uri, 
+                serverSelectionTimeoutMS=5000,
+                tlsCAFile=certifi.where()
+            )
             
             # Test connection
             self._client.admin.command('ping')
