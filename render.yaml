@@ -24,6 +24,7 @@ services:
     env: node
     region: virginia
     plan: free
+    rootDir: frontend
     buildCommand: "npm install && npm run build"
     startCommand: "npm run serve-build"
     envVars:
