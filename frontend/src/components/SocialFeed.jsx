@@ -59,7 +59,7 @@ const SocialFeed = () => {
                 likes: 0,
                 comments: 0,
                 isLiked: false,
-                createdAt: { toDate: () => new Date() } // Mock Date for fresh posts
+                createdAt: serverTimestamp(), // Use serverTimestamp for consistency
             }, ...posts]);
             setNewPost('');
         } catch (error) {
@@ -67,18 +67,6 @@ const SocialFeed = () => {
         }
     };
     
-    // Mock data for the trending/challenges section
-    const trendingPosts = [
-        { title: "Top 5 Protein Smoothies", likes: 120, comments: 45 },
-        { title: "Best 30-Minute HIIT Workouts", likes: 98, comments: 22 },
-        { title: "Macro-Friendly Desserts Guide", likes: 85, comments: 15 },
-    ];
-
-    const challenges = [
-        { name: "30-Day Plank Challenge", participants: 452 },
-        { name: "Meatless Monday", participants: 1200 },
-        { name: "5K Daily Step Goal", participants: 3120 },
-    ];
 
     return (
         <div className={styles.socialFeedContainer}>
@@ -147,11 +135,7 @@ const SocialFeed = () => {
                         <span>📈 Trending Posts</span>
                     </div>
                     <ul className={styles.trendingList}>
-                        {trendingPosts.map((post, index) => (
-                            <li key={index} className={styles.trendingItem}>
-                                {post.title} <span className={styles.trendingStats}>({post.likes} likes)</span>
-                            </li>
-                        ))}
+                        {/* Removed mock trending posts */}
                     </ul>
                 </div>
 
@@ -160,11 +144,7 @@ const SocialFeed = () => {
                         <span>👥 Challenges</span>
                     </div>
                     <ul className={styles.challengesList}>
-                        {challenges.map((challenge, index) => (
-                            <li key={index} className={styles.challengesItem}>
-                                {challenge.name} <span className={styles.challengesStats}>({challenge.participants} participants)</span>
-                            </li>
-                        ))}
+                        {/* Removed mock challenges */}
                     </ul>
                 </div>
             </div>

@@ -11,3 +11,4 @@ pymongo[srv]==4.6.1
 
 # auth and config
 python-dotenv==1.0.0
+gunicorn==22.0.0

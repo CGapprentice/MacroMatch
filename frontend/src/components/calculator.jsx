@@ -93,7 +93,7 @@ const Calculator = () => {
   const { isConnected: spotifyConnected, generatePlaylist } = useSpotify();
   const navigate = useNavigate();
   
-  // Form state
+  // Handle form state for the calculator (e.g., input fields)
   const [formData, setFormData] = useState({
     weight: '',
     height: '',
@@ -124,6 +124,12 @@ const Calculator = () => {
 
   const [lastSaved, setLastSaved] = useState(null);
 
+  // Handle logout
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   // Load user data on component mount
   useEffect(() => {
     const loadSavedData = async () => {
@@ -147,11 +153,7 @@ const Calculator = () => {
     }
   }, [user]);
 
-  // Handle logout
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
+
 
   // Handle form input changes
   const handleInputChange = (e) => {
@@ -361,6 +363,7 @@ const Calculator = () => {
           <div className={styles.headerUser}>
             <span className={styles.userWelcome}>Welcome, {user?.name || user?.email}</span>
             <button onClick={handleLogout} className={styles.logoutButton}>Logout</button>
+
           </div>
         </div>
       </header>
