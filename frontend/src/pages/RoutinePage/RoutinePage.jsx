@@ -4,6 +4,7 @@ import HomePageHeader from '../../homepage/header.jsx'
 import SummaryPage from "./components/SummaryPage.jsx"
 import { useNavigate } from "react-router-dom"
 import { isSameWeek } from 'date-fns'
+import { getCurrentUserToken } from '../../firebase.js'; // Import getCurrentUserToken
 
 import DayPopup from './components/DayPopup.jsx'
 
@@ -18,8 +19,30 @@ function RoutinePage(){
     const[errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
+    // Token management
+    const [token, setToken] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchToken = async () => {
+            try {
+                const userToken = await getCurrentUserToken();
+                if (!userToken) {
+                    navigate('/login');
+                    return;
+                }
+                setToken(userToken);
+            } catch (error) {
+                console.error("Failed to fetch Firebase token:", error);
+                navigate('/login');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchToken();
+    }, [navigate]); // navigate is stable, so it's safe to include.
+
     //Brings to specific user
-    const token = localStorage.getItem('firebase_token')
 
 
     // routineSummary is boolean where if there is a routine
@@ -68,6 +91,7 @@ function RoutinePage(){
     //this checks if all days are false to just have the add routine button if there's no popup
     const check = Object.values(chooseDay).every(value => value === false);
     useEffect (() =>{
+        if (!token) return; // Only run if token is available
         const getProgressRoutine = async () =>{
             try{
                 const response = await fetch('http://localhost:5000/api/v1/progress/',{
@@ -78,8 +102,7 @@ function RoutinePage(){
                     }
                 });
                 if(response.status === 401){
-                    localStorage.removeItem("firebase_token");
-                    navigate('/login')
+                    // navigate('/login') is already handled by the token fetching useEffect
                     return
                 }
                 const result = await response.json();
@@ -91,7 +114,7 @@ function RoutinePage(){
                     if(!isSameWeek(today,days.updated_at)){
                         const newWeek = Object.fromEntries(Object.keys(days.progress).map(day => [day,false]))
                         try{
-                            const response = await fetch(`http://localhost:5000/api/v1/progress/${days.id}`, {
+                            const updateResponse = await fetch(`http://localhost:5000/api/v1/progress/${days.id}`, {
                                 method: 'PUT',
                                 headers:{
                                     'Content-Type' : 'application/json',
@@ -99,14 +122,14 @@ function RoutinePage(){
                                 },
                                 body: JSON.stringify({progress: newWeek})
                             })
-                            const result = await response.json()
-                            if(response.ok){
-                                setProgressData(result.progress.progress);
-                                setProgressID(result.progress.id);
+                            const updateResult = await updateResponse.json()
+                            if(updateResponse.ok){
+                                setProgressData(updateResult.progress.progress);
+                                setProgressID(updateResult.progress.id);
                                 console.log(progressData);
                             }
-                            if(!response.ok){
-                                console.log("Something went wrong with updating: ", result.error)
+                            if(!updateResponse.ok){
+                                console.log("Something went wrong with updating: ", updateResult.error)
                             }
                         }
                         catch(error){
@@ -124,7 +147,7 @@ function RoutinePage(){
             }
             
         }; getProgressRoutine();
-    },[]);
+    },[token, navigate, today]);
     
 
     /*
@@ -133,6 +156,7 @@ function RoutinePage(){
         submitted
     */
     useEffect (()=>{
+        if (!token) return; // Only run if token is available
         const getSummaryRoutine = async () => {
             try{
                 const result = await fetch('http://localhost:5000/api/v1/routine/',{
@@ -143,8 +167,7 @@ function RoutinePage(){
                     }
                 });
                 if(result.status === 401){
-                    localStorage.removeItem("firebase_token");
-                    navigate('/login')
+                    // navigate('/login') is already handled by the token fetching useEffect
                     return
                 }
                 if(result.ok){
@@ -172,7 +195,7 @@ function RoutinePage(){
                 setErrorMessage(error);
             }
         }; getSummaryRoutine();
-    },[]);
+    },[token, navigate, currentDay]);
 
   
     /*
@@ -181,6 +204,7 @@ function RoutinePage(){
         will delete the data from both the backend and the frontend.
     */
     const handleDayClick = async(selectedDay) =>{
+        if (!token) { navigate('/login'); return; } // Ensure token is available
         const changed= chooseDay[selectedDay]
         setChooseDay(prevState => ({
             ...prevState,
@@ -203,8 +227,7 @@ function RoutinePage(){
                     }
                 });
                 if(response.status === 401){
-                    localStorage.removeItem("firebase_token")
-                    navigate('/login')
+                    // navigate('/login') is already handled by the token fetching useEffect
                     return
                 }
                 if(response.ok){
@@ -234,8 +257,7 @@ function RoutinePage(){
                             body: JSON.stringify({progress: removeProgress})
                         });
                         if(response.status === 401){
-                            localStorage.removeItem("firebase_token")
-                            navigate('/login')
+                            // navigate('/login') is already handled by the token fetching useEffect
                             return
                         }
                         const result = await response.json()
@@ -266,6 +288,7 @@ function RoutinePage(){
 
     
     const addRoutine =  async ()=>{
+        if (!token) { navigate('/login'); return; } // Ensure token is available
         if(!progressID){
             console.error('No progressID!');
             return;
@@ -298,6 +321,7 @@ function RoutinePage(){
     }
     
     const initiateProgressData = async () =>{
+        if (!token) { navigate('/login'); return; } // Ensure token is available
         try{
             const response = await fetch('http://localhost:5000/api/v1/progress/',{
                 method: 'POST',
@@ -327,6 +351,9 @@ function RoutinePage(){
         
     }
 
+    if (isLoading) {
+        return <div>Loading...</div>; // Or a more sophisticated loading spinner
+    }
 
     return(
         <>

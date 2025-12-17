@@ -2,7 +2,7 @@ import styles from "./ProgressRoutine.module.css"
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 
-function ProgressRoutine({ setTodayRoutine,currentDay,totalDays, routineToday, setCompleteRoutine, progress, progressData, setProgressData, progressID,token}) {
+function ProgressRoutine({ setTodayRoutine,currentDay,totalDays, routineToday, setCompleteRoutine, progress, progressData, setProgressData, progressID, setProgressID, token}) {
     const handleAddTodayProgress = async() => {
         const update = {...progressData, [currentDay]:true};
         setProgressData(update);

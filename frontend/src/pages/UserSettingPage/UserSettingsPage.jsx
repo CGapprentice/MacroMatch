@@ -5,7 +5,7 @@ import HomePageHeader from '../../homepage/header.jsx'
 import styles from './UserSettings.module.css'
 
 import { useUser } from '../../components/UserContext.jsx'
-
+import { getCurrentUserToken } from '../../firebase.js'; // Import getCurrentUserToken
 
 import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "firebase/auth";
 import ToggleSwitch from './toggleSwitch/toggleSwitch.jsx';
@@ -20,8 +20,31 @@ function UserSettingsPage(){
     }, [])
 
     
-    const token = localStorage.getItem('firebase_token');
     const navigate = useNavigate();
+
+    // Token management
+    const [token, setToken] = useState(null);
+    const [isTokenLoading, setIsTokenLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchToken = async () => {
+            try {
+                const userToken = await getCurrentUserToken();
+                if (!userToken) {
+                    navigate('/login');
+                    return;
+                }
+                setToken(userToken);
+            } catch (error) {
+                console.error("Failed to fetch Firebase token:", error);
+                navigate('/login');
+            } finally {
+                setIsTokenLoading(false);
+            }
+        };
+        fetchToken();
+    }, [navigate]);
+
 
     const[uploadPicture, setUploadPicture] = useState(null);
     
@@ -47,6 +70,7 @@ function UserSettingsPage(){
     const[passwordMessage, setPasswordMessage] = useState('');
 
     useEffect(()=>{
+        if (!token) return;
         const postPicture = async() =>{
             try{
                 const response = await fetch('http://localhost:5000/api/v1/pictures/',{
@@ -57,8 +81,7 @@ function UserSettingsPage(){
                     }
                 });
                 if(response.status === 401){
-                    localStorage.removeItem("firebase_token");
-                    navigate('/login')
+                    // Navigation handled by token useEffect
                     return
                 }
                 const data = await response.json();
@@ -73,18 +96,19 @@ function UserSettingsPage(){
                 setMessage("Error with getting user profile picture");
             }
         }; postPicture();
-    },[]);
+    },[token]);
 
     const changePicture = async(e) =>{
         e.preventDefault();
         if(!uploadPicture) return;
+        if(!token) return;
 
         const formData = new FormData();
         formData.append('uploadPicture', uploadPicture);
 
 
         try{
-            response = await fetch('http://localhost:5000/api/v1/pictures/',{
+            const response = await fetch('http://localhost:5000/api/v1/pictures/',{
                 method: 'POST',
                 headers:{
                     Authorization: `Bearer ${token}`
@@ -92,8 +116,7 @@ function UserSettingsPage(){
                 body: formData
             });
             if(response.status === 401){
-                localStorage.removeItem("firebase_token");
-                navigate('/login');
+                // Navigation handled by token useEffect
                 return;
             }
             const data = await response.json()
@@ -112,6 +135,7 @@ function UserSettingsPage(){
 
     //Brings User's name and email
     useEffect (()=>{
+        if (!token) return;
         const loadUserData = async () => {
             try{
                 const response = await fetch('http://localhost:5000/api/auth/profile',{
@@ -122,8 +146,7 @@ function UserSettingsPage(){
                     }
                 });
                 if(response.status === 401){
-                    localStorage.removeItem("firebase_token");
-                    navigate('/login')
+                    // Navigation handled by token useEffect
                     return
                 }
                 if(!response.ok){
@@ -142,10 +165,11 @@ function UserSettingsPage(){
                 console.error("Error fetching user data: ", error);
             }
         }; loadUserData();
-    },[]);
+    },[token]);
 
     //Updates User's name and email
     const handleUpdateProfile = async() =>{
+        if (!token) return;
         const updatedData ={
             name: `${userForm.firstName} ${userForm.lastName}`.trim(),
             email: userForm.email
@@ -161,8 +185,7 @@ function UserSettingsPage(){
             });
             
             if(response.status === 401){
-                localStorage.removeItem("firebase_token")
-                navigate('/login')
+                // Navigation handled by token useEffect
                 return 
             }
             const result = await response.json();

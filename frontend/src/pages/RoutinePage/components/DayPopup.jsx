@@ -1,6 +1,8 @@
 import styles from './DayPopup.module.css'
 import InputPopup from './InputPopup.jsx'
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { getCurrentUserToken } from '../../../firebase.js'; // Import getCurrentUserToken
 
 function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, routineId , progressData, setProgressData, setProgressID, todayData, setTodayData, currentDay, postToday, setPostToday}){
 
@@ -9,7 +11,28 @@ function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, rout
     const capitalizedDay = activeDay.charAt(0).toUpperCase() + activeDay.slice(1);
     
     const[errorMessage, setErrorMessage]= useState("");
-    const token = localStorage.getItem('firebase_token')
+    
+    const navigate = useNavigate(); // Initialize navigate
+
+    // Token management
+    const [token, setToken] = useState(null);
+
+    useEffect(() => {
+        const fetchToken = async () => {
+            try {
+                const userToken = await getCurrentUserToken();
+                if (!userToken) {
+                    navigate('/login');
+                    return;
+                }
+                setToken(userToken);
+            } catch (error) {
+                console.error("Failed to fetch Firebase token:", error);
+                navigate('/login');
+            }
+        };
+        fetchToken();
+    }, [navigate]);
 
     const todayInformation = {}
     const[selected, setSelected] = useState('Walking');
@@ -63,6 +86,8 @@ function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, rout
     if(showPopup === false) return null;
 
     const handleEachDayData = async() =>{
+        if (!token) { navigate('/login'); return; } // Ensure token is available
+
         const routineData = {
             activeDay,
             selected,
@@ -96,8 +121,7 @@ function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, rout
                 });
                 const result = await response.json();
                 if(response.status === 401){
-                    localStorage.removeItem("firebase_token")
-                    navigate('/login')
+                    // Navigation handled by token useEffect
                     return
                 }
                 //const day = result.routine.activeDay;
