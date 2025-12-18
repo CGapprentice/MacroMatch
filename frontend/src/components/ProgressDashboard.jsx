@@ -86,7 +86,7 @@ const ProgressDashboard = () => {
     }
 
     // Assign targets
-    const calorieTarget = targets.dailyCalorieTarget;
+    const calorieTarget = targets.dailyGoal;
     const proteinTarget = targets.macroGrams.protein;
     const carbsTarget = targets.macroGrams.carbs;
     const fatsTarget = targets.macroGrams.fats;
@@ -144,7 +144,7 @@ const ProgressDashboard = () => {
                         <Target size={28} />
                         <h2>Macro Progress</h2>
                     </div>
-
+                    
                     {progressData.map(data => (
                         <ProgressBar key={data.label} {...data} />
                     ))}
