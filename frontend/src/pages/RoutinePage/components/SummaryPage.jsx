@@ -2,8 +2,10 @@ import styles from "./SummaryPage.module.css"
 import ProgressRoutine from "./ProgressRoutine";
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+//import { API_BASE_URL } from "../../../firebase";
 
 function SummaryPage({data,setRoutineSummary, todayData, setTodayRoutine, currentDay,todayRoutine, progressData, setProgressData, token, progressID, setProgressID}){
+    const API_BASE_URL = 'http://localhost:5000'
     const routineToday = todayData[currentDay];
     const[completeRoutine, setCompleteRoutine] = useState(null);
     const progress = Object.values(progressData).filter(Boolean).length;
@@ -18,7 +20,7 @@ function SummaryPage({data,setRoutineSummary, todayData, setTodayRoutine, curren
         const update = {...progressData, [day]:true};
         setProgressData(update);
         try{
-            const response = await fetch(`http://localhost:5000/api/v1/progress/${progressID}`, {
+            const response = await fetch(`${API_BASE_URL}/api/v1/progress/${progressID}`, {
                 method: 'PUT',
                 headers:{
                     'Content-Type' : 'application/json',
@@ -30,7 +32,6 @@ function SummaryPage({data,setRoutineSummary, todayData, setTodayRoutine, curren
             if(response.ok){
                 setProgressData(result.progress.progress);
                 setProgressID(result.progress.id);
-                console.log(progressData);
             }
             if(!response.ok){
                 console.log("Something went wrong with updating: ", result.error)
@@ -46,7 +47,7 @@ function SummaryPage({data,setRoutineSummary, todayData, setTodayRoutine, curren
         const update = {...progressData,[day]:false};
         setProgressData(update);
         try{
-            const response = await fetch(`http://localhost:5000/api/v1/progress/${progressID}`, {
+            const response = await fetch(`${API_BASE_URL}/api/v1/progress/${progressID}`, {
                 method: 'PUT',
                 headers:{
                     'Content-Type' : 'application/json',

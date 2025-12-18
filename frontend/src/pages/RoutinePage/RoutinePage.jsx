@@ -4,12 +4,12 @@ import HomePageHeader from '../../homepage/header.jsx'
 import SummaryPage from "./components/SummaryPage.jsx"
 import { useNavigate } from "react-router-dom"
 import { isSameWeek } from 'date-fns'
-import { getCurrentUserToken } from '../../firebase.js'; // Import getCurrentUserToken
-
+import { getCurrentUserToken/*, API_BASE_URL*/ } from '../../firebase.js'; // Import getCurrentUserToken
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import DayPopup from './components/DayPopup.jsx'
 
 function RoutinePage(){
-
+    const API_BASE_URL = 'http://localhost:5000'
     //Changes tab title to be Routine Page
     useEffect(()=>{
         document.title = 'Routine Page';
@@ -28,12 +28,14 @@ function RoutinePage(){
             try {
                 const userToken = await getCurrentUserToken();
                 if (!userToken) {
+                    localStorage.removeItem('firebase_token')
                     navigate('/login');
                     return;
                 }
                 setToken(userToken);
             } catch (error) {
                 console.error("Failed to fetch Firebase token:", error);
+                localStorage.removeItem('firebase_token')
                 navigate('/login');
             } finally {
                 setIsLoading(false);
@@ -94,7 +96,7 @@ function RoutinePage(){
         if (!token) return; // Only run if token is available
         const getProgressRoutine = async () =>{
             try{
-                const response = await fetch('http://localhost:5000/api/v1/progress/',{
+                const response = await fetch(`${API_BASE_URL}/api/v1/progress/`,{
                     method: 'GET',
                     headers: {
                         'Content-Type' :'application/json',
@@ -110,11 +112,10 @@ function RoutinePage(){
                 if(response.ok){
                     setProgressData(days.progress);
                     setProgressID(days.id);
-                    console.log(days.updated_at);
                     if(!isSameWeek(today,days.updated_at)){
                         const newWeek = Object.fromEntries(Object.keys(days.progress).map(day => [day,false]))
                         try{
-                            const updateResponse = await fetch(`http://localhost:5000/api/v1/progress/${days.id}`, {
+                            const updateResponse = await fetch(`${API_BASE_URL}/api/v1/progress/${days.id}`, {
                                 method: 'PUT',
                                 headers:{
                                     'Content-Type' : 'application/json',
@@ -126,7 +127,6 @@ function RoutinePage(){
                             if(updateResponse.ok){
                                 setProgressData(updateResult.progress.progress);
                                 setProgressID(updateResult.progress.id);
-                                console.log(progressData);
                             }
                             if(!updateResponse.ok){
                                 console.log("Something went wrong with updating: ", updateResult.error)
@@ -159,7 +159,7 @@ function RoutinePage(){
         if (!token) return; // Only run if token is available
         const getSummaryRoutine = async () => {
             try{
-                const result = await fetch('http://localhost:5000/api/v1/routine/',{
+                const result = await fetch(`${API_BASE_URL}/api/v1/routine/`,{
                     method: 'GET',
                     headers:{
                         'Content-Type': 'application/json',
@@ -219,7 +219,7 @@ function RoutinePage(){
                 return;
             }
             try{
-                const response = await fetch(`http://localhost:5000/api/v1/routine/${routineId}`,{
+                const response = await fetch(`${API_BASE_URL}/api/v1/routine/${routineId}`,{
                     method: 'DELETE',
                     headers:{
                         'Content-type' : 'application/json',
@@ -246,9 +246,8 @@ function RoutinePage(){
                     const removeProgress = {...progressData};
                     delete removeProgress[selectedDay];
                     setProgressData(removeProgress);
-                    console.log("progressData delete ", progressData);
                     try{
-                        const response = await fetch(`http://localhost:5000/api/v1/progress/${progressID}`,{
+                        const response = await fetch(`${API_BASE_URL}/api/v1/progress/${progressID}`,{
                             method: 'PUT',
                             headers:{
                                 'Content-Type': 'application/json',
@@ -263,7 +262,6 @@ function RoutinePage(){
                         const result = await response.json()
                         if(response.ok){
                             setProgressData(result.progress.progress);
-                            console.log(progressData);
                             setProgressID(result.progress.id);
                         }
                         if(!response.ok){
@@ -294,7 +292,7 @@ function RoutinePage(){
             return;
         }
         try{
-            const response = await fetch (`http://localhost:5000/api/v1/progress/${progressID}`,{
+            const response = await fetch (`${API_BASE_URL}/api/v1/progress/${progressID}`,{
                 method: 'PUT',
                 headers: {
                     'Content-Type' : 'application/json',
@@ -307,9 +305,6 @@ function RoutinePage(){
                 setRoutineSummary(true);
                 setProgressData(result.progress.progress);
                 setProgressID(result.progress.id);
-                
-                console.log("Click edit progressData: ", progressData);
-                console.log("Click edit progressData result: ", result.progress);
             }
             if(!response.ok){
                 console.log("Connects to backend but error is: ", result.error);
@@ -323,7 +318,7 @@ function RoutinePage(){
     const initiateProgressData = async () =>{
         if (!token) { navigate('/login'); return; } // Ensure token is available
         try{
-            const response = await fetch('http://localhost:5000/api/v1/progress/',{
+            const response = await fetch(`${API_BASE_URL}/api/v1/progress/`,{
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json',
@@ -338,9 +333,7 @@ function RoutinePage(){
                 setRoutineSummary(true);
                 setProgressID(result.progress.id);
                 setCheckGet(false);
-                console.log("Post method results" , result.progress);
             }
-            console.log("POST ID: ", progressID);
             if(!response.ok){
                 console.log('failed to get progress routine: ', result.error);
             }

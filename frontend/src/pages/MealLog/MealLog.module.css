@@ -165,3 +165,82 @@
 .errorMessage{
     color: red;
 }
+
+.mealName{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.mealName textarea{
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 10px 10px;
+}
+
+.mealSearch{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    
+}
+
+.mealSearch button{
+    text-align: center;
+    height: 25px;   
+}
+
+.searchButton1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.ingredientform{
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+
+}
+
+.amountIngredient, .nameIngredient, .unitIngredients{
+    display:flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.unitIngredients select{
+    height: 35px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+.overallIngredient{
+    display:flex;
+    flex-direction: column;
+    gap:20px;
+}
+
+.overallIngredient button{
+    width: 10%;
+}
+
+.ingredientsArray{
+    margin-left: 15px;
+}
+
+.mealChoice{
+    display:flex;
+    flex-direction: row;
+    gap:35px;
+}
+
+.mealChoice input{
+    width:15px;
+    height: 15px;
+}
+.mealForm{
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}

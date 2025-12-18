@@ -73,10 +73,13 @@ class Meal:
         self.notes = notes
         self.timestamp = datetime.utcnow()
     '''
-    def __init__(self, mealType, meal="", calories=0, notes="", date="", time="", calculatorResults=None):
+    def __init__(self, mealType, meal="", calories=0, notes="", date="", time="", fats=0, carbs=0, protein=0,  calculatorResults=None):
         self.meal = meal
         self.mealType = mealType
         self.calories = calories
+        self.fats = fats
+        self.carbs = carbs
+        self.protein = protein
         self.notes = notes
         self.date = date
         self.time = time
@@ -116,6 +119,9 @@ class Meal:
             'meal' : self.meal,
             'mealType' : self.mealType,
             'calories' : self.calories,
+            'fats' : self.fats,
+            'carbs' : self.carbs,
+            'protein' : self.protein,
             'date' : self.date,
             'time' : self.time,
             'notes' : self.notes,

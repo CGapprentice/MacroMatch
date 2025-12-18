@@ -5,7 +5,7 @@ import HomePageHeader from '../../homepage/header.jsx'
 import styles from './UserSettings.module.css'
 
 import { useUser } from '../../components/UserContext.jsx'
-import { getCurrentUserToken, API_BASE_URL } from '../../firebase.js'; // Import API_BASE_URL
+import { getCurrentUserToken/*, API_BASE_URL */} from '../../firebase.js'; // Import API_BASE_URL
 
 import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "firebase/auth";
 import ToggleSwitch from './toggleSwitch/toggleSwitch.jsx';
@@ -13,6 +13,7 @@ import { set } from 'react-hook-form';
 
 
 function UserSettingsPage(){
+    const API_BASE_URL = 'http://localhost:5000'
     const {clickGooglePopUp} = useUser()
     useEffect(()=>{
         document.title = "User Settings"

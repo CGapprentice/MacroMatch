@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom"
 import { useState, useEffect} from 'react'
 import ViewPopup from "./ViewPopup/ViewPopup.jsx"
 import { useUser } from '../../components/UserContext.jsx'
+//import { API_BASE_URL} from '../../firebase.js'
 
-
-function MealHistory({dayMeal, setDayMeal}){
+function MealHistory({dayMeal, setDayMeal, totalCarbs, totalFats, totalProtein}){
+    const API_BASE_URL = 'http://localhost:5000'
     const[checkOption, setCheckOption] = useState(null);
     const navigate = useNavigate();
     const token = localStorage.getItem('firebase_token');
@@ -33,7 +34,7 @@ function MealHistory({dayMeal, setDayMeal}){
                     break;
                 }
                 try{
-                    const response = await fetch(`http://localhost:5000/api/v1/meals/${meal.id}`,{
+                    const response = await fetch(`${API_BASE_URL}/api/v1/meals/${meal.id}`,{
                         method: 'DELETE',
                         headers:{
                             'Content-type' : 'application/json',
@@ -81,7 +82,7 @@ function MealHistory({dayMeal, setDayMeal}){
                                         <div key={meal.meal}>
                                             <p><b>{meal.mealType}</b></p>
                                             <p>{meal.meal}</p>
-                                            <p>{meal.calories}</p>                                
+                                            <p>{meal.calories !== null ? Math.round(meal.calories) : ""}</p>                                   
                                         </div>
                                         
                                     ))}
@@ -92,7 +93,7 @@ function MealHistory({dayMeal, setDayMeal}){
                                         {(calculatorResults.dailyGoal - day.totalCalories)> 0 ?
                                             <div className={styles.withinGoal}>
                                                 <p><b>Total Calories</b></p>
-                                                <p className={styles.changegreen}>{day.totalCalories}</p>
+                                                <p className={styles.changegreen}>{day.totalCalories !== null ? Math.round(day.totalCalories) : ""}</p>
                                                 <p><b>Goal: </b></p>
                                                 <p>{calculatorResults.dailyGoal}</p>
 
@@ -127,7 +128,7 @@ function MealHistory({dayMeal, setDayMeal}){
                 </>
             
              </div>
-             {showView && selectedDate ? <ViewPopup day={selectedDate} setShowView={setShowView} setCheckOption={setCheckOption} /> : null}
+             {showView && selectedDate ? <ViewPopup day={selectedDate} setShowView={setShowView} setCheckOption={setCheckOption} totalCarbs={totalCarbs} totalProtein={totalProtein} totalFats={totalFats}/> : null}
         </>
     )
 }
