@@ -13,6 +13,12 @@ function HomePageHeader() {
         signOut(auth).then(()=>{
             localStorage.removeItem('firebase_token');
             localStorage.removeItem('user');
+            
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('macromatch_user');
+            localStorage.removeItem('spotify_access_token'); // Clear Spotify token too
+            localStorage.removeItem('calculatorResults')
+            localStorage.removeItem('macroResult')
             resetClickGooglePopUp();
             console.log("User signed out")
             navigate('/')

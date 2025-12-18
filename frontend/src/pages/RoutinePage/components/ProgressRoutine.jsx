@@ -1,14 +1,16 @@
 import styles from "./ProgressRoutine.module.css"
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+//import { API_BASE_URL } from "../../../firebase"
 
 function ProgressRoutine({ setTodayRoutine,currentDay,totalDays, routineToday, setCompleteRoutine, progress, progressData, setProgressData, progressID, setProgressID, token}) {
+    const API_BASE_URL = 'http://localhost:5000'
     const handleAddTodayProgress = async() => {
         const update = {...progressData, [currentDay]:true};
         setProgressData(update);
         console.log(progressData);
         try{
-            const response = await fetch(`http://localhost:5000/api/v1/progress/${progressID}`, {
+            const response = await fetch(`${API_BASE_URL}/api/v1/progress/${progressID}`, {
                 method: 'PUT',
                 headers:{
                     'Content-Type' : 'application/json',

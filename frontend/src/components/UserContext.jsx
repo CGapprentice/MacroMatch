@@ -19,6 +19,10 @@ export const UserProvider = ({ children }) => {
     const saved = localStorage.getItem('calculatorResults');
     return saved ? JSON.parse(saved) : null;
   }});
+  const [macroResults, setMacroResults] = useState(()=>{{
+    const saved = localStorage.getItem('macroResult');
+    return saved ? JSON.parse(saved) : null
+}})
   const [clickGooglePopUp, setClickGooglePopUp] = useState(() => {
     return localStorage.getItem('clickGooglePopUp') === 'true';
   });
@@ -153,6 +157,8 @@ export const UserProvider = ({ children }) => {
     resetClickGooglePopUp();
     localStorage.removeItem('auth_token');
     localStorage.removeItem('spotify_access_token'); // Clear Spotify token too
+    localStorage.removeItem('calculatorResults')
+    localStorage.removeItem('macroResult')
   };
 
   const clickedGooglePopUp = () =>{
@@ -170,6 +176,11 @@ export const UserProvider = ({ children }) => {
     localStorage.setItem('calculatorResults', JSON.stringify(data));
   }
 
+  const saveAllMacros = (data) =>{
+    setMacroResults(data);
+    localStorage.setItem('macroResult', JSON.stringify(data));
+  }
+
   return (
     <UserContext.Provider value={{
       user,
@@ -182,7 +193,10 @@ export const UserProvider = ({ children }) => {
       calculatorResults,
       setCalculatorResults,
       saveCalculatorData,
+      saveAllMacros,
+      macroResults,
       clickGooglePopUp,
+      setMacroResults,
       loading,
       logout
     }}>

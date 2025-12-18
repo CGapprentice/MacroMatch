@@ -1,7 +1,8 @@
 import styles from "./ViewPopup.module.css"
 import { useUser } from '../../../components/UserContext.jsx'
+import { number } from "framer-motion";
 
-function ViewPopup({day, setShowView, setCheckOption}){
+function ViewPopup({day, setShowView, setCheckOption, totalFats, totalCarbs, totalProtein}){
     const{ calculatorResults } = useUser();
 
     const handleClose = () =>{
@@ -23,27 +24,45 @@ function ViewPopup({day, setShowView, setCheckOption}){
                         </div>
                         <div>
                             <p>{meal.meal}</p>
-                            <p>{meal.calories}</p>
-                            <p>{meal.notes}</p>
+                            <p> Calories: {meal.calories !== null ? Math.round(meal.calories) : ""}</p>
+                            <p>Note: <br></br>{meal.notes}</p>
+                            <p>Fats: {meal.fats}</p>
+                            <p>Protein: {meal.protein}</p>
+                            <p>Carbs: {meal.carbs}</p>
                         </div>
                     </div>
                 ))}
+                
+                <div className={styles.calorieOptions}>
+                        <div className={styles.caloriesView}>
+                            <p><b>Total Calories</b></p>
+                            
+                            {((calculatorResults.dailyGoal - day.totalCalories) > 0) ? <p className={styles.green}>{day.totalCalories !== null ? Math.round(day.totalCalories) : ""}</p> : <p className={styles.red}>{day.totalCalories !== null ? Math.round(day.totalCalories) : ""}</p>}
+                        </div>
+                        <div className={styles.calorieGoalview}>
+                            <p><b>Calorie Goal</b></p>
+                            <p>{calculatorResults.dailyGoal}</p>
+                            
+                        </div>
+                        <div className={styles.carbsview}>
+                            <p><b>Total carbs</b></p>
+                            {/*<p>{totalCarbs !== null ? Math.round(totalCarbs): ''}</p>*/}
+                            {Math.round(day.newMeal.reduce((sum,meal)=>sum + Number(meal.carbs),0))}
+                        </div>
+                        <div className={styles.fatsview}>
+                            <p><b>Total fats</b></p>
+                            {/*<p>{totalFats !== null ? Math.round(totalFats):""}</p>*/}
+                            {Math.round(day.newMeal.reduce((sum,meal)=>sum + Number(meal.fats),0))}
+                        </div>
+                        <div className={styles.fatsview}>
+                            <p><b>Total protein</b></p>
+                            {/*<p>{totalProtein !== null ? Math.round(totalProtein):""}</p>*/}
+                            {Math.round(day.newMeal.reduce((sum,meal)=>sum + Number(meal.protein),0))}
+                        </div>
+
+                    </div>
                 <div className={styles.calories}>
-                    <div className={styles.calorieOptions}>
-                        <p><b>Total Calories</b></p>
-                        <p><b>Calorie Goal</b></p>
-                    </div>
-                    <div className={styles.calorieNum}>
-                        {(calculatorResults.dailyGoal - day.totalCalories) > 0 ?
-                            <>
-                                <p className={styles.good}>{day.totalCalories}</p>  
-                                <p>{calculatorResults.dailyGoal}</p> 
-                            </>
-                        :   <>
-                                <p className={styles.bad}>{day.totalCalories}</p>  
-                                <p>{calculatorResults.dailyGoal}</p> 
-                            </>}
-                    </div>
+                    
                     <div className={styles.advice}>
                         {(calculatorResults.dailyGoal - day.totalCalories) > 0 ?
                             <div className={styles.adviceGreen}>

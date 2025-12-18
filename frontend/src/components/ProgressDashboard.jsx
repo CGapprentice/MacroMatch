@@ -1,8 +1,8 @@
 // src/components/ProgressDashboard.jsx
 import React, { useState, useEffect } from 'react';
-import { useUser } from './UserContext';
 import { Activity, Target, Utensils } from 'lucide-react';
 import styles from './ProgressDashboard.module.css';
+import { useUser} from '../components/UserContext'
 
 // --- MOCK DATA: REPLACE THIS WITH YOUR API CALL ---
 // This is a placeholder for the data fetched from your group mate's meal log.
@@ -45,17 +45,31 @@ const ProgressBar = ({ label, consumed, target, unit, color }) => {
 };
 
 const ProgressDashboard = () => {
-    const { user } = useUser();
+    const { user, macroResults} = useUser();
     const [todayLog, setTodayLog] = useState(null);
+    /*useEffect(()=>{
+        const today = new Date().toISOString().slice(0,10);
+        if(macroResu)
+    })**/
+    const protein = macroResults?.protein;
+    const fats = macroResults?.fats;
+    const carbs = macroResults?.carbs;
+    const calories = macroResults?.totalCalories;
+    const today = new Date().toISOString().split('T')[0];
 
     // Get the targets calculated from Calculator.jsx
     const targets = user?.calculatorData.lastCalculation;
+    let log = null;
 
     useEffect(() => {
         // Find today's log entry (or fetch it from your API)
-        const log = mockMealLog.find(item => item.date === '2025-11-09'); 
+        if(Array.isArray(macroResults)){
+            log = macroResults.find(item => item.date === today); 
+        }else if(macroResults && macroResults.date === today){
+            log = macroResults;
+        }
 
-        setTodayLog(log || { totalCalories: 0, protein: 0, carbs: 0, fats: 0 });
+        setTodayLog(log || { calories: 0, protein: 0, carbs: 0, fats: 0 });
     }, []);
 
     if (!targets ) {
@@ -88,7 +102,9 @@ const ProgressDashboard = () => {
     const remainingCalories = Math.max(0, calorieTarget - todayLog.totalCalories);
 
     return (
+        
         <main className={styles.dashboardPage}>
+            {console.log(macroResults)}
             <h1 className={styles.dashboardTitle}>
                 <Activity size={32} />
                 Daily Progress Tracker

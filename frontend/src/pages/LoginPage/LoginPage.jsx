@@ -13,7 +13,6 @@ import { useUser } from '../../components/UserContext.jsx'
 
 
 function LoginPage() {
-    
     const { clickedGooglePopUp } = useUser();
     
     const navigate = useNavigate();
