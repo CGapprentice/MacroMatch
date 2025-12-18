@@ -178,8 +178,8 @@ function MealLog(){
         setCarbs('');
         setProtein('');
         setChooseIngredient(false);
-        setChooseMeal(false);
         setShowChoice(true);
+        setChooseMeal(false);
         
         
     }
@@ -294,6 +294,7 @@ function MealLog(){
             const foodsWithServingSize = data.foods.filter(food => food.servingSize);
             setMealReturn(containAllMacros);
             setQuestionMeal(true);
+            setChooseMeal(true);
             console.log(mealReturn);
             return
 
@@ -513,6 +514,7 @@ function MealLog(){
                                         />
                                         <button className={styles.searchButton1} onClick={mealSearch}>Search</button>
                                 </div>
+                                {chooseMeal ? 
                                 <div className={styles.mealForm}>
                                     {questionMeal ? <p>Which works best describes the meal you are adding to the log?<br></br></p>:null}
                                     {mealReturn ? 
@@ -549,6 +551,9 @@ function MealLog(){
                                     :  
                                         null}
                                 </div>
+                                :
+                                null}
+                                
                             </div>
                         
                                             
