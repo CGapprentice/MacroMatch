@@ -54,16 +54,15 @@ function SignInPage() {
             // Get Firebase ID token
             const idToken = await user.getIdToken();
             
-            // Send to backend to create user in MongoDB
-            const response = await fetch(`${API_BASE_URL}/api/auth/register`, { // Use API_BASE_URL
+            // Send to backend to create/sync user in MongoDB
+            // We use /login because the user is already created in Firebase at this point
+            const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    email: formData.email,
-                    password: formData.password,
-                    name: name
+                    idToken: idToken
                 }),
             });
 

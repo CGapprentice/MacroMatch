@@ -63,5 +63,5 @@ export const getCurrentUserToken = async () => {
 };
 
 // API base URL from environment
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-// export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+// Defaults to localhost if VITE_API_BASE_URL is not set (e.g., in local development)
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
