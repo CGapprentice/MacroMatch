@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react'
 import HomePageHeader from '../../homepage/header.jsx'
 import MealHistory from '../MealLog/MealHistory.jsx'
 import { useNavigate } from "react-router-dom"
-//import { API_BASE_URL} from '../../firebase.js'
+import { API_BASE_URL} from '../../firebase.js'
 const mealOrder = ["Breakfast", "Lunch", "Dinner", "Snack"];
 import { useUser } from '../../components/UserContext'
 
@@ -16,7 +16,6 @@ import { useUser } from '../../components/UserContext'
 
 function MealLog(){
     const {saveAllMacros} = useUser();
-    const API_BASE_URL = 'http://localhost:5000'
     const USDA_URL = 'https://api.nal.usda.gov/fdc/v1/'
     const UDSA_KEY = import.meta.env.VITE_USDA_KEY
     useEffect(()=>{
@@ -295,7 +294,6 @@ function MealLog(){
             setMealReturn(containAllMacros);
             setQuestionMeal(true);
             setChooseMeal(true);
-            console.log(mealReturn);
             return
 
         }catch(error){
@@ -306,7 +304,6 @@ function MealLog(){
     const mealInfo = (meal)=>{
         
         setMealChosen(meal);
-        console.log(meal);
         setUserUnits(true);
         setDataServingSize(meal.servingSize);
         setUserAte(meal.servingSize);
@@ -344,13 +341,10 @@ function MealLog(){
         setProtein(userServings * dataProtein);
         setFats(userServings * dataFat);
         setCarbs(userServings * dataCarbs);
-
-        console.log("calories: ", calories, "Protein: ", protein, "fats: ", fats, "carbs: ", carbs);
     }
 
     useEffect(()=>{
         const today = new Date().toISOString().split("T")[0];
-        console.log("dayMea", dayMeal);
         const todayData = dayMeal.find(day=>day.date === today);
         if(todayData){
             setSendData({

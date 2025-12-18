@@ -2,10 +2,9 @@ import styles from './DayPopup.module.css'
 import InputPopup from './InputPopup.jsx'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import { /*API_BASE_URL, */getCurrentUserToken } from '../../../firebase.js'; // Import getCurrentUserToken
+import { API_BASE_URL,getCurrentUserToken } from '../../../firebase.js'; // Import getCurrentUserToken
 
 function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, routineId , progressData, setProgressData, setProgressID, todayData, setTodayData, currentDay, postToday, setPostToday}){
-    const API_BASE_URL = 'http://localhost:5000'
     //SEE IF YOU WANT TO ADD AN X BUTTON ONTO THE POPUP
 
     const capitalizedDay = activeDay.charAt(0).toUpperCase() + activeDay.slice(1);

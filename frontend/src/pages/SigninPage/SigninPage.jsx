@@ -2,14 +2,13 @@ import styles from './SigninPage.module.css'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { registerWithEmail } from '../../firebase'
-import {auth,google/*, API_BASE_URL*/} from '../../firebase.js' // Import API_BASE_URL
+import {auth,google, API_BASE_URL} from '../../firebase.js' // Import API_BASE_URL
 import {signInWithPopup} from 'firebase/auth'
 
 import{ useUser } from '../../components/UserContext.jsx'
 
 
 function SignInPage() {
-    const API_BASE_URL = 'http://localhost:5000'
     const {clickedGooglePopUp} = useUser()
     const navigate = useNavigate();
     

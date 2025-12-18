@@ -4,12 +4,11 @@ import HomePageHeader from '../../homepage/header.jsx'
 import SummaryPage from "./components/SummaryPage.jsx"
 import { useNavigate } from "react-router-dom"
 import { isSameWeek } from 'date-fns'
-import { getCurrentUserToken/*, API_BASE_URL*/ } from '../../firebase.js'; // Import getCurrentUserToken
+import { getCurrentUserToken, API_BASE_URL } from '../../firebase.js'; // Import getCurrentUserToken
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import DayPopup from './components/DayPopup.jsx'
 
 function RoutinePage(){
-    const API_BASE_URL = 'http://localhost:5000'
     //Changes tab title to be Routine Page
     useEffect(()=>{
         document.title = 'Routine Page';
