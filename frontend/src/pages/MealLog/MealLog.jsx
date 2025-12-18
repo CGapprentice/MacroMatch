@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react'
 import HomePageHeader from '../../homepage/header.jsx'
 import MealHistory from '../MealLog/MealHistory.jsx'
 import { useNavigate } from "react-router-dom"
-//import { API_BASE_URL} from '../../firebase.js'
+import { API_BASE_URL} from '../../firebase.js'
 const mealOrder = ["Breakfast", "Lunch", "Dinner", "Snack"];
 import { useUser } from '../../components/UserContext'
 
@@ -16,7 +16,6 @@ import { useUser } from '../../components/UserContext'
 
 function MealLog(){
     const {saveAllMacros} = useUser();
-    const API_BASE_URL = 'http://localhost:5000'
     const USDA_URL = 'https://api.nal.usda.gov/fdc/v1/'
     const UDSA_KEY = import.meta.env.VITE_USDA_KEY
     useEffect(()=>{

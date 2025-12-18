@@ -4,10 +4,9 @@ import { useNavigate } from "react-router-dom"
 import { useState, useEffect} from 'react'
 import ViewPopup from "./ViewPopup/ViewPopup.jsx"
 import { useUser } from '../../components/UserContext.jsx'
-//import { API_BASE_URL} from '../../firebase.js'
+import { API_BASE_URL} from '../../firebase.js'
 
 function MealHistory({dayMeal, setDayMeal, totalCarbs, totalFats, totalProtein}){
-    const API_BASE_URL = 'http://localhost:5000'
     const[checkOption, setCheckOption] = useState(null);
     const navigate = useNavigate();
     const token = localStorage.getItem('firebase_token');
