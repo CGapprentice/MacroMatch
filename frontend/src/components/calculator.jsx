@@ -90,7 +90,7 @@ const workoutDatabase = {
 // Main Calculator Component
 const Calculator = () => {
   const { user, saveUserData, loadUserData, loading, logout, saveCalculatorData } = useUser();
-  const { isConnected: spotifyConnected, generatePlaylist } = useSpotify();
+  const { isConnected: spotifyConnected, generatePlaylist, connectSpotify} = useSpotify();
   const navigate = useNavigate();
   
   // Handle form state for the calculator (e.g., input fields)
@@ -336,11 +336,17 @@ const Calculator = () => {
   };
 
   const handleGeneratePlaylist = async () => {
+  // If not connected, trigger the login redirect instead of just alerting
   if (!spotifyConnected) {
-    alert('Please connect your Spotify account first or configure Spotify credentials!');
+    try {
+      await connectSpotify();
+    } catch (error) {
+      alert('Could not redirect to Spotify. Please check your configuration.');
+    }
     return;
   }
   
+  // If already connected, proceed with generation
   try {
     const duration = parseInt(formData.timeAvailable.split('-')[0]);
     const playlist = await generatePlaylist(formData.workoutType, duration, formData.fitnessLevel);

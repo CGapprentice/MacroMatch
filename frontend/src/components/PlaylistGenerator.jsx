@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useUser } from './UserContext';
 import { useSpotify } from './SpotifyIntegration';
+import { useNavigate } from 'react-router-dom';
 import { Music } from 'lucide-react';
 import styles from './PlaylistGenerator.module.css';
 
@@ -25,6 +26,8 @@ const PlaylistGenerator = () => {
     // Retrieve user and spotify data
     const { userData } = useUser(); 
     const { isConnected, connectSpotify, generatePlaylist } = useSpotify(); // Destructure Spotify functions
+
+    const navigate = useNavigate();
     
     // Check for the existence of the calculator results
     const hasCalculatorData = userData && userData.calculatorData;
@@ -37,22 +40,32 @@ const PlaylistGenerator = () => {
     const [playlistStatus, setPlaylistStatus] = useState(null); 
     const [isCustom, setIsCustom] = useState(false); 
 
-    // Mock workout data for the playlist context
+    // Get workout data from calculator or use defaults
     const workout = {
-        type: userData?.calculatorData?.workoutPlan?.[0]?.name || 'Light Cardio',
-        duration: userData?.calculatorData?.workoutPlan?.[0]?.duration || '30 min',
-        context: 'Daily maintenance workout'
+        type: userData?.calculatorData?.workoutType || 'cardio',  // Use workoutType from calculator
+        duration: parseInt(userData?.calculatorData?.timeAvailable?.split('-')[0]) || 30,  // Extract duration from timeAvailable
+        fitnessLevel: userData?.calculatorData?.fitnessLevel || 'moderate'
     };
 
-
+    // Auto-generate Spotify playlist on load if connected and has calculator data
+    useEffect(() => {
+        if (hasCalculatorData && isConnected && !playlistStatus) {
+            handleGenerateSpotifyPlaylist();
+        }
+    }, [hasCalculatorData, isConnected]);
+    
     const handleGenerateSpotifyPlaylist = async () => {
-        if (!isConnected || !hasCalculatorData) return;
+        if (!isConnected) {
+            console.log("Cannot generate - Connected:", isConnected, "Has data:", hasCalculatorData);
+            return;
+        }
         setPlaylistStatus('Generating...');
         try {
             // NOTE: The 'generatePlaylist' call here would need the actual workout context
             // and the user's Spotify profile, which is handled inside useSpotify.
             // For now, we mock the success.
-            const result = await generatePlaylist(workout.type); // Pass the workout type to the hook
+            console.log("Calling generatePlaylist with:", workout.type, workout.duration);
+            const result = await generatePlaylist(workout.type, parseInt(workout.duration), workout.fitnessLevel); // Pass the workout type to the hook
             
             // In a real app, this would return the actual playlist URL/ID
             console.log("Spotify Playlist Created:", result); 
@@ -99,12 +112,15 @@ const PlaylistGenerator = () => {
                     {!isConnected && (
                         <div className={styles.playlistButton}>
                              <button 
-                                onClick={connectSpotify}
+                                onClick={connectSpotify} // Call connectSpotify directly here too
                                 className={`${styles.playlistButtonStyle} button`}
-                                style={{backgroundColor: '#1DB954'}} // Spotify Green
+                                style={{backgroundColor: '#1DB954'}} 
                             >
-                                Connect with Spotify
+                                Connect Spotify to Unlock Playlists
                             </button>
+                            <p className={styles.secondaryText} style={{fontSize: '0.8rem', marginTop: '10px'}}>
+                                (Or return to the <span style={{textDecoration: 'underline', cursor: 'pointer'}} onClick={() => navigate('/calculator')}>Calculator</span>)
+                            </p>
                         </div>
                     )}
 
