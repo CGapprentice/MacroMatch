@@ -29,21 +29,32 @@ export const UserProvider = ({ children }) => {
 
   // Load user from localStorage on mount
   useEffect(() => {
-    const savedUser = localStorage.getItem('auth_token') || localStorage.getItem('macromatch_user');
-    if (savedUser) {
+    const token = localStorage.getItem('firebase_token');
+    const savedUser = localStorage.getItem('user');
+    
+    if (token && savedUser) {
       try {
-        // Try to parse as JSON first (in case it's a user object)
         const userData = JSON.parse(savedUser);
-        setUser(userData);
-      } catch {
-        // If it's just a token string, create a basic user object
+        // Combine user data with token
+        setUser({ ...userData, token });
+      } catch (error) {
+        console.error("Error parsing saved user:", error);
+        // If parsing fails but we have a token, create a minimal user
         setUser({
           id: 'user_' + Date.now(),
-          token: savedUser,
-          name: 'User', // You can update this after fetching user profile
+          token: token,
+          name: 'User',
           calculatorData: null
         });
       }
+    } else if (token) {
+       // Only token exists (legacy or partial state)
+       setUser({
+         id: 'user_' + Date.now(),
+         token: token,
+         name: 'User',
+         calculatorData: null
+       });
     }
   }, []);
 
@@ -68,7 +79,7 @@ export const UserProvider = ({ children }) => {
       };
 
       setUser(updatedUser);
-      localStorage.setItem('macromatch_user', JSON.stringify(updatedUser));
+      localStorage.setItem('user', JSON.stringify(updatedUser));
       
       return { success: true };
     } catch (error) {
@@ -82,7 +93,7 @@ export const UserProvider = ({ children }) => {
           lastUpdated: new Date().toISOString()
         };
         setUser(updatedUser);
-        localStorage.setItem('macromatch_user', JSON.stringify(updatedUser));
+        localStorage.setItem('user', JSON.stringify(updatedUser));
         console.log('Data saved locally as fallback');
         return { success: true };
       } catch (localError) {
@@ -109,7 +120,7 @@ export const UserProvider = ({ children }) => {
     
     // Fallback to localStorage
     try {
-      const savedUser = localStorage.getItem('macromatch_user');
+      const savedUser = localStorage.getItem('user');
       if (savedUser) {
         const userData = JSON.parse(savedUser);
         if (userData.calculatorData) {
@@ -139,7 +150,7 @@ export const UserProvider = ({ children }) => {
       };
       
       setUser(updatedUser);
-      localStorage.setItem('macromatch_user', JSON.stringify(updatedUser));
+      localStorage.setItem('user', JSON.stringify(updatedUser));
       
       return { success: true };
     } catch (error) {
@@ -152,7 +163,7 @@ export const UserProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('macromatch_user');
+    localStorage.removeItem('user');
     localStorage.removeItem('firebase_token');
     resetClickGooglePopUp();
     localStorage.removeItem('auth_token');
