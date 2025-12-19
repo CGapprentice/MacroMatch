@@ -162,6 +162,7 @@ function MealLog(){
                 }
                 return addMeal.sort((a,b) => new Date(b.date) - new Date(a.date));
             })
+
         }catch(error){
             console.error('Adding meal error: ', error);
             setErrorMessage(error.message || String(error));
@@ -342,25 +343,23 @@ function MealLog(){
 
     useEffect(()=>{
         const today = new Date().toISOString().split("T")[0];
-        const todayData = dayMeal.find(day=>day.date === today);
-        if(todayData){
-            setSendData({
-                date: todayData.date,
+        const todayData = dayMeal.find(day=>day.date === today) || {};
+        if(todayData.date === today){
+            saveAllMacros({
+                date: today,
                 totalCalories: todayData.totalCalories,
                 protein: todayData.totalProtein,
                 carbs: todayData.totalCarbs,
                 fats: todayData.totalFats
             })
-            saveAllMacros(sendData);
         }else{
-            setSendData({
+            saveAllMacros({
                 date: today,
                 calories: 0,
                 protein: 0,
                 carbs: 0,
                 fats: 0
             })
-            saveAllMacros(sendData);
 
         }
     },[dayMeal]);

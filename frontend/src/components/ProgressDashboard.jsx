@@ -51,11 +51,14 @@ const ProgressDashboard = () => {
         const today = new Date().toISOString().slice(0,10);
         if(macroResu)
     })**/
+    const[load, setLoad] = useState(true);
+ 
     const protein = macroResults?.protein;
     const fats = macroResults?.fats;
     const carbs = macroResults?.carbs;
     const calories = macroResults?.totalCalories;
     const today = new Date().toISOString().split('T')[0];
+   
 
     // Get the targets calculated from Calculator.jsx
     const targets = user?.calculatorData.lastCalculation;
