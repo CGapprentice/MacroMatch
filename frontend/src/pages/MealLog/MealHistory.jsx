@@ -7,12 +7,17 @@ import { useUser } from '../../components/UserContext.jsx'
 import { API_BASE_URL} from '../../firebase.js'
 
 function MealHistory({dayMeal, setDayMeal, totalCarbs, totalFats, totalProtein}){
+    //const API_BASE_URL = 'http://localhost:5000'
     const[checkOption, setCheckOption] = useState(null);
     const navigate = useNavigate();
     const token = localStorage.getItem('firebase_token');
     const[showView, setShowView] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
-    const{ calculatorResults } = useUser();
+    let { calculatorResults } = useUser();
+    // If calculatorResults is missing, default to empty object
+    if (!calculatorResults) {
+        calculatorResults = { dailyGoal: '', macroGrams: { protein: '', carbs: '', fats: '' }, tdee: '', goal: '' };
+    }
     const mealOrder = ["Breakfast", "Lunch", "Dinner", "Snack"];
 
     const handleView = (day) =>{
@@ -77,7 +82,7 @@ function MealHistory({dayMeal, setDayMeal, totalCarbs, totalFats, totalProtein})
                                 <h3>{day.date}</h3>
                                 <div className={styles.meals}>
                                     {day.newMeal.map(meal=>(
-                                        <div key={meal.meal}>
+                                        <div key={meal.id}>
                                             <p><b>{meal.mealType}</b></p>
                                             <p>{meal.meal}</p>
                                             <p>{meal.calories !== null ? Math.round(meal.calories) : ""}</p>                                   
@@ -85,41 +90,45 @@ function MealHistory({dayMeal, setDayMeal, totalCarbs, totalFats, totalProtein})
                                         
                                     ))}
                                 </div>
-                                
                                 <div className={styles.options}>
                                     <div className={styles.calories}>
-                                        {(calculatorResults.dailyGoal - day.totalCalories)> 0 ?
-                                            <div className={styles.withinGoal}>
+                                        {calculatorResults.dailyGoal === "" ?
+                                            <div className={styles.justTotalCal}>
                                                 <p><b>Total Calories</b></p>
-                                                <p className={styles.changegreen}>{day.totalCalories !== null ? Math.round(day.totalCalories) : ""}</p>
-                                                <p><b>Goal: </b></p>
-                                                <p>{calculatorResults.dailyGoal}</p>
+                                                <p>{day.totalCalories !== null ? Math.round(day.totalCalories) : ""}</p>
+                                            </div>
+                                        :calculatorResults.dailyGoal >= day.totalCalories ?
+                                            <div className={styles.entire}>
+                                                <div className={styles.withinGoal}>
+                                                    <p><b>Total Calories</b></p>
+                                                    <p className={styles.changegreen}>{day.totalCalories !== null ? Math.round(day.totalCalories) : ""}</p>
+                                                </div>
+                                                <div className={styles.withinGoalCal}>
+                                                    {calculatorResults.dailyGoal?<p><b>Goal: </b></p> : null }
+                                                    <p>{calculatorResults.dailyGoal}</p>
+                                                </div>
 
                                             </div>
-                                        : <div className={styles.outOfGoal}>
+                                        :
+                                            <div className={styles.outOfGoal}>
                                                 <p><b>Total Calories</b></p>
                                                 <p className={styles.changered}>{day.totalCalories}</p>
-                                                <p><b>Goal: </b></p>
+                                                {calculatorResults.dailyGoal?<p><b>Goal: </b></p> : null }
                                                 <p>{calculatorResults.dailyGoal}</p>
-
                                             </div>
                                         }
-                                        
-                                        
-                                    </div>
-                                    <div style={{position: "relative", display: "inline-block"}}>
-
-                                        <button onClick={() => setCheckOption(checkOption === index ? null : index)}><img src='../../public/mealLogOption.png'/> </button>
-                                        {checkOption === index && (
-                                            <div className={styles.optionBox}>
-                                                <button onClick={() => handleView(day)}>View</button>
-                                                <button onClick={()=> handleDelete(day.date)}>Delete</button>
+                                            <div style={{position: "relative", display: "inline-block"}}>
+                                                <button onClick={() => setCheckOption(checkOption === index ? null : index)}><img src='../../public/mealLogOption.png'/> </button>
+                                                {checkOption === index && (
+                                                    <div className={styles.optionBox}>
+                                                        <button onClick={() => handleView(day)}>View</button>
+                                                        <button onClick={()=> handleDelete(day.date)}>Delete</button>
+                                                    </div>
+                                                )}
                                             </div>
-                                        )}
+                                        </div>
                                     </div>
-                                    
-                                </div>
-                            </div>  
+                                </div>  
                         ))}
                         
                     </div>

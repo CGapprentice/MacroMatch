@@ -9,6 +9,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import DayPopup from './components/DayPopup.jsx'
 
 function RoutinePage(){
+    //const API_BASE_URL = 'http://localhost:5000'
     //Changes tab title to be Routine Page
     useEffect(()=>{
         document.title = 'Routine Page';

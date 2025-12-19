@@ -83,7 +83,15 @@
 
 .calories{
     display: flex;
+    flex-direction: row;
+    gap: 30px;
+    align-items: center;
+}
+
+.justTotalCal{
+    display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
 }
 
@@ -123,4 +131,11 @@
 
 .changered{
     color: red;
+}
+
+.withinGoal, .withinGoalCal{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

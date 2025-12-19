@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { API_BASE_URL } from "../../../firebase";
 
 function SummaryPage({data,setRoutineSummary, todayData, setTodayRoutine, currentDay,todayRoutine, progressData, setProgressData, token, progressID, setProgressID}){
+    //const API_BASE_URL = 'http://localhost:5000'
     const routineToday = todayData[currentDay];
     const[completeRoutine, setCompleteRoutine] = useState(null);
     const progress = Object.values(progressData).filter(Boolean).length;

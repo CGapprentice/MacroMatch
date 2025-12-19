@@ -15,13 +15,13 @@ import { useUser } from '../../components/UserContext'
 */
 
 function MealLog(){
+    //const API_BASE_URL = 'http://localhost:5000'
     const {saveAllMacros} = useUser();
     const USDA_URL = 'https://api.nal.usda.gov/fdc/v1/'
     const UDSA_KEY = import.meta.env.VITE_USDA_KEY
     useEffect(()=>{
         document.title = 'Meal Log';
     },[])
-    const{ calculatorResults } = useUser();
 
     const token = localStorage.getItem('firebase_token')
 
@@ -42,9 +42,9 @@ function MealLog(){
     const[chooseMeal, setChooseMeal] = useState(false);
     const[chooseIngredient, setChooseIngredient] = useState(false);
     const[showChoice, setShowChoice] = useState(true);
-    const[protein, setProtein] = useState(null);
-    const[carbs, setCarbs] = useState(null);
-    const[fats, setFats] = useState(null);
+    const[protein, setProtein] = useState('');
+    const[carbs, setCarbs] = useState('');
+    const[fats, setFats] = useState('');
     const[searchMessage, setSearchMessage] = useState('');
     const[ingredients, setIngredients] = useState([]);
     const[ingredientform, setIngredientForm] = useState({
@@ -101,7 +101,6 @@ function MealLog(){
             carbs: Number(carbs),
             fats: Number(fats),
             protein: Number(protein),
-            calculatorResults,
             note
         }
         
@@ -163,7 +162,6 @@ function MealLog(){
                 }
                 return addMeal.sort((a,b) => new Date(b.date) - new Date(a.date));
             })
-            console.log(dayMeal);
         }catch(error){
             console.error('Adding meal error: ', error);
             setErrorMessage(error.message || String(error));
@@ -238,7 +236,6 @@ function MealLog(){
                         setTotalFatsDay(0);
                         setTotalProteinDay(0);
                     }
-                    console.log(response);
                 }
             }catch(error){
                 console.error('Getting User History Meals error: ', error);

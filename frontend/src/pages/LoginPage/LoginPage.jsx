@@ -13,6 +13,7 @@ import { useUser } from '../../components/UserContext.jsx'
 
 
 function LoginPage() {
+    //const API_BASE_URL = 'http://localhost:5000'
     const { clickedGooglePopUp } = useUser();
     
     const navigate = useNavigate();
@@ -49,7 +50,6 @@ function LoginPage() {
             });
 
             const data = await response.json();
-            console.log(data.user)
 
             if (response.ok) {
                 // Save Firebase ID token and user data

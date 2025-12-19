@@ -6,7 +6,7 @@ import { API_BASE_URL,getCurrentUserToken } from '../../../firebase.js'; // Impo
 
 function DayPopup({showPopup, activeDay, eachDayChange, data, setActiveDay, routineId , progressData, setProgressData, setProgressID, todayData, setTodayData, currentDay, postToday, setPostToday}){
     //SEE IF YOU WANT TO ADD AN X BUTTON ONTO THE POPUP
-
+    //const API_BASE_URL = 'http://localhost:5000'
     const capitalizedDay = activeDay.charAt(0).toUpperCase() + activeDay.slice(1);
     
     const[errorMessage, setErrorMessage]= useState("");
